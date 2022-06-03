@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<ErrorHandlerMiddleware>();
+builder.Services.AddSingleton<IExceptionResponseMapper, ExceptionResponseMapper>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
