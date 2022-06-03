@@ -1,5 +1,6 @@
 ﻿namespace Goodpets.API.Controllers;
 
+[Route($"{BasePath}/[controller]")]
 public class UserController : BaseController
 {
     private readonly IDispatcher _dispatcher;

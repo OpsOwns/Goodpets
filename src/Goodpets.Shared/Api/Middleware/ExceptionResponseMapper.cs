@@ -9,7 +9,7 @@ public class ExceptionResponseMapper : IExceptionResponseMapper
         BusinessException ex =>
             new ExceptionResponse(new ErrorResponse(new Error(GetErrorCode(ex), ex.Message)),
                 HttpStatusCode.UnprocessableEntity),
-        _ => new ExceptionResponse(new ErrorResponse(new Error("error", "general error")),
+        _ => new ExceptionResponse(new ErrorResponse(new Error("error", "not supported error")),
             HttpStatusCode.InternalServerError)
     };
 
