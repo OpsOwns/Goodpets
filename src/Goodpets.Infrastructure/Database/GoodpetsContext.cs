@@ -9,10 +9,6 @@ public class GoodpetsContext : DbContext
 
     internal DbSet<UserAccount> UserAccount => Set<UserAccount>();
 
-    public GoodpetsContext()
-    {
-    }
-
     public GoodpetsContext(DatabaseOptions databaseOptions)
     {
         _databaseOptions = databaseOptions;

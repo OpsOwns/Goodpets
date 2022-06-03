@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Domain.Users.Repositories;
+﻿using Goodpets.Shared.Abstractions;
+
+namespace Goodpets.Domain.Users.Repositories;
 
 public interface IUserAccountRepository : IRepository
 {

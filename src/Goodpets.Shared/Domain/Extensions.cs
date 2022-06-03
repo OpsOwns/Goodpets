@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Shared.Domain;
+﻿using Goodpets.Shared.Abstractions;
+
+namespace Goodpets.Shared.Domain;
 
 public static class Extensions
 {

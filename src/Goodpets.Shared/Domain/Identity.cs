@@ -1,9 +1,11 @@
 ﻿namespace Goodpets.Shared.Domain;
 
-public abstract record Identity(Guid Value)
+public record Identity
 {
-    public override string ToString()
-    {
-        return Value.ToString();
-    }
+    public Guid Value { get; }
+    public Identity() => Value = Guid.NewGuid();
+    protected Identity(Guid value) => Value = value;
+    public override string ToString() => Value.ToString();
+    public static implicit operator Identity(Guid identity) => new(identity);
+    public static implicit operator Guid(Identity identity) => identity.Value;
 }

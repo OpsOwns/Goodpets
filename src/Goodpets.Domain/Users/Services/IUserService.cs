@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Domain.Users.Services;
+﻿using Goodpets.Shared.Abstractions;
+
+namespace Goodpets.Domain.Users.Services;
 
 public interface IUserService : IService
 {

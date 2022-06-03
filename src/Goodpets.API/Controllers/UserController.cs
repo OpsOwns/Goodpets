@@ -28,6 +28,7 @@ public class UserController : BaseController
     [Consumes(RequestContentType.Json)]
     [Produces(RequestContentType.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Login([FromBody] UserLoginRequest userLoginRequest)
     {
         var jwtToken =

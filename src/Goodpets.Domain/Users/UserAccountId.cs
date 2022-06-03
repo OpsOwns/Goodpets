@@ -6,7 +6,5 @@ public record UserAccountId : Identity
     {
     }
 
-    public UserAccountId() : base(Guid.NewGuid())
-    {
-    }
+    public UserAccountId() { }
 }

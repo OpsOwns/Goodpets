@@ -12,8 +12,4 @@ services:
     ports:
       - '1122:1433'
     volumes:
-      - Db:/var/opt/mssql/data
-
-volumes:
-  Db:
-    driver: local
+      - ./Db:/var/opt/mssql/data
