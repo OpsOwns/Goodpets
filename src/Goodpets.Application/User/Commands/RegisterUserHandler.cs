@@ -1,11 +1,10 @@
 ﻿using Goodpets.Domain.Abstractions;
-using Goodpets.Infrastructure.Security.Abstractions;
 
 namespace Goodpets.Application.User.Commands;
 
-public record RegisterUser(string Email, string Password, string Username) : ICommand;
+public record RegisterUser(string Email, string Password, string Username) : ICommand<Result>;
 
-public class RegisterUserHandler : ICommandHandler<RegisterUser>
+public class RegisterUserHandler : ICommandHandler<RegisterUser, Result>
 {
     private readonly IUserAccountRepository _repository;
     private readonly IUserService _registerUserService;
@@ -19,7 +18,7 @@ public class RegisterUserHandler : ICommandHandler<RegisterUser>
         _passwordEncryptor = passwordEncryptor;
     }
 
-    public async Task HandleAsync(RegisterUser command, CancellationToken cancellationToken = default)
+    public async Task<Result> HandleAsync(RegisterUser command, CancellationToken cancellationToken = default)
     {
         if (command == null)
             throw new ArgumentNullException(nameof(command));
@@ -27,6 +26,13 @@ public class RegisterUserHandler : ICommandHandler<RegisterUser>
         var user = await _registerUserService.RegisterUser(command.Username, command.Password, command.Email,
             cancellationToken);
 
-        await _repository.Add(user, cancellationToken);
+        if (user.IsFailed)
+        {
+            return user.ToResult();
+        }
+
+        await _repository.Add(user.Value, cancellationToken);
+
+        return Result.Ok();
     }
 }

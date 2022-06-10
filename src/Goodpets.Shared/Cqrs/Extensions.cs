@@ -1,5 +1,4 @@
 ﻿namespace Goodpets.Shared.Cqrs;
-
 public static class Extensions
 {
     public static IServiceCollection AddCqrs(this IServiceCollection services)

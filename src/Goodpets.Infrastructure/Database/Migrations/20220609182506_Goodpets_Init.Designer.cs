@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Goodpets.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(GoodpetsContext))]
-    [Migration("20220607154634_Goodpets_Init")]
+    [Migration("20220609182506_Goodpets_Init")]
     partial class Goodpets_Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,6 +98,39 @@ namespace Goodpets.Infrastructure.Database.Migrations
                                 .HasForeignKey("UserAccountId");
                         });
 
+                    b.OwnsOne("Goodpets.Domain.Users.ValueObjects.Token", "Token", b1 =>
+                        {
+                            b1.Property<Guid>("UserAccountId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime?>("CreationDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("CreationDate");
+
+                            b1.Property<DateTime?>("ExpireDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("ExpireDate");
+
+                            b1.Property<bool?>("Invalidated")
+                                .HasColumnType("bit")
+                                .HasColumnName("Invalidated");
+
+                            b1.Property<string>("RefreshToken")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("RefreshToken");
+
+                            b1.Property<bool?>("Used")
+                                .HasColumnType("bit")
+                                .HasColumnName("Used");
+
+                            b1.HasKey("UserAccountId");
+
+                            b1.ToTable("Accounts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserAccountId");
+                        });
+
                     b.Navigation("Credentials")
                         .IsRequired();
 
@@ -105,6 +138,9 @@ namespace Goodpets.Infrastructure.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("Role")
+                        .IsRequired();
+
+                    b.Navigation("Token")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

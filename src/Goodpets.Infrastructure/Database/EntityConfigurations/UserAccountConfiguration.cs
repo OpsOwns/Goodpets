@@ -14,6 +14,15 @@ public class AccountConfiguration : IEntityTypeConfiguration<UserAccount>
             navigationBuilder.Property(credential => credential.Password).IsRequired().HasColumnName("Password");
         });
 
+        builder.OwnsOne(x => x.Token, navigationBuilder =>
+        {
+            navigationBuilder.Property(token => token.RefreshToken).HasColumnName("RefreshToken").IsRequired(false);
+            navigationBuilder.Property(token => token.Invalidated).HasColumnName("Invalidated").IsRequired(false);
+            navigationBuilder.Property(token => token.CreationDate).HasColumnName("CreationDate").IsRequired(false);
+            navigationBuilder.Property(token => token.ExpireDate).HasColumnName("ExpireDate").IsRequired(false);
+            navigationBuilder.Property(token => token.Used).HasColumnName("Used").IsRequired(false);
+        });
+
         builder.OwnsOne(x => x.Role, navigationBuilder => navigationBuilder.Property(role => role.Value)
             .IsRequired().HasMaxLength(25).HasColumnName("Role"));
 

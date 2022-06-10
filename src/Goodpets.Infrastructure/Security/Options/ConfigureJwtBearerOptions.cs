@@ -3,11 +3,15 @@
 internal class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
 {
     private readonly AuthenticationOptions _authenticationOptions;
+    private readonly TokenValidationParameters _tokenValidationParameters;
 
-    public ConfigureJwtBearerOptions(AuthenticationOptions authenticationOptions)
+    public ConfigureJwtBearerOptions(AuthenticationOptions authenticationOptions,
+        TokenValidationParameters tokenValidationParameters)
     {
         _authenticationOptions =
             authenticationOptions ?? throw new ArgumentNullException(nameof(authenticationOptions));
+        _tokenValidationParameters = tokenValidationParameters ??
+                                     throw new ArgumentNullException(nameof(tokenValidationParameters));
     }
 
     public void Configure(string name, JwtBearerOptions options)
@@ -17,12 +21,7 @@ internal class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptio
 
         options.Audience = _authenticationOptions.Audience;
         options.IncludeErrorDetails = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidIssuer = _authenticationOptions.Issuer,
-            ClockSkew = TimeSpan.Zero,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationOptions.SigningKey))
-        };
+        options.TokenValidationParameters = _tokenValidationParameters;
     }
 
     public void Configure(JwtBearerOptions options)

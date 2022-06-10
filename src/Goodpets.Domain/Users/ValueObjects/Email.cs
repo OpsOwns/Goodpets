@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Goodpets.Domain.Users.ValueObjects;
+﻿namespace Goodpets.Domain.Users.ValueObjects;
 
 public class Email : ValueObject
 {
@@ -12,7 +10,7 @@ public class Email : ValueObject
     }
 
 
-    public static Email Create(string value)
+    public static Result<Email> Create(string value)
     {
         if (string.IsNullOrEmpty(value))
             throw new ArgumentNullException(nameof(value));
@@ -20,12 +18,12 @@ public class Email : ValueObject
         value = value.Trim();
 
         if (value.Length > 200)
-            throw new BusinessException("Email is too long");
+            return Result.Fail("Email is too long");
 
         if (!Regex.IsMatch(value, @"^(.+)@(.+)$"))
-            throw new BusinessException("Email is invalid");
+            return Result.Fail("Email is invalid");
 
-        return new(value);
+        return Result.Ok(new Email(value));
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

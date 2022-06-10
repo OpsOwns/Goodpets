@@ -10,7 +10,6 @@ global using Goodpets.Domain.Users.ValueObjects;
 global using Goodpets.Infrastructure.Database;
 global using Goodpets.Infrastructure.Security;
 global using Goodpets.Infrastructure.Security.Abstractions;
-global using Goodpets.Infrastructure.Security.Auth;
 global using Goodpets.Infrastructure.Security.Options;
 global using Goodpets.Infrastructure.SeedWork;
 global using Goodpets.Shared.Abstractions;

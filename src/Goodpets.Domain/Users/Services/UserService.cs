@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Abstractions;
-
-namespace Goodpets.Domain.Users.Services;
+﻿namespace Goodpets.Domain.Users.Services;
 
 public class UserService : IUserService
 {
@@ -14,38 +12,43 @@ public class UserService : IUserService
     }
 
 
-    public async Task<UserAccount> RegisterUser(string username, string password, string email,
+    public async Task<Result<UserAccount>> RegisterUser(string username, string password, string email,
         CancellationToken cancellationToken)
     {
         var credentials = Credentials.Create(username, _passwordEncryptor.Encrypt(password));
         var userEmail = Email.Create(email);
 
-        if (await _repository.CheckUserExistsByEmail(userEmail, cancellationToken))
+        var resultConcat = Result.Merge(credentials.ToResult(), userEmail.ToResult());
+
+        if (resultConcat.IsFailed)
+            return resultConcat;
+
+        if (await _repository.CheckUserExistsByEmail(userEmail.Value, cancellationToken))
         {
             throw new BusinessException($"User with email {userEmail.Value} already exists in system");
         }
 
-        return new UserAccount(new UserAccountId(), Role.User(), credentials, userEmail);
+        return Result.Ok(new UserAccount(Role.User(), credentials.Value, userEmail.Value));
     }
 
-    public async Task<UserAccount> Login(string username, string password, CancellationToken cancellationToken)
+    public async Task<Result<UserAccount>> Login(string username, string password, CancellationToken cancellationToken)
     {
         var credentials = Credentials.Create(username, password);
 
-        var user = await _repository.GetUserAccount(credentials.Username, cancellationToken);
+        var user = await _repository.GetUserAccount(credentials.Value.Username, cancellationToken);
 
         if (!user.Exists)
         {
-            throw new BusinessException("User not exists in the system");
+            return Result.Fail(new Error("User not exists"));
         }
 
-        var passwordValid = _passwordEncryptor.Validate(credentials.Password, user.Credentials.Password);
+        var passwordValid = _passwordEncryptor.Validate(credentials.Value.Password, user.Credentials.Password);
 
         if (!passwordValid)
         {
-            throw new BusinessException("Invalid password");
+            return Result.Fail("Invalid password");
         }
 
-        return user;
+        return Result.Ok(user);
     }
 }

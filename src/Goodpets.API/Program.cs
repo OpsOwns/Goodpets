@@ -1,8 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
+builder.Services.AddControllers().ConfigureApplicationPartManager(manager =>
+    manager.FeatureProviders.Add(new InternalControllerFeatureProvider()));
 
 builder.Services.AddScoped<ErrorHandlerMiddleware>();
 builder.Services.AddSingleton<IExceptionResponseMapper, ExceptionResponseMapper>();

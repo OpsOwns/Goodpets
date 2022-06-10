@@ -22,4 +22,8 @@
       <ProjectReference Include="..\Goodpets.Application\Goodpets.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Seedwork" />
+    </ItemGroup>
+
 </Project>

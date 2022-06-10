@@ -1,7 +1,10 @@
-﻿namespace Goodpets.API.Controllers;
+﻿using FluentResults;
+using Goodpets.Shared.Api.Dto;
+
+namespace Goodpets.API.Controllers;
 
 [Route($"{BasePath}/[controller]")]
-public class UserController : BaseController
+internal class UserController : BaseController
 {
     private readonly IDispatcher _dispatcher;
 
@@ -10,6 +13,7 @@ public class UserController : BaseController
         _dispatcher = dispatcher;
     }
 
+    [AllowAnonymous]
     [HttpPost("register")]
     [SwaggerOperation("Create the user account")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -18,31 +22,47 @@ public class UserController : BaseController
         var command = new RegisterUser(userRegisterRequest.Email, userRegisterRequest.Password,
             userRegisterRequest.UserName);
 
-        await _dispatcher.SendAsync(command);
+        var result = await _dispatcher.SendAsync(command);
+
+        if (result.IsFailed)
+            return Ok(result.ToResultDto());
+
 
         return Ok();
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     [SwaggerOperation("Login user and return the JSON Web Token")]
     [Consumes(RequestContentType.Json)]
     [Produces(RequestContentType.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Login([FromBody] UserLoginRequest userLoginRequest)
+    public async Task<ActionResult<ResultDto>> Login([FromBody] UserLoginRequest userLoginRequest)
     {
         var jwtToken =
-            await _dispatcher.QueryAsync(new LoginUser(userLoginRequest.Login, userLoginRequest.Password));
+            await _dispatcher.SendAsync(new LoginUser(userLoginRequest.Login, userLoginRequest.Password));
 
-        return OkOrNotFound(jwtToken);
+        return jwtToken.ToResultDto();
     }
+
+    [Authorize]
+    [Consumes(RequestContentType.Json)]
+    [Produces(RequestContentType.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
+    {
+        return Ok();
+    }
+
 
     [Authorize(Policy = "admin")]
     [HttpGet("{userAccountId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Register(Guid userAccountId)
     {
-        return OkOrNotFound(await _dispatcher.QueryAsync(
+        return Ok(await _dispatcher.QueryAsync(
             new GetUserAccountById(new UserAccountId(userAccountId))));
     }
 }

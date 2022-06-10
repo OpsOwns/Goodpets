@@ -4,10 +4,24 @@ public static class Extensions
 {
     public static IServiceCollection AddSecurity(this IServiceCollection services)
     {
-        services
+        services.AddSingleton(x =>
+            {
+                var authenticationOptions = x.GetRequiredService<AuthenticationOptions>();
+                return new TokenValidationParameters
+                {
+                    ValidIssuer = authenticationOptions.Issuer,
+                    ClockSkew = TimeSpan.Zero,
+                    RequireAudience = true,
+                    ValidateIssuer = true,
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationOptions.SigningKey)),
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true
+                };
+            })
             .AddSingleton<IPasswordHasher<UserAccount>, PasswordHasher<UserAccount>>()
             .AddSingleton<IPasswordEncryptor, PasswordEncryptor>()
-            .AddSingleton<ITokenHandler, TokenHandler>()
+            .AddSingleton<ITokenService, TokenService>()
             .AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

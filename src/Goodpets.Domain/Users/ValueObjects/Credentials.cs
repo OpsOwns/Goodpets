@@ -11,21 +11,21 @@ public class Credentials : ValueObject
         Password = password;
     }
 
-    public static Credentials Create(string username, string password)
+    public static Result<Credentials> Create(string username, string password)
     {
         if (string.IsNullOrEmpty(username))
-            throw new ArgumentNullException(nameof(username));
+            Result.Fail("username can't be empty");
 
         if (string.IsNullOrEmpty(password))
-            throw new ArgumentNullException(nameof(password));
+            Result.Fail("password can't be empty");
 
         username = username.Trim();
 
         if (username.Length < 3)
-            throw new BusinessException($"{nameof(username)} must be greater than 3 characters");
+            return Result.Fail($"{nameof(username)} must be greater than 3 characters");
 
 
-        return new Credentials(username, password);
+        return Result.Ok(new Credentials(username, password));
     }
 
 

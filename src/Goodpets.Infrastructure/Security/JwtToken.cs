@@ -1,3 +1,3 @@
-﻿namespace Goodpets.Infrastructure.Security.Auth;
+﻿namespace Goodpets.Infrastructure.Security;
 
-public record JwtToken(string AccessToken);
+public record JwtToken(string AccessToken, string RefreshToken, DateTime ExpireRefreshToken);
