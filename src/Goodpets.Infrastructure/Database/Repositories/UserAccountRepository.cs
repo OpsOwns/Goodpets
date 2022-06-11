@@ -39,7 +39,7 @@ public class UserAccountRepository : IUserAccountRepository
 
     public async Task<UserAccount> GetUserByToken(string refreshToken, CancellationToken cancellationToken = default)
     {
-        var user = await _goodpetsContext.UserAccount.SingleOrDefaultAsync(x => x.Token.RefreshToken == refreshToken,
+        var user = await _goodpetsContext.UserAccount.SingleOrDefaultAsync(x => x.RefreshToken.RefreshToken == refreshToken,
             cancellationToken);
 
         return user ?? UserAccount.NotFound();

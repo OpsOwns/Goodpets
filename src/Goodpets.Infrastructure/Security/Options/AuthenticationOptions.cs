@@ -8,6 +8,7 @@ internal sealed class AuthenticationOptions
     public string Audience { get; init; }
     public string SigningKey { get; init; }
     public TimeSpan? Expire { get; init; }
+    public TimeSpan? ExpireRefreshToken { get; init; }
 
 
     public AuthenticationOptions(IConfiguration configuration)
@@ -26,5 +27,6 @@ internal sealed class AuthenticationOptions
         Audience = section.GetValue<string>(nameof(Audience));
         SigningKey = section.GetValue<string>(nameof(SigningKey));
         Expire = section.GetValue<TimeSpan?>(nameof(Expire));
+        ExpireRefreshToken = section.GetValue<TimeSpan?>(nameof(ExpireRefreshToken));
     }
 }

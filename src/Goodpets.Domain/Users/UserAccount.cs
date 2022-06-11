@@ -5,7 +5,7 @@ public class UserAccount : Entity<UserAccountId>
     public Role Role { get; private set; } = null!;
     public Credentials Credentials { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
-    public Token? Token { get; private set; }
+    public Token? RefreshToken { get; private set; }
 
     public static UserAccount NotFound() => new();
 
@@ -20,13 +20,10 @@ public class UserAccount : Entity<UserAccountId>
         Role = role ?? throw new ArgumentNullException(nameof(role));
     }
 
-    public void CreateRefreshToken(string refreshToken, DateTime expireTime)
+    public void CreateRefreshToken(Token refreshToken)
     {
-        if (Token is null)
-        {
-            Token = Token?.Create(refreshToken, expireTime, false, false);
-        }
+        if (refreshToken == null) throw new ArgumentNullException(nameof(refreshToken));
 
-        Token = Token?.Refresh(refreshToken, expireTime);
+        RefreshToken = refreshToken;
     }
 }

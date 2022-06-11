@@ -14,7 +14,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<UserAccount>
             navigationBuilder.Property(credential => credential.Password).IsRequired().HasColumnName("Password");
         });
 
-        builder.OwnsOne(x => x.Token, navigationBuilder =>
+        builder.OwnsOne(x => x.RefreshToken, navigationBuilder =>
         {
             navigationBuilder.Property(token => token.RefreshToken).HasColumnName("RefreshToken").IsRequired(false);
             navigationBuilder.Property(token => token.Invalidated).HasColumnName("Invalidated").IsRequired(false);

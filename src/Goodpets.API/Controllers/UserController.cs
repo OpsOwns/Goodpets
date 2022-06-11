@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using Goodpets.Application.Dto;
 using Goodpets.Shared.Api.Dto;
 
 namespace Goodpets.API.Controllers;
@@ -38,12 +39,15 @@ internal class UserController : BaseController
     [Produces(RequestContentType.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ResultDto>> Login([FromBody] UserLoginRequest userLoginRequest)
+    public async Task<ActionResult<AccessTokenDto>> Login([FromBody] UserLoginRequest userLoginRequest)
     {
-        var jwtToken =
+        var accessTokenDto =
             await _dispatcher.SendAsync(new LoginUser(userLoginRequest.Login, userLoginRequest.Password));
 
-        return jwtToken.ToResultDto();
+        if (accessTokenDto.IsSuccess)
+            return Ok(accessTokenDto.Value);
+
+        return BadRequest(accessTokenDto.ToResult().ToResultDto());
     }
 
     [Authorize]

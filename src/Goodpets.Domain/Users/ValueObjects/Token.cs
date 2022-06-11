@@ -8,21 +8,7 @@ public class Token : ValueObject
     public bool? Used { get; }
     public bool? Invalidated { get; }
 
-    public static Token Empty => new();
-
-    private Token()
-    {
-    }
-
-    private Token(string refreshToken, DateTime expireDate)
-    {
-        RefreshToken = refreshToken;
-        ExpireDate = expireDate;
-        Used = false;
-        Invalidated = false;
-    }
-
-    private Token(string refreshToken, DateTime expireDate, DateTime creationDate, bool used, bool invalidated)
+    private Token(string refreshToken, DateTime expireDate, DateTime creationDate, bool? used, bool? invalidated)
     {
         RefreshToken = refreshToken;
         ExpireDate = expireDate;
@@ -31,27 +17,15 @@ public class Token : ValueObject
         Invalidated = invalidated;
     }
 
-    public Token Create(string token, DateTime expireDate, bool invalidated, bool used)
-    {
-        Validate(token, expireDate);
-
-        return new(token, expireDate, DateTime.UtcNow, used, invalidated);
-    }
-
-    public Token Refresh(string token, DateTime expireTime)
-    {
-        Validate(token, expireTime);
-
-        return new(token, expireTime);
-    }
-
-    private static void Validate(string token, DateTime expireDate)
+    public static Result<Token> Create(string token, DateTime expireDate, bool? invalidated, bool? used)
     {
         if (string.IsNullOrWhiteSpace(token))
-            throw new BusinessException("Token can't be null or empty");
+            return Result.Fail("Token can't be null or empty");
 
         if (expireDate < DateTime.Now)
-            throw new BusinessException("Expire date can't be less than current time");
+            return Result.Fail("Expire date can't be less than current time");
+
+        return Result.Ok(new Token(token, expireDate, DateTime.UtcNow, used, invalidated));
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

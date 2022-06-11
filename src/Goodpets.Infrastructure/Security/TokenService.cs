@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace Goodpets.Infrastructure.Security;
+﻿namespace Goodpets.Infrastructure.Security;
 
 internal sealed class TokenService : ITokenService
 {
@@ -11,7 +9,7 @@ internal sealed class TokenService : ITokenService
     private readonly JwtSecurityTokenHandler _jwtSecurityToken = new();
     private readonly IClock _clock;
     private readonly TokenValidationParameters _tokenValidationParameters;
-    public DateTime ExpireDateToken => DateTime.Now.Add(_expiry);
+    private readonly TimeSpan _expiryRefreshToken;
 
     public TokenService(AuthenticationOptions options, IClock clock,
         TokenValidationParameters tokenValidationParameters)
@@ -21,6 +19,7 @@ internal sealed class TokenService : ITokenService
         _issuer = options.Issuer;
         _audience = options.Audience;
         _expiry = options.Expire ?? TimeSpan.FromHours(1);
+        _expiryRefreshToken = options.ExpireRefreshToken ?? TimeSpan.FromHours(3);
         _signingCredentials = new SigningCredentials(new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(options.SigningKey)),
             SecurityAlgorithms.HmacSha256);
@@ -56,11 +55,13 @@ internal sealed class TokenService : ITokenService
         return principal;
     }
 
-    public string GenerateRefreshToken()
+    public RefreshToken GenerateRefreshToken()
     {
         var randomNumber = new byte[64];
         using var generator = RandomNumberGenerator.Create();
         generator.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
+        string token = Convert.ToBase64String(randomNumber);
+
+        return new(token, _clock.Current().Add(_expiryRefreshToken));
     }
 }
