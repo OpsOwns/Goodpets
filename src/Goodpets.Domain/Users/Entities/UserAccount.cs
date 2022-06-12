@@ -1,12 +1,10 @@
-﻿namespace Goodpets.Domain.Users;
+﻿namespace Goodpets.Domain.Users.Entities;
 
-public class UserAccount : Entity<UserAccountId>
+public sealed class UserAccount : Entity<UserAccountId>
 {
     public Role Role { get; private set; } = null!;
     public Credentials Credentials { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
-    public Token? RefreshToken { get; private set; }
-
     public static UserAccount NotFound() => new();
 
     private UserAccount()
@@ -18,12 +16,5 @@ public class UserAccount : Entity<UserAccountId>
         Credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
         Email = email ?? throw new ArgumentNullException(nameof(email));
         Role = role ?? throw new ArgumentNullException(nameof(role));
-    }
-
-    public void CreateRefreshToken(Token refreshToken)
-    {
-        if (refreshToken == null) throw new ArgumentNullException(nameof(refreshToken));
-
-        RefreshToken = refreshToken;
     }
 }

@@ -19,9 +19,10 @@ public class GetUserAccountByIdHandler : IQueryHandler<GetUserAccountById, UserA
 
         var account = await _accountRepository.GetUserAccount(query.UserAccountId, cancellationToken);
 
-        if (!account.Exists)
+        if (!account.IsFailed)
             return UserAccountDto.Empty;
 
-        return new UserAccountDto(account.Email.Value, account.Credentials.Username, account.Role.Value);
+        return new UserAccountDto(account.Value.Email.Value, account.Value.Credentials.Username,
+            account.Value.Role.Value);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Domain.Users;
+﻿namespace Goodpets.Domain.Users.Identities;
 
 public record UserAccountId : Identity
 {
@@ -6,5 +6,7 @@ public record UserAccountId : Identity
     {
     }
 
-    public UserAccountId() { }
+    public UserAccountId()
+    {
+    }
 }

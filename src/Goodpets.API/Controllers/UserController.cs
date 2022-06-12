@@ -1,8 +1,4 @@
-﻿using FluentResults;
-using Goodpets.Application.Dto;
-using Goodpets.Shared.Api.Dto;
-
-namespace Goodpets.API.Controllers;
+﻿namespace Goodpets.API.Controllers;
 
 [Route($"{BasePath}/[controller]")]
 internal class UserController : BaseController
@@ -47,17 +43,26 @@ internal class UserController : BaseController
         if (accessTokenDto.IsSuccess)
             return Ok(accessTokenDto.Value);
 
-        return BadRequest(accessTokenDto.ToResult().ToResultDto());
+        return Unauthorized(accessTokenDto.ToResult().ToResultDto());
     }
 
-    [Authorize]
+    [AllowAnonymous]
+    [HttpPost("refresh")]
+    [SwaggerOperation("Refresh the JSON Web Token")]
     [Consumes(RequestContentType.Json)]
     [Produces(RequestContentType.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
     {
-        return Ok();
+        var result = await _dispatcher.SendAsync(
+            new RefreshTokenHandler.RefreshUserToken(refreshTokenRequest.AccessToken,
+                refreshTokenRequest.RefreshToken));
+
+        if (result.IsSuccess)
+            return Ok(result.Value);
+
+        return BadRequest(result.ToResult().ToResultDto());
     }
 
 

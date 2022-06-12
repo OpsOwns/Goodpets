@@ -4,7 +4,6 @@ namespace Goodpets.Shared.Domain;
 
 public abstract class Entity<T> where T : Identity
 {
-    public bool Exists => Id is not null;
     public T Id { get; protected set; }
 
     protected Entity()
@@ -44,6 +43,6 @@ public abstract class Entity<T> where T : Identity
     }
 
     public static bool operator !=(Entity<T> a, Entity<T> b) => !(a == b);
-    public override string ToString() => Id.ToString();
+    public override string ToString() => Id.Value.ToString();
     public override int GetHashCode() => GetType().GetHashCode();
 }

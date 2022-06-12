@@ -1,7 +1,4 @@
-﻿using Goodpets.Domain.Users.ValueObjects;
-using Goodpets.Infrastructure.Security;
-
-namespace Goodpets.Application.User.Commands;
+﻿namespace Goodpets.Application.User.Commands;
 
 public record LoginUser(string Login, string Password) : ICommand<Result<AccessTokenDto>>;
 
@@ -9,14 +6,16 @@ public class LoginUserHandler : ICommandHandler<LoginUser, Result<AccessTokenDto
 {
     private readonly ITokenService _tokenService;
     private readonly IUserService _userService;
-    private readonly IUserAccountRepository _accountRepository;
+    private readonly ITokenRepository _tokenRepository;
+    private readonly IClock _clock;
 
     public LoginUserHandler(ITokenService tokenService, IUserService userService,
-        IUserAccountRepository accountRepository)
+        ITokenRepository tokenRepository, IClock clock)
     {
         _tokenService = tokenService;
         _userService = userService;
-        _accountRepository = accountRepository;
+        _tokenRepository = tokenRepository;
+        _clock = clock;
     }
 
 
@@ -34,19 +33,24 @@ public class LoginUserHandler : ICommandHandler<LoginUser, Result<AccessTokenDto
 
         var refreshToken = _tokenService.GenerateRefreshToken();
 
+        var existedUserRefreshToken = await _tokenRepository.GetToken(userAccount.Id, cancellationToken);
 
-        var refreshTokenResult = userAccount.RefreshToken is null
-            ? Token.Create(refreshToken.Value, refreshToken.ExpireTime, false, false)
-            : Token.Create(refreshToken.Value, refreshToken.ExpireTime, userAccount.RefreshToken.Invalidated,
-                userAccount.RefreshToken.Used);
-        
-        if (refreshTokenResult.IsFailed)
-            return refreshTokenResult.ToResult();
+        if (existedUserRefreshToken.IsSuccess)
+        {
+            await _tokenRepository.RemoveToken(existedUserRefreshToken.Value, cancellationToken);
+        }
 
-        userAccount.CreateRefreshToken(refreshTokenResult.Value);
+        var userRefreshToken = Token.Create(refreshToken.Value,
+            refreshToken.ExpireTime, _clock.Current(), userAccount.Id, accessToken.JwtId, false,
+            false);
 
-        await _accountRepository.UpdateUser(userAccount, cancellationToken);
+        if (userRefreshToken.IsFailed)
+            return userRefreshToken.ToResult();
 
-        return Result.Ok(new AccessTokenDto(accessToken, refreshToken.Value));
+
+        await _tokenRepository.Create(userRefreshToken.Value, cancellationToken);
+
+
+        return Result.Ok(new AccessTokenDto(accessToken.Value, refreshToken.Value));
     }
 }

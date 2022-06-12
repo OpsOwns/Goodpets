@@ -1,8 +1,11 @@
-﻿namespace Goodpets.Infrastructure.Security.Abstractions;
+﻿using Goodpets.Infrastructure.Security.Dto;
+
+namespace Goodpets.Infrastructure.Security.Abstractions;
 
 public interface ITokenService
 {
-    string GenerateJwtToken(UserAccount userAccount);
+    AccessToken GenerateJwtToken(UserAccount userAccount);
     ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     RefreshToken GenerateRefreshToken();
+    bool JwtTokenExpired(long expiryDateUnix);
 }

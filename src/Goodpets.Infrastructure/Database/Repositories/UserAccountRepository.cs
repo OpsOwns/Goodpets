@@ -3,7 +3,7 @@
 public class UserAccountRepository : IUserAccountRepository
 {
     private readonly GoodpetsContext _goodpetsContext;
-    private DbSet<UserAccount> _accounts;
+    private readonly DbSet<UserAccount> _accounts;
 
     public UserAccountRepository(GoodpetsContext goodpetsContext)
     {
@@ -22,32 +22,30 @@ public class UserAccountRepository : IUserAccountRepository
         await _goodpetsContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<UserAccount> GetUserAccount(UserAccountId userAccountId,
+    public async Task<Result<UserAccount>> GetUserAccount(UserAccountId userAccountId,
         CancellationToken cancellationToken = default)
     {
         var user = await _goodpetsContext.UserAccount.FindAsync(new object[] { userAccountId }, cancellationToken);
-        return user ?? UserAccount.NotFound();
+
+        if (user is null)
+        {
+            return Result.Fail(CustomResultMessage.Not_Found(nameof(user)));
+        }
+
+        return Result.Ok(user);
     }
 
-    public async Task<UserAccount> GetUserAccount(string username,
+    public async Task<Result<UserAccount>> GetUserAccount(string username,
         CancellationToken cancellationToken = default)
     {
         var user = await _accounts.SingleOrDefaultAsync(x => x.Credentials.Username == username,
             cancellationToken);
-        return user ?? UserAccount.NotFound();
-    }
 
-    public async Task<UserAccount> GetUserByToken(string refreshToken, CancellationToken cancellationToken = default)
-    {
-        var user = await _goodpetsContext.UserAccount.SingleOrDefaultAsync(x => x.RefreshToken.RefreshToken == refreshToken,
-            cancellationToken);
+        if (user is null)
+        {
+            return Result.Fail(CustomResultMessage.Not_Found(nameof(user)));
+        }
 
-        return user ?? UserAccount.NotFound();
-    }
-
-    public async Task UpdateUser(UserAccount userAccount, CancellationToken cancellationToken)
-    {
-        _accounts.Update(userAccount);
-        await _goodpetsContext.SaveChangesAsync(cancellationToken);
+        return Result.Ok(user);
     }
 }

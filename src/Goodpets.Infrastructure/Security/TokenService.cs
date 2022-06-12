@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Security;
+﻿using Goodpets.Infrastructure.Security.Dto;
+
+namespace Goodpets.Infrastructure.Security;
 
 internal sealed class TokenService : ITokenService
 {
@@ -25,19 +27,23 @@ internal sealed class TokenService : ITokenService
             SecurityAlgorithms.HmacSha256);
     }
 
-    public string GenerateJwtToken(UserAccount userAccount)
+    public AccessToken GenerateJwtToken(UserAccount userAccount)
     {
         var now = _clock.Current();
+        var jwtId = new JwtId();
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, userAccount.ToString()),
             new(JwtRegisteredClaimNames.UniqueName, userAccount.Credentials.Username),
             new(JwtRegisteredClaimNames.Email, userAccount.Email.Value),
+            new(JwtRegisteredClaimNames.Jti, jwtId.Value.ToString()),
             new(ClaimTypes.Role, userAccount.Role.Value)
         };
         var expires = now.Add(_expiry);
         var jwt = new JwtSecurityToken(_issuer, _audience, claims, now, expires, _signingCredentials);
-        return _jwtSecurityToken.WriteToken(jwt);
+        var token = _jwtSecurityToken.WriteToken(jwt);
+
+        return new AccessToken(token, jwtId);
     }
 
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
@@ -64,4 +70,7 @@ internal sealed class TokenService : ITokenService
 
         return new(token, _clock.Current().Add(_expiryRefreshToken));
     }
+
+    public bool JwtTokenExpired(long expiryDateUnix) =>
+        DateTime.UnixEpoch.AddSeconds(expiryDateUnix).Subtract(_expiry) > _clock.Current();
 }

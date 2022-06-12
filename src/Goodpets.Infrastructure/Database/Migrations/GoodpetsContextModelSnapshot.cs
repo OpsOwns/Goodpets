@@ -22,17 +22,59 @@ namespace Goodpets.Infrastructure.Database.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Goodpets.Domain.Users.UserAccount", b =>
+            modelBuilder.Entity("Goodpets.Domain.Users.Entities.Token", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationDate");
+
+                    b.Property<DateTime>("ExpireDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ExpireDate");
+
+                    b.Property<bool>("Invalidated")
+                        .HasColumnType("bit")
+                        .HasColumnName("Invalidated");
+
+                    b.Property<Guid>("JwtId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("JwtId")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RefreshToken");
+
+                    b.Property<bool>("Used")
+                        .HasColumnType("bit")
+                        .HasColumnName("Used");
+
+                    b.Property<Guid>("UserAccountId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserAccountId")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RefreshTokens", "Goodpets");
+                });
+
+            modelBuilder.Entity("Goodpets.Domain.Users.Entities.UserAccount", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts", (string)null);
+                    b.ToTable("Accounts", "Goodpets");
                 });
 
-            modelBuilder.Entity("Goodpets.Domain.Users.UserAccount", b =>
+            modelBuilder.Entity("Goodpets.Domain.Users.Entities.UserAccount", b =>
                 {
                     b.OwnsOne("Goodpets.Domain.Users.ValueObjects.Credentials", "Credentials", b1 =>
                         {
@@ -52,7 +94,7 @@ namespace Goodpets.Infrastructure.Database.Migrations
 
                             b1.HasKey("UserAccountId");
 
-                            b1.ToTable("Accounts");
+                            b1.ToTable("Accounts", "Goodpets");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserAccountId");
@@ -71,7 +113,7 @@ namespace Goodpets.Infrastructure.Database.Migrations
 
                             b1.HasKey("UserAccountId");
 
-                            b1.ToTable("Accounts");
+                            b1.ToTable("Accounts", "Goodpets");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserAccountId");
@@ -90,40 +132,7 @@ namespace Goodpets.Infrastructure.Database.Migrations
 
                             b1.HasKey("UserAccountId");
 
-                            b1.ToTable("Accounts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserAccountId");
-                        });
-
-                    b.OwnsOne("Goodpets.Domain.Users.ValueObjects.Token", "Token", b1 =>
-                        {
-                            b1.Property<Guid>("UserAccountId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<DateTime?>("CreationDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("CreationDate");
-
-                            b1.Property<DateTime?>("ExpireDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("ExpireDate");
-
-                            b1.Property<bool?>("Invalidated")
-                                .HasColumnType("bit")
-                                .HasColumnName("Invalidated");
-
-                            b1.Property<string>("RefreshToken")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("RefreshToken");
-
-                            b1.Property<bool?>("Used")
-                                .HasColumnType("bit")
-                                .HasColumnName("Used");
-
-                            b1.HasKey("UserAccountId");
-
-                            b1.ToTable("Accounts");
+                            b1.ToTable("Accounts", "Goodpets");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserAccountId");
@@ -136,9 +145,6 @@ namespace Goodpets.Infrastructure.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("Role")
-                        .IsRequired();
-
-                    b.Navigation("Token")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

@@ -1,13 +1,11 @@
-﻿using Goodpets.Infrastructure.Database.EntityConfigurations;
-using Goodpets.Infrastructure.Database.Options;
-
-namespace Goodpets.Infrastructure.Database;
+﻿namespace Goodpets.Infrastructure.Database;
 
 public class GoodpetsContext : DbContext
 {
-    private readonly DatabaseOptions _databaseOptions = null!;
+    private readonly DatabaseOptions _databaseOptions;
 
     internal DbSet<UserAccount> UserAccount => Set<UserAccount>();
+    internal DbSet<Token> Tokens => Set<Token>();
 
     public GoodpetsContext(DatabaseOptions databaseOptions)
     {

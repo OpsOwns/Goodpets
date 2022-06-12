@@ -35,20 +35,21 @@ public class UserService : IUserService
     {
         var credentials = Credentials.Create(username, password);
 
-        var user = await _repository.GetUserAccount(credentials.Value.Username, cancellationToken);
+        var userResult = await _repository.GetUserAccount(credentials.Value.Username, cancellationToken);
 
-        if (!user.Exists)
+        if (userResult.IsFailed)
         {
             return Result.Fail(new Error("User not exists"));
         }
 
-        var passwordValid = _passwordEncryptor.Validate(credentials.Value.Password, user.Credentials.Password);
+        var passwordValid =
+            _passwordEncryptor.Validate(credentials.Value.Password, userResult.Value.Credentials.Password);
 
         if (!passwordValid)
         {
             return Result.Fail("Invalid password");
         }
 
-        return Result.Ok(user);
+        return Result.Ok(userResult.Value);
     }
 }

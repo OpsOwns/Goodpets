@@ -1,6 +1,4 @@
-﻿using Goodpets.Infrastructure.Database.Options;
-
-namespace Goodpets.Infrastructure.Database;
+﻿namespace Goodpets.Infrastructure.Database;
 
 public static class Extensions
 {
