@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Humanizer" Version="2.14.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -21,10 +22,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Goodpets.Application\Goodpets.Application.csproj" />
       <ProjectReference Include="..\Goodpets.Infrastructure\Goodpets.Infrastructure.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Seedwork" />
     </ItemGroup>
 
 </Project>

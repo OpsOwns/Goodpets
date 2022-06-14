@@ -1,3 +1,5 @@
+using Goodpets.API.SeedWork.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().ConfigureApplicationPartManager(manager =>
@@ -6,7 +8,7 @@ builder.Services.AddControllers().ConfigureApplicationPartManager(manager =>
 builder.Services.AddScoped<ErrorHandlerMiddleware>();
 builder.Services.AddSingleton<IExceptionResponseMapper, ExceptionResponseMapper>();
 
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
 
 

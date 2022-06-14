@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Application.DomainServices;
+﻿using Goodpets.Domain.SeedWork;
+
+namespace Goodpets.Application.DomainServices;
 
 public class UserService : IUserService
 {

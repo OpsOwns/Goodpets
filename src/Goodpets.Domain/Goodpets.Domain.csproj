@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Goodpets.Shared\Goodpets.Shared.csproj" />
+      <PackageReference Include="FluentResults" Version="3.6.0" />
     </ItemGroup>
 
 </Project>

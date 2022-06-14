@@ -1,5 +1,6 @@
 ﻿// Global using directives
 
+global using System.Collections.Concurrent;
 global using System.IdentityModel.Tokens.Jwt;
 global using System.Security.Claims;
 global using System.Security.Cryptography;
@@ -7,20 +8,18 @@ global using System.Text;
 global using FluentResults;
 global using Goodpets.Application.Abstractions.Security;
 global using Goodpets.Application.Dto;
-global using Goodpets.Domain.Users;
+global using Goodpets.Application.Messages;
 global using Goodpets.Domain.Users.Entities;
 global using Goodpets.Domain.Users.Identities;
 global using Goodpets.Domain.Users.Repositories;
 global using Goodpets.Domain.Users.ValueObjects;
 global using Goodpets.Infrastructure.Database;
+global using Goodpets.Infrastructure.Database.Configuration;
 global using Goodpets.Infrastructure.Database.EntityConfigurations;
 global using Goodpets.Infrastructure.Database.Options;
 global using Goodpets.Infrastructure.Security;
 global using Goodpets.Infrastructure.Security.Options;
 global using Goodpets.Infrastructure.SeedWork;
-global using Goodpets.Shared.Abstractions;
-global using Goodpets.Shared.Database;
-global using Goodpets.Shared.Messages;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore;

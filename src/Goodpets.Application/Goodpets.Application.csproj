@@ -7,8 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Goodpets.Domain\Goodpets.Domain.csproj" />
-      <ProjectReference Include="..\Goodpets.Shared\Goodpets.Shared.csproj" />
+        <ProjectReference Include="..\Goodpets.Domain\Goodpets.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Scrutor" Version="4.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="SeedWork" />
     </ItemGroup>
 
 </Project>

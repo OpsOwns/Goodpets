@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Security;
+﻿using Goodpets.Application.Abstractions.Time;
+
+namespace Goodpets.Infrastructure.Security;
 
 internal sealed class TokenProvider : ITokenProvider
 {

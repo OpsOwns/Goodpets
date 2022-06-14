@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.SeedWork;
+﻿using Goodpets.Application.Abstractions.Time;
+
+namespace Goodpets.Infrastructure.SeedWork;
 
 internal sealed class Clock : IClock
 {
