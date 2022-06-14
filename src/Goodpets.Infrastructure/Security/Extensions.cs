@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Security;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+
+namespace Goodpets.Infrastructure.Security;
 
 public static class Extensions
 {
@@ -28,6 +30,8 @@ public static class Extensions
                 o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, configureOptions: null!);
+
+        services.TryAddSingleton<IIdentity, Identity>();
 
         services.AddAuthorization(authorization =>
         {

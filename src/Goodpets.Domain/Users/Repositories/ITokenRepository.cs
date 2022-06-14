@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Domain.Users.Repositories;
+﻿using Goodpets.Domain.Base;
+
+namespace Goodpets.Domain.Users.Repositories;
 
 public interface ITokenRepository : IRepository
 {

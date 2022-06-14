@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Domain.SeedWork;
+﻿namespace Goodpets.Domain.Base.Types;
 
 [Serializable]
 public class BusinessException : Exception

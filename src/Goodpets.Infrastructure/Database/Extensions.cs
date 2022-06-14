@@ -1,4 +1,4 @@
-﻿using Goodpets.Domain.SeedWork;
+﻿using Goodpets.Domain.Base;
 
 namespace Goodpets.Infrastructure.Database;
 

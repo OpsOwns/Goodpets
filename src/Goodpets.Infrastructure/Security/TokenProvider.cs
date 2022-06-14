@@ -70,17 +70,6 @@ internal sealed class TokenProvider : ITokenProvider
         return new(token, _clock.Current().Add(_expiryRefreshToken));
     }
 
-    public bool JwtTokenExpired()
-    {
-        if (_claimsPrincipal is null)
-            throw new InvalidOperationException();
-
-        var expiryDateUnix =
-            long.Parse(_claimsPrincipal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-
-        return DateTime.UnixEpoch.AddSeconds(expiryDateUnix).Subtract(_expiry) > _clock.Current();
-    }
-
     public Guid GetUserIdFromJwtToken()
     {
         if (_claimsPrincipal is null)
@@ -91,11 +80,14 @@ internal sealed class TokenProvider : ITokenProvider
 
     public bool StoredJwtIdSameAsFromPrinciple(JwtId storedJwtId)
     {
+        if (storedJwtId == null)
+            throw new ArgumentNullException(nameof(storedJwtId));
+        
         if (_claimsPrincipal is null)
             throw new InvalidOperationException();
 
         JwtId jwtId = _claimsPrincipal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-        return jwtId == storedJwtId;
+        return jwtId.Value == storedJwtId.Value;
     }
 }

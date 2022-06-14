@@ -1,6 +1,8 @@
-﻿namespace Goodpets.Domain.Users.Identities;
+﻿using Goodpets.Domain.Base.Types;
 
-public record JwtId : Identity
+namespace Goodpets.Domain.Users.Identities;
+
+public record JwtId : EntityId
 {
     public JwtId(Guid value) : base(value)
     {

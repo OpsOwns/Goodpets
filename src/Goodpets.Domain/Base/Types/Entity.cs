@@ -1,11 +1,9 @@
 ﻿#nullable disable
 
-namespace Goodpets.Domain.SeedWork;
+namespace Goodpets.Domain.Base.Types;
 
-public abstract class Entity<T> where T : Identity
+public abstract class Entity<T> where T : EntityId
 {
-    public T Id { get; protected set; }
-
     protected Entity()
     {
     }
@@ -15,7 +13,12 @@ public abstract class Entity<T> where T : Identity
         Id = id ?? throw new ArgumentNullException(nameof(id));
     }
 
-    private bool IsTransient() => Equals(default);
+    public T Id { get; protected set; }
+
+    private bool IsTransient()
+    {
+        return Equals(default);
+    }
 
     public override bool Equals(object obj)
     {
@@ -42,7 +45,18 @@ public abstract class Entity<T> where T : Identity
         return a.Equals(b);
     }
 
-    public static bool operator !=(Entity<T> a, Entity<T> b) => !(a == b);
-    public override string ToString() => Id.Value.ToString();
-    public override int GetHashCode() => GetType().GetHashCode();
+    public static bool operator !=(Entity<T> a, Entity<T> b)
+    {
+        return !(a == b);
+    }
+
+    public override string ToString()
+    {
+        return Id.Value.ToString();
+    }
+
+    public override int GetHashCode()
+    {
+        return GetType().GetHashCode();
+    }
 }

@@ -1,12 +1,9 @@
-﻿namespace Goodpets.Domain.Users.Entities;
+﻿using Goodpets.Domain.Base.Types;
+
+namespace Goodpets.Domain.Users.Entities;
 
 public sealed class UserAccount : Entity<UserAccountId>
 {
-    public Role Role { get; private set; } = null!;
-    public Credentials Credentials { get; private set; } = null!;
-    public Email Email { get; private set; } = null!;
-    public static UserAccount NotFound() => new();
-
     private UserAccount()
     {
     }
@@ -16,5 +13,14 @@ public sealed class UserAccount : Entity<UserAccountId>
         Credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
         Email = email ?? throw new ArgumentNullException(nameof(email));
         Role = role ?? throw new ArgumentNullException(nameof(role));
+    }
+
+    public Role Role { get; } = null!;
+    public Credentials Credentials { get; } = null!;
+    public Email Email { get; } = null!;
+
+    public static UserAccount NotFound()
+    {
+        return new();
     }
 }

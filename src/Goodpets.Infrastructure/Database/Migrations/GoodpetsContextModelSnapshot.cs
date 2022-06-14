@@ -36,10 +36,6 @@ namespace Goodpets.Infrastructure.Database.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("ExpireDate");
 
-                    b.Property<bool>("Invalidated")
-                        .HasColumnType("bit")
-                        .HasColumnName("Invalidated");
-
                     b.Property<Guid>("JwtId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("JwtId")

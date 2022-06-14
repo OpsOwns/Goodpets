@@ -1,13 +1,13 @@
 ﻿#nullable disable
 
-using Goodpets.Domain.SeedWork;
+using Goodpets.Domain.Base.Types;
 
 namespace Goodpets.Infrastructure.Database.Configuration;
 
 public class StronglyTypedIdValueConverterSelector : ValueConverterSelector
 {
     private readonly ConcurrentDictionary<(Type ModelClrType, Type ProviderClrType), ValueConverterInfo> _converters
-        = new ConcurrentDictionary<(Type ModelClrType, Type ProviderClrType), ValueConverterInfo>();
+        = new();
 
     public StronglyTypedIdValueConverterSelector(ValueConverterSelectorDependencies dependencies)
         : base(dependencies)
@@ -27,7 +27,7 @@ public class StronglyTypedIdValueConverterSelector : ValueConverterSelector
 
         if (underlyingProviderType is null || underlyingProviderType == typeof(Guid))
         {
-            var isTypedIdValue = typeof(Identity).IsAssignableFrom(underlyingModelType);
+            var isTypedIdValue = typeof(EntityId).IsAssignableFrom(underlyingModelType);
             if (isTypedIdValue)
             {
                 var converterType = typeof(TypedIdValueConverter<>).MakeGenericType(underlyingModelType);

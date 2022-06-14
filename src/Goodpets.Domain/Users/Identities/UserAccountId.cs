@@ -1,6 +1,8 @@
-﻿namespace Goodpets.Domain.Users.Identities;
+﻿using Goodpets.Domain.Base.Types;
 
-public record UserAccountId : Identity
+namespace Goodpets.Domain.Users.Identities;
+
+public record UserAccountId : EntityId
 {
     public UserAccountId(Guid value) : base(value)
     {
@@ -8,5 +10,13 @@ public record UserAccountId : Identity
 
     public UserAccountId()
     {
+    }
+
+    public static implicit operator UserAccountId(string jwtId)
+    {
+        if (string.IsNullOrEmpty(jwtId))
+            throw new ArgumentNullException(nameof(jwtId));
+
+        return new UserAccountId(Guid.Parse(jwtId));
     }
 }

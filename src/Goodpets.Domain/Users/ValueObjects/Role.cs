@@ -1,14 +1,16 @@
-﻿namespace Goodpets.Domain.Users.ValueObjects;
+﻿using Goodpets.Domain.Base.Types;
+
+namespace Goodpets.Domain.Users.ValueObjects;
 
 public class Role : ValueObject
 {
-    public static IEnumerable<string> AvailableRoles { get; } = new[] { "vet", "admin", "user" };
-    public string Value { get; }
-
     private Role(string value)
     {
         Value = value;
     }
+
+    public static IEnumerable<string> AvailableRoles { get; } = new[] { "vet", "admin", "user" };
+    public string Value { get; }
 
     public static Role Create(string value)
     {
@@ -17,19 +19,25 @@ public class Role : ValueObject
 
         value = value.Trim().ToLower();
 
-        if (!AvailableRoles.Contains(value))
-        {
-            throw new BusinessException($"selected role {value} dose not exists");
-        }
+        if (!AvailableRoles.Contains(value)) throw new BusinessException($"selected role {value} dose not exists");
 
-        return new(value);
+        return new Role(value);
     }
 
-    public static Role Admin() => new("admin");
+    public static Role Admin()
+    {
+        return new("admin");
+    }
 
-    public static Role User() => new("user");
+    public static Role User()
+    {
+        return new("user");
+    }
 
-    public static Role Vet() => new("vet");
+    public static Role Vet()
+    {
+        return new("vet");
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

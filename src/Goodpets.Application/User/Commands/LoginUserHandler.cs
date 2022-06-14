@@ -41,8 +41,7 @@ public class LoginUserHandler : ICommandHandler<LoginUser, Result<AccessTokenDto
         }
 
         var userRefreshToken = Token.Create(refreshToken.Value,
-            refreshToken.ExpireTime, _clock.Current(), userAccount.Id, accessToken.JwtId, false,
-            false);
+            refreshToken.ExpireTime, _clock.Current(), userAccount.Id, accessToken.JwtId, false);
 
         if (userRefreshToken.IsFailed)
             return userRefreshToken.ToResult();

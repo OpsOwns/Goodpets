@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Domain.SeedWork;
+﻿namespace Goodpets.Domain.Base.Types;
 
 [Serializable]
 public abstract class ValueObject : IComparable, IComparable<ValueObject>

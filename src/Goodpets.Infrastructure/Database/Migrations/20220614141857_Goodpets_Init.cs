@@ -39,8 +39,7 @@ namespace Goodpets.Infrastructure.Database.Migrations
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExpireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Used = table.Column<bool>(type: "bit", nullable: false),
-                    Invalidated = table.Column<bool>(type: "bit", nullable: false)
+                    Used = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

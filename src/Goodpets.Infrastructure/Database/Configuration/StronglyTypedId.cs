@@ -1,9 +1,9 @@
-﻿using Goodpets.Domain.SeedWork;
+﻿using Goodpets.Domain.Base.Types;
 
 namespace Goodpets.Infrastructure.Database.Configuration;
 
 public class TypedIdValueConverter<TTypedIdValue> : ValueConverter<TTypedIdValue, Guid>
-    where TTypedIdValue : Identity
+    where TTypedIdValue : EntityId
 {
     public TypedIdValueConverter(ConverterMappingHints? mappingHints = null)
         : base(id => id.Value, value => Create(value), mappingHints)

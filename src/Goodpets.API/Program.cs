@@ -10,7 +10,7 @@ builder.Services.AddSingleton<IExceptionResponseMapper, ExceptionResponseMapper>
 
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
-
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(swagger =>

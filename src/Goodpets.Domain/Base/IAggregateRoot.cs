@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Domain.SeedWork;
+﻿namespace Goodpets.Domain.Base;
 
 //Marker interface
 public interface IAggregateRoot

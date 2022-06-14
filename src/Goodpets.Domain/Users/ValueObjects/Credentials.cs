@@ -1,15 +1,17 @@
-﻿namespace Goodpets.Domain.Users.ValueObjects;
+﻿using Goodpets.Domain.Base.Types;
+
+namespace Goodpets.Domain.Users.ValueObjects;
 
 public class Credentials : ValueObject
 {
-    public string Username { get; }
-    public string Password { get; }
-
     private Credentials(string username, string password)
     {
         Username = username;
         Password = password;
     }
+
+    public string Username { get; }
+    public string Password { get; }
 
     public static Result<Credentials> Create(string username, string password)
     {

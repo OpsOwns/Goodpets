@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Goodpets.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(GoodpetsContext))]
-    [Migration("20220612080946_Goodpets_Init")]
+    [Migration("20220614141857_Goodpets_Init")]
     partial class Goodpets_Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,10 +37,6 @@ namespace Goodpets.Infrastructure.Database.Migrations
                     b.Property<DateTime>("ExpireDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("ExpireDate");
-
-                    b.Property<bool>("Invalidated")
-                        .HasColumnType("bit")
-                        .HasColumnName("Invalidated");
 
                     b.Property<Guid>("JwtId")
                         .HasColumnType("uniqueidentifier")

@@ -1,4 +1,6 @@
-﻿namespace Goodpets.API.SeedWork.Middleware;
+﻿using Goodpets.Domain.Base.Types;
+
+namespace Goodpets.API.SeedWork.Middleware;
 
 public class ExceptionResponseMapper : IExceptionResponseMapper
 {
@@ -6,10 +8,11 @@ public class ExceptionResponseMapper : IExceptionResponseMapper
 
     public ExceptionResponse Map(Exception exception) => exception switch
     {
-        BusinessException ex =>
-            new ExceptionResponse(new ErrorResponse(new Error(GetErrorCode(ex), ex.Message)),
-                HttpStatusCode.UnprocessableEntity),
-        _ => new ExceptionResponse(new ErrorResponse(new Error("error", "not supported error")),
+        BusinessException ex => new ExceptionResponse(new ErrorResponse(new Error(GetErrorCode(ex), ex.Message)),
+            HttpStatusCode.UnprocessableEntity),
+        SecurityTokenExpiredException ex => new ExceptionResponse(
+            new ErrorResponse(new Error(GetErrorCode(ex), ex.Message)), HttpStatusCode.Unauthorized),
+        _ => new ExceptionResponse(new ErrorResponse(new Error(GetErrorCode(exception), exception.Message)),
             HttpStatusCode.InternalServerError)
     };
 

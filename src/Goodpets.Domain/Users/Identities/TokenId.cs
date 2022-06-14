@@ -1,10 +1,14 @@
-﻿namespace Goodpets.Domain.Users.Identities;
+﻿using Goodpets.Domain.Base.Types;
 
-public record TokenId : Identity
+namespace Goodpets.Domain.Users.Identities;
+
+public record TokenId : EntityId
 {
     public TokenId(Guid value) : base(value)
     {
     }
 
-    public TokenId() { }
+    public TokenId()
+    {
+    }
 }

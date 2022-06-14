@@ -1,13 +1,15 @@
-﻿namespace Goodpets.Domain.Users.ValueObjects;
+﻿using Goodpets.Domain.Base.Types;
+
+namespace Goodpets.Domain.Users.ValueObjects;
 
 public class Email : ValueObject
 {
-    public string Value { get; }
-
     private Email(string value)
     {
         Value = value;
     }
+
+    public string Value { get; }
 
 
     public static Result<Email> Create(string value)

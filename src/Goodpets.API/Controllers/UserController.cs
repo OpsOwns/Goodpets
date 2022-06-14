@@ -65,6 +65,17 @@ internal class UserController : BaseController
         return BadRequest(result.ToResult().ToResultDto());
     }
 
+    [Authorize]
+    [HttpDelete("logout")]
+    [SwaggerOperation("Logout user")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> LogoutUser()
+    {
+        await _dispatcher.SendAsync(new LogoutUser());
+
+        return NoContent();
+    }
 
     [Authorize(Policy = "admin")]
     [HttpGet("{userAccountId:guid}")]

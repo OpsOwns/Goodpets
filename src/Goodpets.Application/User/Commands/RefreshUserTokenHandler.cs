@@ -26,9 +26,6 @@ public class RefreshTokenHandler
         {
             _tokenService.ValidatePrincipalFromExpiredToken(command.AccessToken);
 
-            if (_tokenService.JwtTokenExpired())
-                return Result.Fail("This JWT token hasn't expired yet");
-
             var userId =
                 new UserAccountId(_tokenService.GetUserIdFromJwtToken());
 
@@ -53,14 +50,11 @@ public class RefreshTokenHandler
                 return Result.Fail("This refresh token has expired");
             }
 
-            if (storedRefreshToken.Invalidated)
-                return Result.Fail("This refresh token has been invalidated");
-
             if (storedRefreshToken.Used)
                 return Result.Fail("This refresh token has been used");
 
 
-            if (_tokenService.StoredJwtIdSameAsFromPrinciple(storedRefreshToken.JwtId))
+            if (!_tokenService.StoredJwtIdSameAsFromPrinciple(storedRefreshToken.JwtId))
             {
                 return Result.Fail("This refresh token does not match this JWT");
             }
