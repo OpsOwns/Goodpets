@@ -7,6 +7,7 @@ global using FluentResults;
 global using Goodpets.API.Requests;
 global using Goodpets.API.SeedWork;
 global using Goodpets.API.SeedWork.Dto;
+global using Goodpets.API.SeedWork.Middleware;
 global using Goodpets.Application;
 global using Goodpets.Application.Dto;
 global using Goodpets.Application.SeedWork.Cqrs;

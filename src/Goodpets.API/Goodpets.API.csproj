@@ -9,19 +9,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Humanizer" Version="2.14.1"/>
+        <PackageReference Include="Azure.Identity" Version="1.6.0" />
+        <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.3.0" />
+        <PackageReference Include="Humanizer" Version="2.14.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.3.1"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="6.3.1"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.24" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.3.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="6.3.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Goodpets.Application\Goodpets.Application.csproj"/>
-        <ProjectReference Include="..\Goodpets.Infrastructure\Goodpets.Infrastructure.csproj"/>
+        <ProjectReference Include="..\Goodpets.Application\Goodpets.Application.csproj" />
+        <ProjectReference Include="..\Goodpets.Infrastructure\Goodpets.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

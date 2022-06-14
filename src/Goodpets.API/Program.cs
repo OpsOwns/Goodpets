@@ -1,5 +1,3 @@
-using Goodpets.API.SeedWork.Middleware;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().ConfigureApplicationPartManager(manager =>
@@ -53,6 +51,14 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+if (!app.Environment.IsDevelopment())
+{
+    builder.Configuration.AddAzureKeyVault(builder.Configuration["AzureKeyVault:Url"],
+        builder.Configuration["AzureKeyVault:ClientId"],
+        builder.Configuration["AzureKeyVault:SecretKey"]);
+}
+
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
