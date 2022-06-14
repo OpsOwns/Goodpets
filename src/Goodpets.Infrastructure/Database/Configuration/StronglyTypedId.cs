@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Base.Types;
-
-namespace Goodpets.Infrastructure.Database.Configuration;
+﻿namespace Goodpets.Infrastructure.Database.Configuration;
 
 public class TypedIdValueConverter<TTypedIdValue> : ValueConverter<TTypedIdValue, Guid>
     where TTypedIdValue : EntityId

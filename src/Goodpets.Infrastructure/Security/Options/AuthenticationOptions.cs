@@ -4,12 +4,6 @@ internal sealed class AuthenticationOptions
 {
     private const string SectionName = "Authentication";
 
-    public string Issuer { get; init; }
-    public string Audience { get; init; }
-    public string SigningKey { get; init; }
-    public TimeSpan? Expire { get; init; }
-    public TimeSpan? ExpireRefreshToken { get; init; }
-
 
     public AuthenticationOptions(IConfiguration configuration)
     {
@@ -18,10 +12,7 @@ internal sealed class AuthenticationOptions
 
         var section = configuration.GetSection(SectionName);
 
-        if (section is null)
-        {
-            throw new InvalidOperationException("Can't find configuration section");
-        }
+        if (section is null) throw new InvalidOperationException("Can't find configuration section");
 
         Issuer = section.GetValue<string>(nameof(Issuer));
         Audience = section.GetValue<string>(nameof(Audience));
@@ -29,4 +20,10 @@ internal sealed class AuthenticationOptions
         Expire = section.GetValue<TimeSpan?>(nameof(Expire));
         ExpireRefreshToken = section.GetValue<TimeSpan?>(nameof(ExpireRefreshToken));
     }
+
+    public string Issuer { get; init; }
+    public string Audience { get; init; }
+    public string SigningKey { get; init; }
+    public TimeSpan? Expire { get; init; }
+    public TimeSpan? ExpireRefreshToken { get; init; }
 }

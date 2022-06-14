@@ -1,8 +1,9 @@
-﻿using Goodpets.Application.Abstractions.Time;
-
-namespace Goodpets.Infrastructure.SeedWork;
+﻿namespace Goodpets.Infrastructure.SeedWork;
 
 internal sealed class Clock : IClock
 {
-    public DateTime Current() => DateTime.UtcNow;
+    public DateTime Current()
+    {
+        return DateTime.UtcNow;
+    }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace Goodpets.API.SeedWork;
+﻿namespace Goodpets.API.SeedWork;
 
 [ApiController]
 [Route(BasePath)]

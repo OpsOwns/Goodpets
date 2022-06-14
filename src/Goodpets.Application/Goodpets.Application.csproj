@@ -7,16 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Goodpets.Domain\Goodpets.Domain.csproj" />
+        <ProjectReference Include="..\Goodpets.Domain\Goodpets.Domain.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-      <PackageReference Include="Scrutor" Version="4.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0"/>
+        <PackageReference Include="Scrutor" Version="4.2.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="SeedWork" />
+        <Folder Include="SeedWork"/>
     </ItemGroup>
 
 </Project>

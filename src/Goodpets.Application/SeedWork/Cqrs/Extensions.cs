@@ -1,4 +1,5 @@
 ﻿namespace Goodpets.Application.SeedWork.Cqrs;
+
 public static class Extensions
 {
     public static IServiceCollection AddCqrs(this IServiceCollection services)

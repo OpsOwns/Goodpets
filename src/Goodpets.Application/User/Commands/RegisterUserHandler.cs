@@ -4,9 +4,9 @@ public record RegisterUser(string Email, string Password, string Username) : ICo
 
 public class RegisterUserHandler : ICommandHandler<RegisterUser, Result>
 {
-    private readonly IUserAccountRepository _repository;
-    private readonly IUserService _registerUserService;
     private readonly IPasswordEncryptor _passwordEncryptor;
+    private readonly IUserService _registerUserService;
+    private readonly IUserAccountRepository _repository;
 
     public RegisterUserHandler(IUserAccountRepository repository, IUserService registerUserService,
         IPasswordEncryptor passwordEncryptor)
@@ -24,10 +24,7 @@ public class RegisterUserHandler : ICommandHandler<RegisterUser, Result>
         var user = await _registerUserService.RegisterUser(command.Username, command.Password, command.Email,
             cancellationToken);
 
-        if (user.IsFailed)
-        {
-            return user.ToResult();
-        }
+        if (user.IsFailed) return user.ToResult();
 
         await _repository.Add(user.Value, cancellationToken);
 

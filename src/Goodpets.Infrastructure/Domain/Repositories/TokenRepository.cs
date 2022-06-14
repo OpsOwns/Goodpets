@@ -15,10 +15,7 @@ public class TokenRepository : ITokenRepository
     {
         var token = await _tokens.SingleOrDefaultAsync(x => x.RefreshToken == refreshToken, cancellationToken);
 
-        if (token is null)
-        {
-            return Result.Fail(CustomResultMessage.Not_Found(nameof(token)));
-        }
+        if (token is null) return Result.Fail(CustomResultMessage.Not_Found(nameof(token)));
 
         return Result.Ok(token);
     }
@@ -27,10 +24,7 @@ public class TokenRepository : ITokenRepository
     {
         var token = await _tokens.SingleOrDefaultAsync(x => x.UserAccountId == userAccountId, cancellationToken);
 
-        if (token is null)
-        {
-            return Result.Fail(CustomResultMessage.Not_Found(nameof(token)));
-        }
+        if (token is null) return Result.Fail(CustomResultMessage.Not_Found(nameof(token)));
 
         return Result.Ok(token);
     }

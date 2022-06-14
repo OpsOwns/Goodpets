@@ -2,8 +2,8 @@
 
 public class UserAccountRepository : IUserAccountRepository
 {
-    private readonly GoodpetsContext _goodpetsContext;
     private readonly DbSet<UserAccount> _accounts;
+    private readonly GoodpetsContext _goodpetsContext;
 
     public UserAccountRepository(GoodpetsContext goodpetsContext)
     {
@@ -27,10 +27,7 @@ public class UserAccountRepository : IUserAccountRepository
     {
         var user = await _goodpetsContext.UserAccount.FindAsync(new object[] { userAccountId }, cancellationToken);
 
-        if (user is null)
-        {
-            return Result.Fail(CustomResultMessage.Not_Found(nameof(user)));
-        }
+        if (user is null) return Result.Fail(CustomResultMessage.Not_Found(nameof(user)));
 
         return Result.Ok(user);
     }
@@ -41,10 +38,7 @@ public class UserAccountRepository : IUserAccountRepository
         var user = await _accounts.SingleOrDefaultAsync(x => x.Credentials.Username == username,
             cancellationToken);
 
-        if (user is null)
-        {
-            return Result.Fail(CustomResultMessage.Not_Found(nameof(user)));
-        }
+        if (user is null) return Result.Fail(CustomResultMessage.Not_Found(nameof(user)));
 
         return Result.Ok(user);
     }

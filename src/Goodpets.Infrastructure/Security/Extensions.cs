@@ -29,7 +29,7 @@ public static class Extensions
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, configureOptions: null!);
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, null!);
 
         services.TryAddSingleton<IIdentity, Identity>();
 

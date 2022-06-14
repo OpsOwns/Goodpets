@@ -4,10 +4,10 @@ public record LoginUser(string Login, string Password) : ICommand<Result<AccessT
 
 public class LoginUserHandler : ICommandHandler<LoginUser, Result<AccessTokenDto>>
 {
+    private readonly IClock _clock;
+    private readonly ITokenRepository _tokenRepository;
     private readonly ITokenProvider _tokenService;
     private readonly IUserService _userService;
-    private readonly ITokenRepository _tokenRepository;
-    private readonly IClock _clock;
 
     public LoginUserHandler(ITokenProvider tokenService, IUserService userService,
         ITokenRepository tokenRepository, IClock clock)
@@ -36,9 +36,7 @@ public class LoginUserHandler : ICommandHandler<LoginUser, Result<AccessTokenDto
         var existedUserRefreshToken = await _tokenRepository.GetToken(userAccount.Id, cancellationToken);
 
         if (existedUserRefreshToken.IsSuccess)
-        {
             await _tokenRepository.RemoveToken(existedUserRefreshToken.Value, cancellationToken);
-        }
 
         var userRefreshToken = Token.Create(refreshToken.Value,
             refreshToken.ExpireTime, _clock.Current(), userAccount.Id, accessToken.JwtId, false);

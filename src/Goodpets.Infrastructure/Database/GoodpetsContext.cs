@@ -4,13 +4,13 @@ public class GoodpetsContext : DbContext
 {
     private readonly DatabaseOptions _databaseOptions;
 
-    internal DbSet<UserAccount> UserAccount => Set<UserAccount>();
-    internal DbSet<Token> Tokens => Set<Token>();
-
     public GoodpetsContext(DatabaseOptions databaseOptions)
     {
         _databaseOptions = databaseOptions;
     }
+
+    internal DbSet<UserAccount> UserAccount => Set<UserAccount>();
+    internal DbSet<Token> Tokens => Set<Token>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

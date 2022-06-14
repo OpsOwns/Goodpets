@@ -1,6 +1,6 @@
 ﻿namespace Goodpets.Application.User.Commands;
 
-public record LogoutUser() : ICommand;
+public record LogoutUser : ICommand;
 
 public class LogoutUserHandler : ICommandHandler<LogoutUser>
 {

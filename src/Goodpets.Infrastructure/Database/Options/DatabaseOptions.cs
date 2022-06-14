@@ -2,8 +2,6 @@
 
 public class DatabaseOptions
 {
-    public string ConnectionString { get; init; }
-
     public DatabaseOptions(IConfiguration configuration)
     {
         if (configuration == null) throw new ArgumentNullException(nameof(configuration));
@@ -13,4 +11,6 @@ public class DatabaseOptions
         if (string.IsNullOrEmpty(ConnectionString))
             throw new ArgumentException($"{nameof(ConnectionString)} can't be null or empty");
     }
+
+    public string ConnectionString { get; init; }
 }

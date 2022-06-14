@@ -2,8 +2,8 @@
 
 public class ErrorHandlerMiddleware : IMiddleware
 {
-    private readonly ILogger<ErrorHandlerMiddleware> _logger;
     private readonly IExceptionResponseMapper _exceptionResponseMapper;
+    private readonly ILogger<ErrorHandlerMiddleware> _logger;
 
     public ErrorHandlerMiddleware(IExceptionResponseMapper exceptionResponseMapper,
         ILogger<ErrorHandlerMiddleware> logger)

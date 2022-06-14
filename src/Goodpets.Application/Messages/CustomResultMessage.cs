@@ -2,5 +2,8 @@
 
 public static class CustomResultMessage
 {
-    public static string Not_Found(string value) => $"Not found {value}";
+    public static string Not_Found(string value)
+    {
+        return $"Not found {value}";
+    }
 }

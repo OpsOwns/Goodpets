@@ -5,7 +5,9 @@ internal sealed class CommandDispatcher : ICommandDispatcher
     private readonly IServiceProvider _serviceProvider;
 
     public CommandDispatcher(IServiceProvider serviceProvider)
-        => _serviceProvider = serviceProvider;
+    {
+        _serviceProvider = serviceProvider;
+    }
 
     public async Task SendAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default)
         where TCommand : class, ICommand
@@ -23,9 +25,7 @@ internal sealed class CommandDispatcher : ICommandDispatcher
         var handler = scope.ServiceProvider.GetRequiredService(handlerType);
         var method = handlerType.GetMethod(nameof(ICommandHandler<ICommand<TResult>, TResult>.HandleAsync));
         if (method is null)
-        {
             throw new InvalidOperationException($"Query handler for '{typeof(TResult).Name}' is invalid.");
-        }
 
         return await (Task<TResult>)method.Invoke(handler, new object[] { command, cancellationToken })!;
     }

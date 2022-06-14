@@ -4,8 +4,8 @@ namespace Goodpets.Application.DomainServices;
 
 public class UserService : IUserService
 {
-    private readonly IUserAccountRepository _repository;
     private readonly IPasswordEncryptor _passwordEncryptor;
+    private readonly IUserAccountRepository _repository;
 
     public UserService(IUserAccountRepository repository, IPasswordEncryptor passwordEncryptor)
     {
@@ -26,9 +26,7 @@ public class UserService : IUserService
             return resultConcat;
 
         if (await _repository.CheckUserExistsByEmail(userEmail.Value, cancellationToken))
-        {
             throw new BusinessException($"User with email {userEmail.Value} already exists in system");
-        }
 
         return Result.Ok(new UserAccount(Role.User(), credentials.Value, userEmail.Value));
     }
@@ -39,18 +37,12 @@ public class UserService : IUserService
 
         var userResult = await _repository.GetUserAccount(credentials.Value.Username, cancellationToken);
 
-        if (userResult.IsFailed)
-        {
-            return Result.Fail(new Error("User not exists"));
-        }
+        if (userResult.IsFailed) return Result.Fail(new Error("User not exists"));
 
         var passwordValid =
             _passwordEncryptor.Validate(credentials.Value.Password, userResult.Value.Credentials.Password);
 
-        if (!passwordValid)
-        {
-            return Result.Fail("Invalid password");
-        }
+        if (!passwordValid) return Result.Fail("Invalid password");
 
         return Result.Ok(userResult.Value);
     }

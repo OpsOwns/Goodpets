@@ -1,17 +1,15 @@
-﻿using Goodpets.Application.Abstractions.Time;
-
-namespace Goodpets.Infrastructure.Security;
+﻿namespace Goodpets.Infrastructure.Security;
 
 internal sealed class TokenProvider : ITokenProvider
 {
-    private readonly string _issuer;
-    private readonly TimeSpan _expiry;
     private readonly string _audience;
-    private readonly SigningCredentials _signingCredentials;
-    private readonly JwtSecurityTokenHandler _jwtSecurityToken = new();
     private readonly IClock _clock;
-    private readonly TokenValidationParameters _tokenValidationParameters;
+    private readonly TimeSpan _expiry;
     private readonly TimeSpan _expiryRefreshToken;
+    private readonly string _issuer;
+    private readonly JwtSecurityTokenHandler _jwtSecurityToken = new();
+    private readonly SigningCredentials _signingCredentials;
+    private readonly TokenValidationParameters _tokenValidationParameters;
     private ClaimsPrincipal? _claimsPrincipal;
 
     public TokenProvider(AuthenticationOptions options, IClock clock,
@@ -52,7 +50,7 @@ internal sealed class TokenProvider : ITokenProvider
         var tokenHandler = new JwtSecurityTokenHandler();
 
         _claimsPrincipal =
-            tokenHandler.ValidateToken(token, _tokenValidationParameters, out SecurityToken securityToken);
+            tokenHandler.ValidateToken(token, _tokenValidationParameters, out var securityToken);
 
         if (securityToken is not JwtSecurityToken jwtSecurityToken ||
             !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
@@ -65,9 +63,9 @@ internal sealed class TokenProvider : ITokenProvider
         var randomNumber = new byte[64];
         using var generator = RandomNumberGenerator.Create();
         generator.GetBytes(randomNumber);
-        string token = Convert.ToBase64String(randomNumber);
+        var token = Convert.ToBase64String(randomNumber);
 
-        return new(token, _clock.Current().Add(_expiryRefreshToken));
+        return new RefreshToken(token, _clock.Current().Add(_expiryRefreshToken));
     }
 
     public Guid GetUserIdFromJwtToken()
@@ -82,7 +80,7 @@ internal sealed class TokenProvider : ITokenProvider
     {
         if (storedJwtId == null)
             throw new ArgumentNullException(nameof(storedJwtId));
-        
+
         if (_claimsPrincipal is null)
             throw new InvalidOperationException();
 

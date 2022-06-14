@@ -2,11 +2,6 @@
 
 public record UserAccountDto
 {
-    private string Email { get; }
-    private string UserName { get; }
-    private string Role { get; }
-    public static UserAccountDto Empty => new();
-
     private UserAccountDto()
     {
         Email = null!;
@@ -20,4 +15,9 @@ public record UserAccountDto
         UserName = userName;
         Role = role;
     }
+
+    private string Email { get; }
+    private string UserName { get; }
+    private string Role { get; }
+    public static UserAccountDto Empty => new();
 }

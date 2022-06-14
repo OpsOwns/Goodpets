@@ -1,6 +1,4 @@
-﻿using Goodpets.Application.Abstractions.Time;
-
-namespace Goodpets.Infrastructure;
+﻿namespace Goodpets.Infrastructure;
 
 public static class Extensions
 {
