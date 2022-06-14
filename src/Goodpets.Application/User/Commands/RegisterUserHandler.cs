@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Abstractions;
-
-namespace Goodpets.Application.User.Commands;
+﻿namespace Goodpets.Application.User.Commands;
 
 public record RegisterUser(string Email, string Password, string Username) : ICommand<Result>;
 

@@ -47,8 +47,8 @@ public sealed class Token : Entity<TokenId>
         return Result.Ok(new Token(token, userAccountId, jwtId, expireDate, creationDate, invalidated, used));
     }
 
-    public void ChangeStatus(bool used)
+    public void UseRefreshToken()
     {
-        Used = used;
+        Used = true;
     }
 }

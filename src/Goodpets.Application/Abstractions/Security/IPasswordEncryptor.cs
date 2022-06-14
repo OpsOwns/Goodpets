@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Domain.Abstractions;
+﻿namespace Goodpets.Application.Abstractions.Security;
 
 public interface IPasswordEncryptor
 {

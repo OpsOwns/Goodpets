@@ -4,12 +4,12 @@ public record LoginUser(string Login, string Password) : ICommand<Result<AccessT
 
 public class LoginUserHandler : ICommandHandler<LoginUser, Result<AccessTokenDto>>
 {
-    private readonly ITokenService _tokenService;
+    private readonly ITokenProvider _tokenService;
     private readonly IUserService _userService;
     private readonly ITokenRepository _tokenRepository;
     private readonly IClock _clock;
 
-    public LoginUserHandler(ITokenService tokenService, IUserService userService,
+    public LoginUserHandler(ITokenProvider tokenService, IUserService userService,
         ITokenRepository tokenRepository, IClock clock)
     {
         _tokenService = tokenService;

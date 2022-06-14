@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace Goodpets.Application.User.Commands;
+﻿namespace Goodpets.Application.User.Commands;
 
 public class RefreshTokenHandler
 {
@@ -11,10 +9,10 @@ public class RefreshTokenHandler
     {
         private readonly ITokenRepository _tokenRepository;
         private readonly IUserAccountRepository _accountRepository;
-        private readonly ITokenService _tokenService;
+        private readonly ITokenProvider _tokenService;
         private readonly IClock _clock;
 
-        public RefreshUserTokenHandler(ITokenRepository tokenRepository, ITokenService tokenService,
+        public RefreshUserTokenHandler(ITokenRepository tokenRepository, ITokenProvider tokenService,
             IUserAccountRepository accountRepository, IClock clock)
         {
             _tokenRepository = tokenRepository;
@@ -26,15 +24,13 @@ public class RefreshTokenHandler
         public async Task<Result<AccessTokenDto>> HandleAsync(RefreshUserToken command,
             CancellationToken cancellationToken = default)
         {
-            var principal = _tokenService.GetPrincipalFromExpiredToken(command.AccessToken);
+            _tokenService.ValidatePrincipalFromExpiredToken(command.AccessToken);
 
-            var expiryDateUnix = long.Parse(principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-
-            if (_tokenService.JwtTokenExpired(expiryDateUnix))
+            if (_tokenService.JwtTokenExpired())
                 return Result.Fail("This JWT token hasn't expired yet");
 
             var userId =
-                new UserAccountId(Guid.Parse(principal.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value));
+                new UserAccountId(_tokenService.GetUserIdFromJwtToken());
 
             var userResult = await _accountRepository.GetUserAccount(userId, cancellationToken);
 
@@ -64,14 +60,12 @@ public class RefreshTokenHandler
                 return Result.Fail("This refresh token has been used");
 
 
-            JwtId jwtId = principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-
-            if (jwtId != storedRefreshToken.JwtId)
+            if (_tokenService.StoredJwtIdSameAsFromPrinciple(storedRefreshToken.JwtId))
             {
                 return Result.Fail("This refresh token does not match this JWT");
             }
 
-            storedRefreshToken.ChangeStatus(true);
+            storedRefreshToken.UseRefreshToken();
 
             await _tokenRepository.UpdateToken(storedRefreshToken, cancellationToken);
 

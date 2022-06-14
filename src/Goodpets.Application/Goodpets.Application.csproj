@@ -7,7 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Goodpets.Infrastructure\Goodpets.Infrastructure.csproj" />
+      <ProjectReference Include="..\Goodpets.Domain\Goodpets.Domain.csproj" />
+      <ProjectReference Include="..\Goodpets.Shared\Goodpets.Shared.csproj" />
     </ItemGroup>
 
 </Project>

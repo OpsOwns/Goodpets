@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Domain.Users.Services;
+﻿namespace Goodpets.Application.DomainServices;
 
 public class UserService : IUserService
 {

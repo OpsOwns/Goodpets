@@ -1,8 +1,6 @@
-﻿using Goodpets.Infrastructure.Security.Dto;
+﻿namespace Goodpets.Infrastructure.Security;
 
-namespace Goodpets.Infrastructure.Security;
-
-internal sealed class TokenService : ITokenService
+internal sealed class TokenProvider : ITokenProvider
 {
     private readonly string _issuer;
     private readonly TimeSpan _expiry;
@@ -12,8 +10,9 @@ internal sealed class TokenService : ITokenService
     private readonly IClock _clock;
     private readonly TokenValidationParameters _tokenValidationParameters;
     private readonly TimeSpan _expiryRefreshToken;
+    private ClaimsPrincipal? _claimsPrincipal;
 
-    public TokenService(AuthenticationOptions options, IClock clock,
+    public TokenProvider(AuthenticationOptions options, IClock clock,
         TokenValidationParameters tokenValidationParameters)
     {
         _clock = clock;
@@ -46,19 +45,17 @@ internal sealed class TokenService : ITokenService
         return new AccessToken(token, jwtId);
     }
 
-    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    public void ValidatePrincipalFromExpiredToken(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
-        var principal = tokenHandler.ValidateToken(token, _tokenValidationParameters, out SecurityToken securityToken);
+        _claimsPrincipal =
+            tokenHandler.ValidateToken(token, _tokenValidationParameters, out SecurityToken securityToken);
 
         if (securityToken is not JwtSecurityToken jwtSecurityToken ||
             !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                 StringComparison.InvariantCultureIgnoreCase))
             throw new SecurityTokenException("Invalid token");
-
-
-        return principal;
     }
 
     public RefreshToken GenerateRefreshToken()
@@ -71,6 +68,32 @@ internal sealed class TokenService : ITokenService
         return new(token, _clock.Current().Add(_expiryRefreshToken));
     }
 
-    public bool JwtTokenExpired(long expiryDateUnix) =>
-        DateTime.UnixEpoch.AddSeconds(expiryDateUnix).Subtract(_expiry) > _clock.Current();
+    public bool JwtTokenExpired()
+    {
+        if (_claimsPrincipal is null)
+            throw new InvalidOperationException();
+
+        var expiryDateUnix =
+            long.Parse(_claimsPrincipal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+
+        return DateTime.UnixEpoch.AddSeconds(expiryDateUnix).Subtract(_expiry) > _clock.Current();
+    }
+
+    public Guid GetUserIdFromJwtToken()
+    {
+        if (_claimsPrincipal is null)
+            throw new InvalidOperationException();
+
+        return Guid.Parse(_claimsPrincipal.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value);
+    }
+
+    public bool StoredJwtIdSameAsFromPrinciple(JwtId storedJwtId)
+    {
+        if (_claimsPrincipal is null)
+            throw new InvalidOperationException();
+
+        JwtId jwtId = _claimsPrincipal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+
+        return jwtId == storedJwtId;
+    }
 }

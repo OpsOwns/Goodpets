@@ -20,6 +20,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Goodpets.Application\Goodpets.Application.csproj" />
+      <ProjectReference Include="..\Goodpets.Infrastructure\Goodpets.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
