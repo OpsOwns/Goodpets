@@ -19,6 +19,7 @@ internal class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptio
         if (name != JwtBearerDefaults.AuthenticationScheme)
             return;
 
+        options.MapInboundClaims = false;
         options.Audience = _authenticationOptions.Audience;
         options.IncludeErrorDetails = true;
         options.TokenValidationParameters = _tokenValidationParameters;

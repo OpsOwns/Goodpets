@@ -18,6 +18,8 @@ public static class Extensions
                     IssuerSigningKey =
                         new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationOptions.SigningKey)),
                     ValidateLifetime = true,
+                    ValidateActor = false,
+                    ValidateTokenReplay = false,
                     ValidateIssuerSigningKey = true
                 };
             })

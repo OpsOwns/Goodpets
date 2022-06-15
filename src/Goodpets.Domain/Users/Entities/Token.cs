@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Base.Types;
-
-namespace Goodpets.Domain.Users.Entities;
+﻿namespace Goodpets.Domain.Users.Entities;
 
 public sealed class Token : Entity<TokenId>
 {

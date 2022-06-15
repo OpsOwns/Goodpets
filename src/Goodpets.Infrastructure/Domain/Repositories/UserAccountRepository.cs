@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Domain.Repositories;
+﻿using Goodpets.Application.SeedWork.Messages;
+
+namespace Goodpets.Infrastructure.Domain.Repositories;
 
 public class UserAccountRepository : IUserAccountRepository
 {

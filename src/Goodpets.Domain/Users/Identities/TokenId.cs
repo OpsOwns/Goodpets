@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Base.Types;
-
-namespace Goodpets.Domain.Users.Identities;
+﻿namespace Goodpets.Domain.Users.Identities;
 
 public record TokenId : EntityId
 {

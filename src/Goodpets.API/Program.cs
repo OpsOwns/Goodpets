@@ -1,3 +1,8 @@
+using Goodpets.Application;
+using Goodpets.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().ConfigureApplicationPartManager(manager =>

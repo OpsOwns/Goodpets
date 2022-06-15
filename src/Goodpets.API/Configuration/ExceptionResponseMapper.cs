@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Base.Types;
-
-namespace Goodpets.API.SeedWork.Middleware;
+﻿namespace Goodpets.API.Configuration;
 
 public class ExceptionResponseMapper : IExceptionResponseMapper
 {

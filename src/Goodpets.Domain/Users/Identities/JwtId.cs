@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Base.Types;
-
-namespace Goodpets.Domain.Users.Identities;
+﻿namespace Goodpets.Domain.Users.Identities;
 
 public record JwtId : EntityId
 {
@@ -17,6 +15,11 @@ public record JwtId : EntityId
         if (string.IsNullOrEmpty(jwtId))
             throw new ArgumentNullException(nameof(jwtId));
 
-        return new JwtId(Guid.Parse(jwtId));
+        if (!Guid.TryParse(jwtId, out var jwtIdParsed))
+        {
+            throw new InvalidCastException(nameof(jwtId));
+        }
+
+        return new JwtId(jwtIdParsed);
     }
 }

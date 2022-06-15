@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Base.Types;
-
-namespace Goodpets.Domain.Users.Entities;
+﻿namespace Goodpets.Domain.Users.Entities;
 
 public sealed class UserAccount : Entity<UserAccountId>
 {
@@ -18,9 +16,4 @@ public sealed class UserAccount : Entity<UserAccountId>
     public Role Role { get; } = null!;
     public Credentials Credentials { get; } = null!;
     public Email Email { get; } = null!;
-
-    public static UserAccount NotFound()
-    {
-        return new();
-    }
 }

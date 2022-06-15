@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Application.Messages;
+﻿namespace Goodpets.Application.SeedWork.Messages;
 
 public static class CustomResultMessage
 {

@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Base.Types;
-
-namespace Goodpets.Domain.Users.Identities;
+﻿namespace Goodpets.Domain.Users.Identities;
 
 public record UserAccountId : EntityId
 {
@@ -12,11 +10,16 @@ public record UserAccountId : EntityId
     {
     }
 
-    public static implicit operator UserAccountId(string jwtId)
+    public static implicit operator UserAccountId(string userAccountId)
     {
-        if (string.IsNullOrEmpty(jwtId))
-            throw new ArgumentNullException(nameof(jwtId));
+        if (string.IsNullOrEmpty(userAccountId))
+            throw new ArgumentNullException(nameof(userAccountId));
 
-        return new UserAccountId(Guid.Parse(jwtId));
+        if (!Guid.TryParse(userAccountId, out var userId))
+        {
+            throw new InvalidCastException(nameof(userAccountId));
+        }
+
+        return new UserAccountId(userId);
     }
 }

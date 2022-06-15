@@ -1,4 +1,4 @@
-﻿namespace Goodpets.API.SeedWork;
+﻿namespace Goodpets.API.Configuration;
 
 public static class RequestContentType
 {

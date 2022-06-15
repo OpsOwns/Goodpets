@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Base.Types;
-
-namespace Goodpets.Domain.Users.ValueObjects;
+﻿namespace Goodpets.Domain.Users.ValueObjects;
 
 public class Email : ValueObject
 {

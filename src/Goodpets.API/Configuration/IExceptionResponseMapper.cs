@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Shared.Api.Middleware;
+﻿namespace Goodpets.API.Configuration;
 
 public interface IExceptionResponseMapper
 {

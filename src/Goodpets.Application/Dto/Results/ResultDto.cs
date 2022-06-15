@@ -1,4 +1,4 @@
-﻿namespace Goodpets.API.SeedWork.Dto;
+﻿namespace Goodpets.Application.Dto.Results;
 
 public class ResultDto
 {
