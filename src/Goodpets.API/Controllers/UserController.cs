@@ -3,11 +3,11 @@
 [Route($"{BasePath}/[controller]")]
 internal class UserController : BaseController
 {
-    private readonly IDispatcher _dispatcher;
+    private readonly IUserService _userService;
 
-    public UserController(IDispatcher dispatcher)
+    public UserController(IUserService userService)
     {
-        _dispatcher = dispatcher;
+        _userService = userService;
     }
 
     [AllowAnonymous]
@@ -16,13 +16,11 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Register([FromBody] UserRegisterRequest userRegisterRequest)
     {
-        var command = new SignUp(userRegisterRequest.Email, userRegisterRequest.Password,
-            userRegisterRequest.UserName);
-
-        var result = await _dispatcher.SendAsync(command);
+        var result = await _userService.SignUp(userRegisterRequest.UserName, userRegisterRequest.Password,
+            userRegisterRequest.Email, userRegisterRequest.Role, CancellationToken.None);
 
         if (result.IsFailed)
-            return Ok(result.ToResultDto());
+            return BadRequest(result.ToResultDto());
 
 
         return Ok();
@@ -38,7 +36,7 @@ internal class UserController : BaseController
     public async Task<ActionResult<AccessTokenDto>> SignIn([FromBody] UserLoginRequest userLoginRequest)
     {
         var accessTokenDto =
-            await _dispatcher.SendAsync(new SignIn(userLoginRequest.Login, userLoginRequest.Password));
+            await _userService.SignIn(userLoginRequest.Login, userLoginRequest.Password, CancellationToken.None);
 
         if (accessTokenDto.IsFailed)
             return Unauthorized(accessTokenDto.ToResult().ToResultDto());
@@ -55,9 +53,8 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
     {
-        var result = await _dispatcher.SendAsync(
-            new Application.User.Commands.RefreshToken(refreshTokenRequest.AccessToken,
-                refreshTokenRequest.RefreshToken));
+        var result = await _userService.RefreshToken(refreshTokenRequest.AccessToken,
+            refreshTokenRequest.RefreshToken, CancellationToken.None);
 
         if (result.IsFailed)
             return BadRequest(result.ToResult().ToResultDto());
@@ -72,7 +69,7 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> LogoutUser()
     {
-        await _dispatcher.SendAsync(new SignOut());
+        await _userService.SignOut(CancellationToken.None);
 
         return NoContent();
     }

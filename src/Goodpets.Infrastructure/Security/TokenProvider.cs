@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Security;
+﻿using Goodpets.Infrastructure.Security.Models;
+
+namespace Goodpets.Infrastructure.Security;
 
 internal sealed class TokenProvider : ITokenProvider
 {
@@ -26,17 +28,17 @@ internal sealed class TokenProvider : ITokenProvider
             SecurityAlgorithms.HmacSha256);
     }
 
-    public AccessToken GenerateJwtToken(UserAccount userAccount)
+    public AccessToken GenerateJwtToken(User user)
     {
         var now = _clock.Current();
         var jwtId = new JwtId();
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, userAccount.ToString()),
-            new(JwtRegisteredClaimNames.UniqueName, userAccount.Credentials.Username),
-            new(JwtRegisteredClaimNames.Email, userAccount.Email.Value),
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.UniqueName, user.Username),
+            new(JwtRegisteredClaimNames.Email, user.Email),
             new(JwtRegisteredClaimNames.Jti, jwtId.Value.ToString()),
-            new(ClaimTypes.Role, userAccount.Role.Value)
+            new(ClaimTypes.Role, user.Role)
         };
         var expires = now.Add(_expiry);
         var jwt = new JwtSecurityToken(_issuer, _audience, claims, now, expires, _signingCredentials);
@@ -76,16 +78,16 @@ internal sealed class TokenProvider : ITokenProvider
         return Guid.Parse(_claimsPrincipal.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value);
     }
 
-    public bool StoredJwtIdSameAsFromPrinciple(JwtId storedJwtId)
+    public bool StoredJwtIdSameAsFromPrinciple(Guid storedJwtId)
     {
-        if (storedJwtId == null)
+        if (storedJwtId == Guid.Empty)
             throw new ArgumentNullException(nameof(storedJwtId));
 
         if (_claimsPrincipal is null)
             throw new InvalidOperationException();
 
-        JwtId jwtId = _claimsPrincipal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+        Guid jwtId = Guid.Parse(_claimsPrincipal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value);
 
-        return jwtId.Value == storedJwtId.Value;
+        return jwtId == storedJwtId;
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Goodpets.Infrastructure.Security.Models;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Goodpets.Infrastructure.Security;
 
@@ -23,7 +24,7 @@ public static class Extensions
                     ValidateIssuerSigningKey = true
                 };
             })
-            .AddSingleton<IPasswordHasher<UserAccount>, PasswordHasher<UserAccount>>()
+            .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>()
             .AddSingleton<IPasswordEncryptor, PasswordEncryptor>()
             .AddSingleton<ITokenProvider, TokenProvider>()
             .AddAuthentication(o =>

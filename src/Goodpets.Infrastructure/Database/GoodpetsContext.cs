@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Database;
+﻿using Goodpets.Infrastructure.Security.Models;
+
+namespace Goodpets.Infrastructure.Database;
 
 public class GoodpetsContext : DbContext
 {
@@ -9,12 +11,13 @@ public class GoodpetsContext : DbContext
         _databaseOptions = databaseOptions;
     }
 
-    internal DbSet<UserAccount> UserAccount => Set<UserAccount>();
-    internal DbSet<Token> Tokens => Set<Token>();
+    internal DbSet<User> Users => Set<User>();
+    internal  DbSet<Token> Tokens => Set<Token>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(_databaseOptions.ConnectionString);
+        optionsBuilder.UseLazyLoadingProxies();
         optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddFilter((category, level) =>
                 category == DbLoggerCategory.Database.Command.Name && level == LogLevel.Information).AddConsole()))
             .EnableSensitiveDataLogging();

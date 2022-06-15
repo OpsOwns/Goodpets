@@ -1,3 +1,6 @@
+using System.Globalization;
+using FluentValidation.AspNetCore;
+using FluentValidation.Resources;
 using Goodpets.Application;
 using Goodpets.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,6 +17,12 @@ builder.Services.AddSingleton<IExceptionResponseMapper, ExceptionResponseMapper>
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddFluentValidation(x =>
+{
+    x.ValidatorOptions.LanguageManager.Culture = new CultureInfo("en-US");
+    x.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+});
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(swagger =>

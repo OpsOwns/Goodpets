@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Database.EntityConfigurations;
+﻿using Goodpets.Infrastructure.Security.Models;
+
+namespace Goodpets.Infrastructure.Database.EntityConfigurations;
 
 public class TokenConfiguration : IEntityTypeConfiguration<Token>
 {
@@ -13,11 +15,9 @@ public class TokenConfiguration : IEntityTypeConfiguration<Token>
         builder.Property(x => x.ExpireDate).HasColumnName("ExpireDate").IsRequired();
         builder.Property(x => x.CreationDate).HasColumnName("CreationDate").IsRequired();
 
-        builder.Property(x => x.UserAccountId).HasColumnOrder(1).HasConversion(x => x.Value,
-            c => new UserAccountId(c)).HasColumnName("UserAccountId").IsRequired();
+        builder.HasOne(x => x.User).WithOne();
 
-        builder.Property(x => x.JwtId).HasColumnOrder(2).HasConversion(x => x.Value,
-            c => new JwtId(c)).HasColumnName("JwtId").IsRequired();
+        builder.Property(x => x.JwtId).HasColumnOrder(2).HasColumnName("JwtId").IsRequired();
 
         builder.ToTable("RefreshTokens", Schema.Goodpets);
     }

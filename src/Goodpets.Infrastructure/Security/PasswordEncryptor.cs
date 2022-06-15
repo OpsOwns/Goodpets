@@ -1,10 +1,12 @@
-﻿namespace Goodpets.Infrastructure.Security;
+﻿using Goodpets.Infrastructure.Security.Models;
+
+namespace Goodpets.Infrastructure.Security;
 
 internal sealed class PasswordEncryptor : IPasswordEncryptor
 {
-    private readonly IPasswordHasher<UserAccount> _passwordHasher;
+    private readonly IPasswordHasher<User> _passwordHasher;
 
-    public PasswordEncryptor(IPasswordHasher<UserAccount> passwordHasher)
+    public PasswordEncryptor(IPasswordHasher<User> passwordHasher)
     {
         _passwordHasher = passwordHasher;
     }

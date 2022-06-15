@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Application.Abstractions.Security;
+﻿namespace Goodpets.Infrastructure.Abstractions;
 
 public interface IIdentity
 {

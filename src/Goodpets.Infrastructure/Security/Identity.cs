@@ -43,7 +43,7 @@ public class Identity : IIdentity
 
             var userAccountClaim =
                 _httpContextAccessor.HttpContext.User.Claims
-                    .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+                    .FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
 
             if (userAccountClaim is null)
             {
