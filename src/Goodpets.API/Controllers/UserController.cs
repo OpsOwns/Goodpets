@@ -40,10 +40,10 @@ internal class UserController : BaseController
         var accessTokenDto =
             await _dispatcher.SendAsync(new SignIn(userLoginRequest.Login, userLoginRequest.Password));
 
-        if (accessTokenDto.IsSuccess)
-            return Ok(accessTokenDto.Value);
+        if (accessTokenDto.IsFailed)
+            return Unauthorized(accessTokenDto.ToResult().ToResultDto());
 
-        return Unauthorized(accessTokenDto.ToResult().ToResultDto());
+        return Ok(accessTokenDto.Value);
     }
 
     [AllowAnonymous]
@@ -59,15 +59,15 @@ internal class UserController : BaseController
             new Application.User.Commands.RefreshToken(refreshTokenRequest.AccessToken,
                 refreshTokenRequest.RefreshToken));
 
-        if (result.IsSuccess)
-            return Ok(result.Value);
+        if (result.IsFailed)
+            return BadRequest(result.ToResult().ToResultDto());
 
-        return BadRequest(result.ToResult().ToResultDto());
+        return Ok(result.Value);
     }
 
     [Authorize]
     [HttpDelete("sign-out")]
-    [SwaggerOperation("SignOut user")]
+    [SwaggerOperation("SignOut user, revoke refresh token")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> LogoutUser()
