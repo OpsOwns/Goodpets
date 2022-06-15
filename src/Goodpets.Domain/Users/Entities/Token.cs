@@ -24,19 +24,19 @@ public sealed class Token : Entity<TokenId>
     public UserAccountId UserAccountId { get; } = null!;
     public JwtId JwtId { get; } = null!;
 
-    public static Result<Token> Create(string token, DateTime expireDate, DateTime creationDate,
+    public static Token Create(string token, DateTime expireDate, DateTime creationDate,
         UserAccountId userAccountId, JwtId jwtId, bool used)
     {
         if (userAccountId == null)
-            throw new ArgumentNullException(nameof(userAccountId));
+            throw new BusinessException($"{nameof(userAccountId)} can't be null");
 
         if (jwtId == null)
-            throw new ArgumentNullException(nameof(jwtId));
+            throw new BusinessException($"{nameof(jwtId)} can't be null");
 
         if (string.IsNullOrWhiteSpace(token))
-            return Result.Fail("Token can't be null or empty");
+            throw new BusinessException($"{nameof(token)} can't be null");
 
-        return Result.Ok(new Token(token, userAccountId, jwtId, expireDate, creationDate, used));
+        return new Token(token, userAccountId, jwtId, expireDate, creationDate, used);
     }
 
     public void UseRefreshToken()

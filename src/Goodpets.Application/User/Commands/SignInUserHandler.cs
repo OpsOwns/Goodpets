@@ -1,15 +1,15 @@
 ﻿namespace Goodpets.Application.User.Commands;
 
-public record LoginUser(string Login, string Password) : ICommand<Result<AccessTokenDto>>;
+public record SignIn(string Login, string Password) : ICommand<Result<AccessTokenDto>>;
 
-public class LoginUserHandler : ICommandHandler<LoginUser, Result<AccessTokenDto>>
+public class SignInrHandler : ICommandHandler<SignIn, Result<AccessTokenDto>>
 {
     private readonly IClock _clock;
     private readonly ITokenRepository _tokenRepository;
     private readonly ITokenProvider _tokenService;
     private readonly IUserService _userService;
 
-    public LoginUserHandler(ITokenProvider tokenService, IUserService userService,
+    public SignInrHandler(ITokenProvider tokenService, IUserService userService,
         ITokenRepository tokenRepository, IClock clock)
     {
         _tokenService = tokenService;
@@ -19,7 +19,7 @@ public class LoginUserHandler : ICommandHandler<LoginUser, Result<AccessTokenDto
     }
 
 
-    public async Task<Result<AccessTokenDto>> HandleAsync(LoginUser query,
+    public async Task<Result<AccessTokenDto>> HandleAsync(SignIn query,
         CancellationToken cancellationToken = default)
     {
         var userAccountResult = await _userService.Login(query.Login, query.Password, cancellationToken);
@@ -41,11 +41,7 @@ public class LoginUserHandler : ICommandHandler<LoginUser, Result<AccessTokenDto
         var userRefreshToken = Token.Create(refreshToken.Value,
             refreshToken.ExpireTime, _clock.Current(), userAccount.Id, accessToken.JwtId, false);
 
-        if (userRefreshToken.IsFailed)
-            return userRefreshToken.ToResult();
-
-
-        await _tokenRepository.Create(userRefreshToken.Value, cancellationToken);
+        await _tokenRepository.Create(userRefreshToken, cancellationToken);
 
 
         return Result.Ok(new AccessTokenDto(accessToken.Value, refreshToken.Value));

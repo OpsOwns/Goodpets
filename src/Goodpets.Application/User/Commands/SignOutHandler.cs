@@ -1,19 +1,19 @@
 ﻿namespace Goodpets.Application.User.Commands;
 
-public record LogoutUser : ICommand;
+public record SignOut : ICommand;
 
-public class LogoutUserHandler : ICommandHandler<LogoutUser>
+public class SignOutHandler : ICommandHandler<SignOut>
 {
     private readonly IIdentity _identity;
     private readonly ITokenRepository _tokenRepository;
 
-    public LogoutUserHandler(IIdentity identity, ITokenRepository tokenRepository)
+    public SignOutHandler(IIdentity identity, ITokenRepository tokenRepository)
     {
         _identity = identity;
         _tokenRepository = tokenRepository;
     }
 
-    public async Task HandleAsync(LogoutUser command, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(SignOut command, CancellationToken cancellationToken = default)
     {
         var token = await _tokenRepository.GetToken(_identity.UserAccountId, cancellationToken);
 

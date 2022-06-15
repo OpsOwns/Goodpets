@@ -11,12 +11,12 @@ internal class UserController : BaseController
     }
 
     [AllowAnonymous]
-    [HttpPost("register")]
+    [HttpPost("sign-up")]
     [SwaggerOperation("Create the user account")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Register([FromBody] UserRegisterRequest userRegisterRequest)
     {
-        var command = new RegisterUser(userRegisterRequest.Email, userRegisterRequest.Password,
+        var command = new SignUp(userRegisterRequest.Email, userRegisterRequest.Password,
             userRegisterRequest.UserName);
 
         var result = await _dispatcher.SendAsync(command);
@@ -29,16 +29,16 @@ internal class UserController : BaseController
     }
 
     [AllowAnonymous]
-    [HttpPost("login")]
-    [SwaggerOperation("Login user and return the JSON Web Token")]
+    [HttpPost("sign-in")]
+    [SwaggerOperation("SignIn user and return the JSON Web Token")]
     [Consumes(RequestContentType.Json)]
     [Produces(RequestContentType.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<AccessTokenDto>> Login([FromBody] UserLoginRequest userLoginRequest)
+    public async Task<ActionResult<AccessTokenDto>> SignIn([FromBody] UserLoginRequest userLoginRequest)
     {
         var accessTokenDto =
-            await _dispatcher.SendAsync(new LoginUser(userLoginRequest.Login, userLoginRequest.Password));
+            await _dispatcher.SendAsync(new SignIn(userLoginRequest.Login, userLoginRequest.Password));
 
         if (accessTokenDto.IsSuccess)
             return Ok(accessTokenDto.Value);
@@ -56,7 +56,7 @@ internal class UserController : BaseController
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
     {
         var result = await _dispatcher.SendAsync(
-            new RefreshTokenHandler.RefreshUserToken(refreshTokenRequest.AccessToken,
+            new Application.User.Commands.RefreshToken(refreshTokenRequest.AccessToken,
                 refreshTokenRequest.RefreshToken));
 
         if (result.IsSuccess)
@@ -66,23 +66,14 @@ internal class UserController : BaseController
     }
 
     [Authorize]
-    [HttpDelete("logout")]
-    [SwaggerOperation("Logout user")]
+    [HttpDelete("sign-out")]
+    [SwaggerOperation("SignOut user")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> LogoutUser()
     {
-        await _dispatcher.SendAsync(new LogoutUser());
+        await _dispatcher.SendAsync(new SignOut());
 
         return NoContent();
-    }
-
-    [Authorize(Policy = "admin")]
-    [HttpGet("{userAccountId:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> Register(Guid userAccountId)
-    {
-        return Ok(await _dispatcher.QueryAsync(
-            new GetUserAccountById(new UserAccountId(userAccountId))));
     }
 }
