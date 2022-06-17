@@ -21,9 +21,9 @@ internal sealed class AuthenticationOptions
         ExpireRefreshToken = section.GetValue<TimeSpan?>(nameof(ExpireRefreshToken));
     }
 
-    public string Issuer { get; init; }
-    public string Audience { get; init; }
-    public string SigningKey { get; init; }
-    public TimeSpan? Expire { get; init; }
-    public TimeSpan? ExpireRefreshToken { get; init; }
+    internal string Issuer { get; init; }
+    internal string Audience { get; init; }
+    internal string SigningKey { get; init; }
+    internal TimeSpan? Expire { get; init; }
+    internal TimeSpan? ExpireRefreshToken { get; init; }
 }

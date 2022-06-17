@@ -11,6 +11,7 @@ internal class UserService : IUserService, IService
     private readonly ITokenProvider _tokenProvider;
     private readonly IClock _clock;
     private readonly IPasswordEncryptor _passwordEncryptor;
+    private string Not_Empty(string value) => $"field {value} can't be null or empty";
 
     public UserService(IIdentity identity, GoodpetsContext goodpetsContext, ITokenProvider tokenProvider, IClock clock,
         IPasswordEncryptor passwordEncryptor)
@@ -28,6 +29,12 @@ internal class UserService : IUserService, IService
     public async Task<Result<AccessTokenDto>> SignIn(string username, string password,
         CancellationToken cancellationToken)
     {
+        if (string.IsNullOrWhiteSpace(username))
+            return Result.Fail(Not_Empty(nameof(username)));
+
+        if (string.IsNullOrWhiteSpace(password))
+            return Result.Fail(Not_Empty(nameof(password)));
+
         var user = await _users.SingleOrDefaultAsync(x => x.Username == username,
             cancellationToken);
 
@@ -68,7 +75,17 @@ internal class UserService : IUserService, IService
     public async Task<Result> SignUp(string username, string password, string email, string role,
         CancellationToken cancellationToken)
     {
-        await _goodpetsContext.Database.MigrateAsync(cancellationToken);
+        if (string.IsNullOrWhiteSpace(username))
+            return Result.Fail(Not_Empty(nameof(username)));
+
+        if (string.IsNullOrWhiteSpace(password))
+            return Result.Fail(Not_Empty(nameof(password)));
+
+        if (string.IsNullOrWhiteSpace(email))
+            return Result.Fail(Not_Empty(nameof(email)));
+
+        if (string.IsNullOrWhiteSpace(role))
+            return Result.Fail(Not_Empty(nameof(role)));
 
         if (await _goodpetsContext.Users.AnyAsync(x => x.Email == email, cancellationToken))
             return Result.Fail($"User with email {email} already exists in system");
@@ -88,6 +105,12 @@ internal class UserService : IUserService, IService
     public async Task<Result<AccessTokenDto>> RefreshToken(string accessToken, string refreshToken,
         CancellationToken cancellationToken)
     {
+        if (string.IsNullOrWhiteSpace(accessToken))
+            return Result.Fail(Not_Empty(nameof(accessToken)));
+
+        if (string.IsNullOrWhiteSpace(refreshToken))
+            return Result.Fail(Not_Empty(nameof(refreshToken)));
+
         _tokenProvider.ValidatePrincipalFromExpiredToken(accessToken);
 
         var userId = _tokenProvider.GetUserIdFromJwtToken();
@@ -127,7 +150,7 @@ internal class UserService : IUserService, IService
 
     public async Task SignOut(CancellationToken cancellationToken)
     {
-        var token = await _tokens.Include(x => x.User).SingleAsync(x => x.UserId == _identity.UserAccountId.Value,
+        var token = await _tokens.SingleAsync(x => x.UserId == _identity.UserAccountId.Value,
             cancellationToken);
 
         _goodpetsContext.Tokens.Remove(token);

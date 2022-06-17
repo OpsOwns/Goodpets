@@ -1,4 +1,4 @@
-﻿namespace Goodpets.API.Configuration;
+﻿namespace Goodpets.API.Configuration.Middleware;
 
 public class ErrorHandlerMiddleware : IMiddleware
 {

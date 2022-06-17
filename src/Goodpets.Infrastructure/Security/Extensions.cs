@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
-
-namespace Goodpets.Infrastructure.Security;
+﻿namespace Goodpets.Infrastructure.Security;
 
 public static class Extensions
 {

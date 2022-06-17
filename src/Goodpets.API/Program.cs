@@ -1,16 +1,11 @@
-using System.Globalization;
-using FluentValidation.AspNetCore;
-using FluentValidation.Resources;
-using Goodpets.Application;
-using Goodpets.Infrastructure;
-using Goodpets.Infrastructure.Database;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
+using Goodpets.API.Configuration.Filters;
+using Goodpets.API.Configuration.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers().ConfigureApplicationPartManager(manager =>
-    manager.FeatureProviders.Add(new InternalControllerFeatureProvider()));
+builder.Services.AddControllers(x => x.Filters.Add(new FluentValidationAttribute())).ConfigureApplicationPartManager(
+    manager =>
+        manager.FeatureProviders.Add(new InternalControllerFeatureProvider()));
 
 builder.Services.AddScoped<ErrorHandlerMiddleware>();
 builder.Services.AddSingleton<IExceptionResponseMapper, ExceptionResponseMapper>();

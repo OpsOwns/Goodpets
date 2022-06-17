@@ -1,6 +1,4 @@
-﻿using Goodpets.API.Configuration.Exceptions;
-
-namespace Goodpets.API.Configuration;
+﻿namespace Goodpets.API.Configuration.Abstractions;
 
 public interface IExceptionResponseMapper
 {

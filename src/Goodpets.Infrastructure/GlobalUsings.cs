@@ -2,6 +2,7 @@
 
 global using System.Collections.Concurrent;
 global using System.IdentityModel.Tokens.Jwt;
+global using System.Runtime.CompilerServices;
 global using System.Security.Claims;
 global using System.Security.Cryptography;
 global using System.Text;
@@ -28,6 +29,7 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;

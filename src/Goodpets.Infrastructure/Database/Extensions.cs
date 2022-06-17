@@ -1,7 +1,5 @@
-﻿
-using System.Runtime.CompilerServices;
+﻿[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 namespace Goodpets.Infrastructure.Database;
 
 public static class Extensions
