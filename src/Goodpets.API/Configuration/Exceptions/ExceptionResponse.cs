@@ -1,3 +1,3 @@
-﻿namespace Goodpets.API.Configuration;
+﻿namespace Goodpets.API.Configuration.Exceptions;
 
 public record ExceptionResponse(object Response, HttpStatusCode HttpStatusCode);

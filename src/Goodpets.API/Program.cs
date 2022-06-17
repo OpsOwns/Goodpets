@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using FluentValidation.Resources;
 using Goodpets.Application;
 using Goodpets.Infrastructure;
+using Goodpets.Infrastructure.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
@@ -59,7 +60,6 @@ builder.Services.AddSwaggerGen(swagger =>
         }
     });
 });
-
 
 var app = builder.Build();
 

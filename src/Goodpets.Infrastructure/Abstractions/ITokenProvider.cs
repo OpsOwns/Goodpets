@@ -1,8 +1,6 @@
-﻿using Goodpets.Infrastructure.Security.Models;
+﻿namespace Goodpets.Infrastructure.Abstractions;
 
-namespace Goodpets.Infrastructure.Abstractions;
-
-public interface ITokenProvider
+internal interface ITokenProvider
 {
     AccessToken GenerateJwtToken(User user);
     void ValidatePrincipalFromExpiredToken(string token);

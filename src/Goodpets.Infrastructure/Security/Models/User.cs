@@ -1,10 +1,10 @@
 ﻿namespace Goodpets.Infrastructure.Security.Models;
 
-public class User
+internal class User
 {
-    public Guid Id { get; set; }
-    public string Role { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public string Email { get; set; }
+    internal Guid Id { get; set; }
+    internal string Role { get; set; } = null!;
+    internal string Username { get; set; } = null!;
+    internal string Password { get; set; } = null!;
+    internal string Email { get; set; } = null!;
 }

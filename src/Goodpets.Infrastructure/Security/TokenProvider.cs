@@ -1,6 +1,4 @@
-﻿using Goodpets.Infrastructure.Security.Models;
-
-namespace Goodpets.Infrastructure.Security;
+﻿namespace Goodpets.Infrastructure.Security;
 
 internal sealed class TokenProvider : ITokenProvider
 {

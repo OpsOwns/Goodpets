@@ -1,8 +1,6 @@
-﻿using Goodpets.Infrastructure.Security.Models;
+﻿namespace Goodpets.Infrastructure.Database.EntityConfigurations;
 
-namespace Goodpets.Infrastructure.Database.EntityConfigurations;
-
-public class AccountConfiguration : IEntityTypeConfiguration<User>
+internal class AccountConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {

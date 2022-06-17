@@ -1,8 +1,6 @@
-﻿using Goodpets.Infrastructure.Security.Models;
+﻿namespace Goodpets.Infrastructure.Database;
 
-namespace Goodpets.Infrastructure.Database;
-
-public class GoodpetsContext : DbContext
+internal class GoodpetsContext : DbContext
 {
     private readonly DatabaseOptions _databaseOptions;
 
@@ -12,7 +10,7 @@ public class GoodpetsContext : DbContext
     }
 
     internal DbSet<User> Users => Set<User>();
-    internal  DbSet<Token> Tokens => Set<Token>();
+    internal DbSet<Token> Tokens => Set<Token>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

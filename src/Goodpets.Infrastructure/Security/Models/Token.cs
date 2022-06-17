@@ -1,13 +1,13 @@
 ﻿namespace Goodpets.Infrastructure.Security.Models;
 
-public class Token
+internal class Token
 {
-    public Guid Id { get; set; }
-    public string RefreshToken { get; set; }
-    public DateTime ExpireDate { get; set; }
-    public DateTime CreationDate { get; set; }
-    public bool Used { get; set; }
-    public Guid JwtId { get; set; }
-    public Guid UserId { get; set; }
-    public virtual User User { get; set; }
+    internal Guid Id { get; set; }
+    internal string RefreshToken { get; set; } = null!;
+    internal DateTime ExpireDate { get; set; }
+    internal DateTime CreationDate { get; set; }
+    internal bool Used { get; set; }
+    internal Guid JwtId { get; set; }
+    internal Guid UserId { get; set; }
+    internal virtual User User { get; set; } = null!;
 }

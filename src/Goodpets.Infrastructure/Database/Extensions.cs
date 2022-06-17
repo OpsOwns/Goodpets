@@ -1,5 +1,7 @@
-﻿using Goodpets.Domain.Base;
+﻿
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 namespace Goodpets.Infrastructure.Database;
 
 public static class Extensions
@@ -8,6 +10,9 @@ public static class Extensions
     {
         services.AddSingleton(x => new DatabaseOptions(x.GetRequiredService<IConfiguration>()));
         services.AddTransient(x => new GoodpetsContext(x.GetRequiredService<DatabaseOptions>()));
+
+        services.AddHostedService<DbInitializer>();
+
 
         services.Scan(s => s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
             .AddClasses(c => c.AssignableTo(typeof(IRepository)))

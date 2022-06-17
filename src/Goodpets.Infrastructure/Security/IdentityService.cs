@@ -1,9 +1,8 @@
 ﻿using Goodpets.Application.Abstractions.Domain;
-using Goodpets.Infrastructure.Security.Models;
 
 namespace Goodpets.Infrastructure.Security;
 
-public class UserService : IUserService, IService
+internal class UserService : IUserService, IService
 {
     private readonly IIdentity _identity;
     private readonly GoodpetsContext _goodpetsContext;
@@ -69,6 +68,8 @@ public class UserService : IUserService, IService
     public async Task<Result> SignUp(string username, string password, string email, string role,
         CancellationToken cancellationToken)
     {
+        await _goodpetsContext.Database.MigrateAsync(cancellationToken);
+
         if (await _goodpetsContext.Users.AnyAsync(x => x.Email == email, cancellationToken))
             return Result.Fail($"User with email {email} already exists in system");
 
