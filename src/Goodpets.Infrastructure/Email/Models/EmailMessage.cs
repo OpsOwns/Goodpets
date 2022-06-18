@@ -1,3 +1,3 @@
-﻿namespace Goodpets.Infrastructure.Email;
+﻿namespace Goodpets.Infrastructure.Email.Models;
 
 public record EmailMessage(string Body, string Receiver, string Subject);

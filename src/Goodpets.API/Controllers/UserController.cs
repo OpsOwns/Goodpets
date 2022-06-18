@@ -91,7 +91,7 @@ internal class UserController : BaseController
 
     [AllowAnonymous]
     [HttpPost("forgot-password")]
-    [SwaggerOperation("Change user password")]
+    [SwaggerOperation("Send new password to email")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]

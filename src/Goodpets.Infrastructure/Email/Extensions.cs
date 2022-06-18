@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Email;
+﻿using Goodpets.Infrastructure.Email.Options;
+
+namespace Goodpets.Infrastructure.Email;
 
 public static class Extensions
 {

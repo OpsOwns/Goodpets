@@ -1,4 +1,7 @@
-﻿namespace Goodpets.Infrastructure.Email;
+﻿using Goodpets.Infrastructure.Email.Exceptions;
+using Goodpets.Infrastructure.Email.Options;
+
+namespace Goodpets.Infrastructure.Email;
 
 internal class EmailService : IEmailService
 {
@@ -27,6 +30,7 @@ internal class EmailService : IEmailService
         };
 
         using var client = new SmtpClient();
+
         await client.ConnectAsync(_options.SmtpServer, _options.Port, SecureSocketOptions.StartTls, cancellationToken);
         await client.AuthenticateAsync(_options.Username, _options.Password, cancellationToken);
 

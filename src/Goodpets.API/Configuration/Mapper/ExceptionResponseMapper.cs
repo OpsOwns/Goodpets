@@ -1,4 +1,4 @@
-﻿using Goodpets.Infrastructure.Security.Exceptions;
+﻿using Goodpets.Infrastructure.Email.Exceptions;
 
 namespace Goodpets.API.Configuration.Mapper;
 
@@ -17,6 +17,8 @@ public class ExceptionResponseMapper : IExceptionResponseMapper
                 new ErrorResponse(new ErrorDetail(GetErrorCode(ex), ex.Message)),
                 HttpStatusCode.Unauthorized),
             UserException ex => new ExceptionResponse(new ErrorResponse(new ErrorDetail(ex.Parameter, ex.Message)),
+                HttpStatusCode.Conflict),
+            EmailException ex => new ExceptionResponse(new ErrorResponse(new ErrorDetail(GetErrorCode(ex), ex.Message)),
                 HttpStatusCode.Conflict),
             _ => new ExceptionResponse(
                 new ErrorResponse(new ErrorDetail(GetErrorCode(exception), exception.Message)),

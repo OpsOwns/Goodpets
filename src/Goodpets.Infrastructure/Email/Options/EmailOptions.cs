@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Infrastructure.Email;
+﻿namespace Goodpets.Infrastructure.Email.Options;
 
 internal sealed class EmailOptions
 {
