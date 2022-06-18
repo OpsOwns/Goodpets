@@ -1,18 +1,26 @@
 ﻿namespace Goodpets.API.Configuration.Responses;
 
-public record ErrorDetail(string Parameter, string Message);
-
-public record ErrorResponse
+public record ErrorDetail
 {
-    public IEnumerable<ErrorDetail> Errors { get; }
+    public string Parameter { get; }
+    public IEnumerable<string> Messages { get; }
 
-    public ErrorResponse(IEnumerable<ErrorDetail> errors)
+    public ErrorDetail(string parameter, string message)
     {
-        Errors = errors ?? throw new ArgumentNullException(nameof(errors));
+        if (message == null)
+            throw new ArgumentNullException(nameof(message));
+        Parameter = parameter ?? throw new ArgumentNullException(nameof(parameter));
+        Messages ??= new List<string> { message };
     }
 
-    public ErrorResponse(params ErrorDetail[] errors)
+    public ErrorDetail(string parameter, IEnumerable<string> messages)
     {
-        Errors = errors ?? throw new ArgumentNullException(nameof(errors));
+        Parameter = parameter ?? throw new ArgumentNullException(nameof(parameter));
+        Messages = messages ?? throw new ArgumentNullException(nameof(messages));
     }
+}
+
+public record ErrorResponse(IEnumerable<ErrorDetail> Errors)
+{
+    public IEnumerable<ErrorDetail> Errors { get; } = Errors ?? throw new ArgumentNullException(nameof(Errors));
 }

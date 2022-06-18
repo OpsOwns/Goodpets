@@ -1,11 +1,11 @@
 ﻿namespace Goodpets.API.Configuration.Responses;
 
-public static class ResultDtoExtensions
+internal static class ResultDtoExtensions
 {
-    public static ErrorResponse MapToError(this Result result)
+    internal static ErrorResponse MapToError(this Result result)
     {
         if (result.IsSuccess)
-            return new ErrorResponse(Enumerable.Empty<ErrorDetail>());
+            return new ErrorResponse(Array.Empty<ErrorDetail>());
 
         return new ErrorResponse(TransformErrors(result.Errors));
     }

@@ -7,11 +7,10 @@ public class FluentValidationAttribute : ActionFilterAttribute
         if (context.ModelState.IsValid)
             return;
 
-        var errors = context.ModelState.Values.Where(v => v.Errors.Count > 0)
-            .SelectMany(v => v.Errors)
-            .Select(v => new ErrorDetail("Request", v.ErrorMessage))
-            .ToList();
+        var groupedErrors = context.ModelState.Keys.Where(k => context.ModelState[k]!.Errors.Count > 0)
+            .Select(key => new { key, messages = context.ModelState[key]!.Errors.Select(x => x.ErrorMessage) })
+            .Select(t => new ErrorDetail(t.key, t.messages));
 
-        context.Result = new BadRequestObjectResult(new ErrorResponse(errors));
+        context.Result = new BadRequestObjectResult(new ErrorResponse(groupedErrors));
     }
 }
