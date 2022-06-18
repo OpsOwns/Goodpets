@@ -1,6 +1,6 @@
 ﻿namespace Goodpets.API.Validators;
 
-public class RegisterUserValidator : AbstractValidator<UserRegisterRequest>
+public class RegisterUserValidator : AbstractValidator<RegisterRequest>
 {
     public RegisterUserValidator()
     {

@@ -1,4 +1,4 @@
-﻿namespace Goodpets.API.Validators;
+﻿namespace Goodpets.API.Configuration.Validator;
 
 public static class FluentValidatorExtensions
 {

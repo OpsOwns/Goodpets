@@ -20,7 +20,17 @@ public record ErrorDetail
     }
 }
 
-public record ErrorResponse(IEnumerable<ErrorDetail> Errors)
+public record ErrorResponse
 {
-    public IEnumerable<ErrorDetail> Errors { get; } = Errors ?? throw new ArgumentNullException(nameof(Errors));
+    public IEnumerable<ErrorDetail> Errors { get; }
+
+    public ErrorResponse(IEnumerable<ErrorDetail> errors)
+    {
+        Errors = errors ?? throw new ArgumentNullException(nameof(errors));
+    }
+
+    public ErrorResponse(params ErrorDetail[] errors)
+    {
+        Errors = errors ?? throw new ArgumentNullException(nameof(errors));
+    }
 }

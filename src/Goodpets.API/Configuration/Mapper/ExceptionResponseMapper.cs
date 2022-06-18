@@ -9,13 +9,15 @@ public class ExceptionResponseMapper : IExceptionResponseMapper
         return exception switch
         {
             BusinessException ex => new ExceptionResponse(
-                new ErrorResponse(new[] { new ErrorDetail(GetErrorCode(ex), ex.Message) }),
+                new ErrorResponse(new ErrorDetail(GetErrorCode(ex), ex.Message)),
                 HttpStatusCode.UnprocessableEntity),
             SecurityTokenExpiredException ex => new ExceptionResponse(
-                new ErrorResponse(new[] { new ErrorDetail(GetErrorCode(ex), ex.Message) }),
+                new ErrorResponse(new ErrorDetail(GetErrorCode(ex), ex.Message)),
                 HttpStatusCode.Unauthorized),
+            UserException ex => new ExceptionResponse(new ErrorResponse(new ErrorDetail(ex.Parameter, ex.Message)),
+                HttpStatusCode.Conflict),
             _ => new ExceptionResponse(
-                new ErrorResponse(new[] { new ErrorDetail(GetErrorCode(exception), exception.Message) }),
+                new ErrorResponse(new ErrorDetail(GetErrorCode(exception), exception.Message)),
                 HttpStatusCode.InternalServerError)
         };
     }

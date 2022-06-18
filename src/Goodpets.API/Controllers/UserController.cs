@@ -17,7 +17,7 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Register([FromBody] UserRegisterRequest userRegisterRequest)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest userRegisterRequest)
     {
         var result = await _userService.SignUp(userRegisterRequest.UserName, userRegisterRequest.Password,
             userRegisterRequest.Email, userRegisterRequest.Role, HttpContext.RequestAborted);
@@ -38,7 +38,7 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(JsonWebToken), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<JsonWebToken>> SignIn([FromBody] UserLoginRequest userLoginRequest)
+    public async Task<ActionResult<JsonWebToken>> SignIn([FromBody] LoginRequest userLoginRequest)
     {
         var jsonWebToken =
             await _userService.SignIn(userLoginRequest.Login, userLoginRequest.Password, HttpContext.RequestAborted);
@@ -68,6 +68,27 @@ internal class UserController : BaseController
 
         return Ok(jsonWebToken.Value);
     }
+
+
+    [Authorize]
+    [HttpPut("change-password")]
+    [SwaggerOperation("Change user password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest changePasswordRequest)
+    {
+        var result = await _userService.ChangePassword(changePasswordRequest.NewPassword,
+            changePasswordRequest.OldPassword,
+            HttpContext.RequestAborted);
+
+        if (result.IsFailed)
+            return BadRequest(result.MapError());
+
+        return Ok();
+    }
+
 
     [Authorize]
     [HttpDelete("sign-out")]

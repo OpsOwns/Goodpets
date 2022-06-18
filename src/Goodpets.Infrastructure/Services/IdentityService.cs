@@ -1,6 +1,6 @@
 ﻿namespace Goodpets.Infrastructure.Services;
 
-internal class UserService : IUserService, IService
+internal class UserService : IUserService
 {
     private readonly IIdentity _identity;
     private readonly GoodpetsContext _goodpetsContext;
@@ -158,5 +158,33 @@ internal class UserService : IUserService, IService
         _goodpetsContext.Tokens.Remove(token);
 
         await _goodpetsContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<Result> ChangePassword(string newPassword, string oldPassword,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(newPassword))
+            return Result.Fail(Not_Empty(nameof(newPassword)));
+
+        if (string.IsNullOrWhiteSpace(oldPassword))
+            return Result.Fail(Not_Empty(nameof(oldPassword)));
+
+        var user = await _users.SingleOrDefaultAsync(x => x.Id == _identity.UserAccountId.Value, cancellationToken);
+
+        if (user is null)
+            throw new UserException("system can't find user in database");
+
+        if (!_passwordEncryptor.Validate(oldPassword, user.Password))
+        {
+            return Result.Fail(new Error("Old password is invalid").WithErrorCode("oldPassword"));
+        }
+
+        user.Password = _passwordEncryptor.Encrypt(newPassword);
+
+        _users.Attach(user);
+
+        await _goodpetsContext.SaveChangesAsync(cancellationToken);
+
+        return Result.Ok();
     }
 }
