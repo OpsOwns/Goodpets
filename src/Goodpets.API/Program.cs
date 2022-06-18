@@ -5,7 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(x => x.Filters.Add(new FluentValidationAttribute())).ConfigureApplicationPartManager(
     manager =>
-        manager.FeatureProviders.Add(new InternalControllerFeatureProvider()));
+        manager.FeatureProviders.Add(new InternalControllerFeatureProvider())).ConfigureApiBehaviorOptions(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 builder.Services.AddScoped<ErrorHandlerMiddleware>();
 builder.Services.AddSingleton<IExceptionResponseMapper, ExceptionResponseMapper>();

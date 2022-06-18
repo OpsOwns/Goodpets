@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Base;
-
-namespace Goodpets.API.Configuration.Mapper;
+﻿namespace Goodpets.API.Configuration.Mapper;
 
 public class ExceptionResponseMapper : IExceptionResponseMapper
 {
@@ -11,11 +9,13 @@ public class ExceptionResponseMapper : IExceptionResponseMapper
         return exception switch
         {
             BusinessException ex => new ExceptionResponse(
-                new ErrorResponse(new ErrorDetail(GetErrorCode(ex), ex.Message)),
+                new ErrorResponse(new[] { new ErrorDetail(GetErrorCode(ex), ex.Message) }),
                 HttpStatusCode.UnprocessableEntity),
             SecurityTokenExpiredException ex => new ExceptionResponse(
-                new ErrorResponse(new ErrorDetail(GetErrorCode(ex), ex.Message)), HttpStatusCode.Unauthorized),
-            _ => new ExceptionResponse(new ErrorResponse(new ErrorDetail(GetErrorCode(exception), exception.Message)),
+                new ErrorResponse(new[] { new ErrorDetail(GetErrorCode(ex), ex.Message) }),
+                HttpStatusCode.Unauthorized),
+            _ => new ExceptionResponse(
+                new ErrorResponse(new[] { new ErrorDetail(GetErrorCode(exception), exception.Message) }),
                 HttpStatusCode.InternalServerError)
         };
     }
