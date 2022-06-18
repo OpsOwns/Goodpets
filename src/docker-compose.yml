@@ -1,6 +1,22 @@
 version: '3.9'
 
 services:
+  goodpets:
+    container_name: goodpets
+    image: ${DOCKER_REGISTRY-}goodpets
+    build:
+      context: .
+      dockerfile: Goodpets.API/Dockerfile
+    depends_on:
+      - database
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5000:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+  
   database:
     image: mcr.microsoft.com/mssql/server:2019-latest
     shm_size: '4gb'

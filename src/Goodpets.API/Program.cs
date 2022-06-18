@@ -1,6 +1,3 @@
-using Goodpets.API.Configuration.Filters;
-using Goodpets.API.Configuration.Mapper;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(x => x.Filters.Add(new FluentValidationAttribute())).ConfigureApplicationPartManager(
@@ -15,13 +12,9 @@ builder.Services.AddSingleton<IExceptionResponseMapper, ExceptionResponseMapper>
 
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddFluentValidation(x =>
-{
-    x.ValidatorOptions.LanguageManager.Culture = new CultureInfo("en-US");
-    x.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-});
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddFluentValidation(FluentValidatorExtensions.AddConfiguration());
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(swagger =>
@@ -35,7 +28,7 @@ builder.Services.AddSwaggerGen(swagger =>
 
     swagger?.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+        Description = "Put **_ONLY_** your JWT Bearer token on textBox below!",
         BearerFormat = "JWT",
         Name = "JWT Authentication",
         In = ParameterLocation.Header,
@@ -64,19 +57,28 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    builder.Configuration
+        .AddUserSecrets<Program>()
+        .AddJsonFile($"appsettings.{app.Environment.EnvironmentName}.json", optional: true)
+        .AddEnvironmentVariables();
+}
+else
 {
     builder.Configuration.AddAzureKeyVault(builder.Configuration["AzureKeyVault:Url"],
         builder.Configuration["AzureKeyVault:ClientId"],
         builder.Configuration["AzureKeyVault:SecretKey"]);
 }
 
-
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseHttpsRedirection();
+
 app.UseAuthorization();
 
 app.MapControllers();
