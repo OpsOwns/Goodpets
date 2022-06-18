@@ -1,6 +1,6 @@
 ﻿namespace Goodpets.API.Configuration.Responses;
 
-internal static class ResultDtoExtensions
+internal static class ResultExtensions
 {
     internal static ErrorResponse MapToError(this Result result)
     {
