@@ -78,4 +78,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/", context => context.Response.WriteAsync("Goodpets API Gateway"));
+
 await app.RunAsync();

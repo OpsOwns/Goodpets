@@ -2,7 +2,7 @@
 
 public static class ResultDtoExtensions
 {
-    public static ErrorResponse ToResultDto(this Result result)
+    public static ErrorResponse MapToError(this Result result)
     {
         if (result.IsSuccess)
             return new ErrorResponse(Enumerable.Empty<ErrorDetail>());

@@ -14,13 +14,16 @@ internal class UserController : BaseController
     [HttpPost("sign-up")]
     [SwaggerOperation("Create the user account")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] UserRegisterRequest userRegisterRequest)
     {
         var result = await _userService.SignUp(userRegisterRequest.UserName, userRegisterRequest.Password,
-            userRegisterRequest.Email, userRegisterRequest.Role, CancellationToken.None);
+            userRegisterRequest.Email, userRegisterRequest.Role, HttpContext.RequestAborted);
 
         if (result.IsFailed)
-            return BadRequest(result.ToResultDto());
+            return BadRequest(result.MapToError());
 
 
         return Ok();
@@ -32,16 +35,18 @@ internal class UserController : BaseController
     [Consumes(RequestContentType.Json)]
     [Produces(RequestContentType.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<AccessTokenDto>> SignIn([FromBody] UserLoginRequest userLoginRequest)
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(JsonWebToken), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<JsonWebToken>> SignIn([FromBody] UserLoginRequest userLoginRequest)
     {
-        var accessTokenDto =
-            await _userService.SignIn(userLoginRequest.Login, userLoginRequest.Password, CancellationToken.None);
+        var jsonWebToken =
+            await _userService.SignIn(userLoginRequest.Login, userLoginRequest.Password, HttpContext.RequestAborted);
 
-        if (accessTokenDto.IsFailed)
-            return Unauthorized(accessTokenDto.ToResult().ToResultDto());
+        if (jsonWebToken.IsFailed)
+            return Unauthorized(jsonWebToken.ToResult().MapToError());
 
-        return Ok(accessTokenDto.Value);
+        return Ok(jsonWebToken.Value);
     }
 
     [AllowAnonymous]
@@ -51,15 +56,17 @@ internal class UserController : BaseController
     [Produces(RequestContentType.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
+    [ProducesResponseType(typeof(JsonWebToken), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<JsonWebToken>> RefreshToken([FromBody] JsonWebTokenRequest jsonWebTokenRequest)
     {
-        var result = await _userService.RefreshToken(refreshTokenRequest.AccessToken,
-            refreshTokenRequest.RefreshToken, CancellationToken.None);
+        var jsonWebToken = await _userService.RefreshToken(jsonWebTokenRequest.AccessToken,
+            jsonWebTokenRequest.RefreshToken, HttpContext.RequestAborted);
 
-        if (result.IsFailed)
-            return BadRequest(result.ToResult().ToResultDto());
+        if (jsonWebToken.IsFailed)
+            return BadRequest(jsonWebToken.ToResult().MapToError());
 
-        return Ok(result.Value);
+        return Ok(jsonWebToken.Value);
     }
 
     [Authorize]
@@ -69,7 +76,7 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> LogoutUser()
     {
-        await _userService.SignOut(CancellationToken.None);
+        await _userService.SignOut(HttpContext.RequestAborted);
 
         return NoContent();
     }

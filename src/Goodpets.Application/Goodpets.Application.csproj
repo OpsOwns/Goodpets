@@ -15,9 +15,4 @@
         <PackageReference Include="Scrutor" Version="4.2.0" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Dto\Results" />
-        <Folder Include="SeedWork" />
-    </ItemGroup>
-
 </Project>

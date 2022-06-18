@@ -1,4 +1,4 @@
-﻿using Goodpets.Application.SeedWork.Cqrs;
+﻿using Goodpets.Application.Cqrs;
 
 namespace Goodpets.Application;
 

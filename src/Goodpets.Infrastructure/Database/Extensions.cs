@@ -1,4 +1,6 @@
-﻿[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
+﻿using Goodpets.Domain.Base.Abstractions;
+
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 namespace Goodpets.Infrastructure.Database;
 
