@@ -1,8 +1,8 @@
 ﻿namespace Goodpets.API.Configuration.Responses;
 
-internal static class ResultExtensions
+internal static class ResultMapper
 {
-    internal static ErrorResponse MapToError(this Result result)
+    internal static ErrorResponse MapError(this Result result)
     {
         if (result.IsSuccess)
             return new ErrorResponse(Array.Empty<ErrorDetail>());
@@ -19,14 +19,14 @@ internal static class ResultExtensions
     {
         var errorCode = TransformErrorCode(error);
 
-        return new ErrorDetail(error.Message, errorCode);
+        return new ErrorDetail(errorCode, error.Message);
     }
 
     private static string TransformErrorCode(IError error)
     {
-        if (error.Metadata.TryGetValue("ErrorCode", out var errorCode))
+        if (error.Metadata.TryGetValue("ErrorParameter", out var errorCode))
             return errorCode as string ?? throw new InvalidOperationException();
 
-        return "Undefined";
+        return "Unknown";
     }
 }

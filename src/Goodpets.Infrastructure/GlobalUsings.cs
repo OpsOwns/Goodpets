@@ -7,6 +7,7 @@ global using System.Security.Claims;
 global using System.Security.Cryptography;
 global using System.Text;
 global using FluentResults;
+global using Goodpets.Application;
 global using Goodpets.Application.Abstractions.Domain;
 global using Goodpets.Application.Abstractions.Time;
 global using Goodpets.Domain.Base;

@@ -37,13 +37,13 @@ internal class UserService : IUserService, IService
             cancellationToken);
 
         if (user is null)
-            return Result.Fail(new Error("User not exists"));
+            return Result.Fail(new Error("User not exists").WithErrorCode("user"));
 
         var passwordValid =
             _passwordEncryptor.Validate(password, user.Password);
 
         if (!passwordValid)
-            return Result.Fail("Invalid password");
+            return Result.Fail(new Error("Invalid password").WithErrorCode("password"));
 
         var accessToken = _tokenProvider.GenerateJwtToken(user);
 
@@ -86,7 +86,8 @@ internal class UserService : IUserService, IService
             return Result.Fail(Not_Empty(nameof(role)));
 
         if (await _goodpetsContext.Users.AnyAsync(x => x.Email == email, cancellationToken))
-            return Result.Fail($"User with email {email} already exists in system");
+            return Result.Fail(
+                new Error($"User with email {email} already exists in system").WithErrorCode("email"));
 
         await _users.AddAsync(new User
         {
@@ -116,23 +117,23 @@ internal class UserService : IUserService, IService
         var user = await _goodpetsContext.Users.SingleOrDefaultAsync(x => x.Id == userId, cancellationToken);
 
         if (user is null)
-            return Result.Fail("This user not exists");
+            return Result.Fail(new Error("This user not exists").WithErrorCode("user"));
 
         var storedRefreshToken =
             await _tokens.SingleOrDefaultAsync(x => x.RefreshToken == refreshToken, cancellationToken);
 
         if (storedRefreshToken is null)
-            return Result.Fail("This refresh token not exists");
+            return Result.Fail(new Error("This refresh token not exists").WithErrorCode("refreshToken"));
 
         if (_clock.Current() > storedRefreshToken.ExpireDate)
-            return Result.Fail("This refresh token has expired");
+            return Result.Fail(new Error("This refresh token has expired").WithErrorCode("refreshToken"));
 
         if (storedRefreshToken.Used)
-            return Result.Fail("This refresh token has been used");
+            return Result.Fail(new Error("This refresh token has been used").WithErrorCode("refreshToken"));
 
 
         if (!_tokenProvider.StoredJwtIdSameAsFromPrinciple(storedRefreshToken.JwtId))
-            return Result.Fail("This refresh token does not match this JWT");
+            return Result.Fail(new Error("This refresh token does not match this JWT").WithErrorCode("refreshToken"));
 
         storedRefreshToken.Used = true;
 
@@ -148,8 +149,11 @@ internal class UserService : IUserService, IService
 
     public async Task SignOut(CancellationToken cancellationToken)
     {
-        var token = await _tokens.SingleAsync(x => x.UserId == _identity.UserAccountId.Value,
+        var token = await _tokens.SingleOrDefaultAsync(x => x.UserId == _identity.UserAccountId.Value,
             cancellationToken);
+
+        if (token is null)
+            return;
 
         _goodpetsContext.Tokens.Remove(token);
 

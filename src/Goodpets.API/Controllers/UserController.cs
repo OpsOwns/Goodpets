@@ -23,7 +23,7 @@ internal class UserController : BaseController
             userRegisterRequest.Email, userRegisterRequest.Role, HttpContext.RequestAborted);
 
         if (result.IsFailed)
-            return BadRequest(result.MapToError());
+            return BadRequest(result.MapError());
 
 
         return Ok();
@@ -44,7 +44,7 @@ internal class UserController : BaseController
             await _userService.SignIn(userLoginRequest.Login, userLoginRequest.Password, HttpContext.RequestAborted);
 
         if (jsonWebToken.IsFailed)
-            return Unauthorized(jsonWebToken.ToResult().MapToError());
+            return Unauthorized(jsonWebToken.ToResult().MapError());
 
         return Ok(jsonWebToken.Value);
     }
@@ -64,7 +64,7 @@ internal class UserController : BaseController
             jsonWebTokenRequest.RefreshToken, HttpContext.RequestAborted);
 
         if (jsonWebToken.IsFailed)
-            return BadRequest(jsonWebToken.ToResult().MapToError());
+            return BadRequest(jsonWebToken.ToResult().MapError());
 
         return Ok(jsonWebToken.Value);
     }
