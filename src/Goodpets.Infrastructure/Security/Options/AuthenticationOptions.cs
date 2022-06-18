@@ -5,7 +5,7 @@ internal sealed class AuthenticationOptions
     private const string SectionName = "Authentication";
 
 
-    public AuthenticationOptions(IConfiguration configuration)
+    internal AuthenticationOptions(IConfiguration configuration)
     {
         if (configuration == null)
             throw new ArgumentNullException(nameof(configuration));

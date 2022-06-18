@@ -22,8 +22,9 @@ public static class Extensions
                 };
             })
             .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>()
-            .AddSingleton<IPasswordEncryptor, PasswordEncryptor>()
+            .AddSingleton<IPasswordManager, PasswordManager>()
             .AddSingleton<ITokenProvider, TokenProvider>()
+            .AddSingleton<IIdentityService, IdentityService>()
             .AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

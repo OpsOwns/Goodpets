@@ -1,6 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Services;
+﻿namespace Goodpets.Infrastructure.Security;
 
-internal class UserService : IUserService
+internal class IdentityService : IIdentityService
 {
     private readonly IIdentity _identity;
     private readonly GoodpetsContext _goodpetsContext;
@@ -8,17 +8,20 @@ internal class UserService : IUserService
     private readonly DbSet<User> _users;
     private readonly ITokenProvider _tokenProvider;
     private readonly IClock _clock;
-    private readonly IPasswordEncryptor _passwordEncryptor;
+    private readonly IPasswordManager _passwordManager;
+    private readonly IEmailService _emailService;
     private string Not_Empty(string value) => $"field {value} can't be null or empty";
 
-    public UserService(IIdentity identity, GoodpetsContext goodpetsContext, ITokenProvider tokenProvider, IClock clock,
-        IPasswordEncryptor passwordEncryptor)
+    public IdentityService(IIdentity identity, GoodpetsContext goodpetsContext, ITokenProvider tokenProvider,
+        IClock clock,
+        IPasswordManager passwordManager, IEmailService emailService)
     {
-        _identity = identity;
-        _goodpetsContext = goodpetsContext;
-        _tokenProvider = tokenProvider;
-        _clock = clock;
-        _passwordEncryptor = passwordEncryptor;
+        _identity = identity ?? throw new ArgumentNullException(nameof(identity));
+        _goodpetsContext = goodpetsContext ?? throw new ArgumentNullException(nameof(goodpetsContext));
+        _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
+        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
+        _passwordManager = passwordManager ?? throw new ArgumentNullException(nameof(passwordManager));
+        _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
 
         _tokens = goodpetsContext.Tokens;
         _users = goodpetsContext.Users;
@@ -40,7 +43,7 @@ internal class UserService : IUserService
             return Result.Fail(new Error("User not exists").WithErrorCode("user"));
 
         var passwordValid =
-            _passwordEncryptor.Validate(password, user.Password);
+            _passwordManager.Validate(password, user.Password);
 
         if (!passwordValid)
             return Result.Fail(new Error("Invalid password").WithErrorCode("password"));
@@ -92,7 +95,7 @@ internal class UserService : IUserService
         await _users.AddAsync(new User
         {
             Username = username, Email = email, Id = Guid.NewGuid(), Role = role,
-            Password = _passwordEncryptor.Encrypt(password)
+            Password = _passwordManager.Encrypt(password)
         }, cancellationToken);
 
         await _goodpetsContext.SaveChangesAsync(cancellationToken);
@@ -174,14 +177,37 @@ internal class UserService : IUserService
         if (user is null)
             throw new UserException("system can't find user in database");
 
-        if (!_passwordEncryptor.Validate(oldPassword, user.Password))
+        if (!_passwordManager.Validate(oldPassword, user.Password))
         {
             return Result.Fail(new Error("Old password is invalid").WithErrorCode("oldPassword"));
         }
 
-        user.Password = _passwordEncryptor.Encrypt(newPassword);
+        user.Password = _passwordManager.Encrypt(newPassword);
 
         _users.Attach(user);
+
+        await _goodpetsContext.SaveChangesAsync(cancellationToken);
+
+        return Result.Ok();
+    }
+
+    public async Task<Result> ResetPassword(string email, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            return Result.Fail(Not_Empty(nameof(email)));
+
+        var user = await _users.SingleOrDefaultAsync(x => x.Email == email, cancellationToken);
+
+        if (user is null)
+            return Result.Fail(new Error($"User with email {email} not exists").WithErrorCode("email"));
+
+        var password = _passwordManager.GeneratePassword(12);
+
+        user.Password = _passwordManager.Encrypt(password);
+
+        _users.Attach(user);
+
+        await _emailService.Send(new EmailMessage(password, user.Email, "[GoodPets] New password"), cancellationToken);
 
         await _goodpetsContext.SaveChangesAsync(cancellationToken);
 

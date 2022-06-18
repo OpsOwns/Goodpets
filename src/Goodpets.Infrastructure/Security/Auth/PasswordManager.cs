@@ -1,12 +1,26 @@
-﻿namespace Goodpets.Infrastructure.Security;
+﻿namespace Goodpets.Infrastructure.Security.Auth;
 
-internal sealed class PasswordEncryptor : IPasswordEncryptor
+internal sealed class PasswordManager : IPasswordManager
 {
     private readonly IPasswordHasher<User> _passwordHasher;
 
-    public PasswordEncryptor(IPasswordHasher<User> passwordHasher)
+    public PasswordManager(IPasswordHasher<User> passwordHasher)
     {
         _passwordHasher = passwordHasher;
+    }
+
+    public string GeneratePassword(int length)
+    {
+        const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        var builder = new StringBuilder();
+        var random = new Random();
+
+        while (0 < length--)
+        {
+            builder.Append(valid[random.Next(valid.Length)]);
+        }
+
+        return builder.ToString();
     }
 
     public string Encrypt(string password)

@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Types;
-
-namespace Goodpets.Infrastructure.Security.Models;
+﻿namespace Goodpets.Infrastructure.Security.Models;
 
 public record JsonWebToken(string AccessToken, string RefreshToken);
 

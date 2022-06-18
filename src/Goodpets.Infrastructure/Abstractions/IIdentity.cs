@@ -1,6 +1,4 @@
-﻿using Goodpets.Domain.Types;
-
-namespace Goodpets.Infrastructure.Abstractions;
+﻿namespace Goodpets.Infrastructure.Abstractions;
 
 public interface IIdentity
 {

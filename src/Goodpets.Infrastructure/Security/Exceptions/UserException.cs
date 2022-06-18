@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Infrastructure.Security;
+﻿namespace Goodpets.Infrastructure.Security.Exceptions;
 
 [Serializable]
 public class UserException : Exception

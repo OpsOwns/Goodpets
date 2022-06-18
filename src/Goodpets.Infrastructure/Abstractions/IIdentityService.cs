@@ -1,6 +1,6 @@
 ﻿namespace Goodpets.Infrastructure.Abstractions;
 
-public interface IUserService : IService
+public interface IIdentityService
 {
     Task<Result<JsonWebToken>> SignIn(string username, string password,
         CancellationToken cancellationToken);
@@ -14,4 +14,5 @@ public interface IUserService : IService
     Task SignOut(CancellationToken cancellationToken);
 
     Task<Result> ChangePassword(string newPassword, string oldPassword, CancellationToken cancellationToken);
+    Task<Result> ResetPassword(string email, CancellationToken cancellationToken);
 }

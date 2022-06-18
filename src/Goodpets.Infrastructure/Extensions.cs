@@ -7,8 +7,11 @@ public static class Extensions
         if (services == null)
             throw new ArgumentNullException(nameof(services));
 
+        services.AddEmail();
+
         services.AddSecurity();
         services.AddSingleton<IClock, Clock>();
+
         services.AddDatabase();
 
         return services;

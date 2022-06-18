@@ -1,4 +1,6 @@
-﻿namespace Goodpets.API.Configuration.Mapper;
+﻿using Goodpets.Infrastructure.Security.Exceptions;
+
+namespace Goodpets.API.Configuration.Mapper;
 
 public class ExceptionResponseMapper : IExceptionResponseMapper
 {

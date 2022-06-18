@@ -3,9 +3,9 @@
 [Route($"{BasePath}/[controller]")]
 internal class UserController : BaseController
 {
-    private readonly IUserService _userService;
+    private readonly IIdentityService _userService;
 
-    public UserController(IUserService userService)
+    public UserController(IIdentityService userService)
     {
         _userService = userService;
     }
@@ -89,6 +89,22 @@ internal class UserController : BaseController
         return Ok();
     }
 
+    [AllowAnonymous]
+    [HttpPost("forgot-password")]
+    [SwaggerOperation("Change user password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> ChangePassword([FromBody] ForgotPasswordRequest forgotPasswordRequest)
+    {
+        var result = await _userService.ResetPassword(forgotPasswordRequest.Email,
+            HttpContext.RequestAborted);
+
+        if (result.IsFailed)
+            return NotFound(result.MapError());
+
+        return Ok();
+    }
 
     [Authorize]
     [HttpDelete("sign-out")]
