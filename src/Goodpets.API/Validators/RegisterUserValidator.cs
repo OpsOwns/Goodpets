@@ -1,8 +1,8 @@
 ﻿namespace Goodpets.API.Validators;
 
-public class UserRegisterValidator : AbstractValidator<UserRegisterRequest>
+public class RegisterUserValidator : AbstractValidator<UserRegisterRequest>
 {
-    public UserRegisterValidator()
+    public RegisterUserValidator()
     {
         RuleFor(x => x.Email).EmailAddress();
         RuleFor(x => x.Password).Password(8);

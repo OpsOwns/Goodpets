@@ -20,7 +20,6 @@ global using Goodpets.Domain.Base;
 global using Goodpets.Infrastructure;
 global using Goodpets.Infrastructure.Abstractions;
 global using Goodpets.Infrastructure.Security.Models;
-global using Humanizer;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
