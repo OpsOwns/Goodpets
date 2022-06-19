@@ -7,13 +7,20 @@ System should guarantee faster fill all stuff what is needed to register owner w
 check status of his pet, what pills or other treatment should take.
 
 
-### Technology
+### Architecture
 
 * .NET 6 ⭐
 * DDD (Domain Driven Design) approach ⭐
 * Clean architecture ⭐
 * CQRS ⭐
 * Unit Tests ⭐
+
+### Project structure
+
+* Domain (Entities, ValueObjects, Repositories)
+* Infrastructure (Database operations, Authentication etc.)
+* Application (Domain logic implementation)
+* Api (Presetaion part)
 
 ### Built With
 
@@ -24,6 +31,7 @@ check status of his pet, what pills or other treatment should take.
 * [Docker Compose](https://docs.docker.com/compose/)
 * [Azure Key Vault](https://github.com/Azure/AzureKeyVault)
 * [Xunit](https://github.com/xunit/xunit)
+* [Moq](https://github.com/moq/moq)
 
 ### Storage
 * MS sql server
