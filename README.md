@@ -17,10 +17,10 @@ check status of his pet, what pills or other treatment should take.
 
 ### Project structure
 
-* Domain (Entities, ValueObjects, Repositories)
-* Infrastructure (Database operations, Authentication etc.)
+* Domain (entities, valueObjects, aggregates, repositories interfaces, exceptions etc.)
+* Infrastructure (Database operations, authentication etc.)
 * Application (Domain logic implementation)
-* Api (Presetaion part)
+* Api (Presentation layer)
 
 ### Built With
 
