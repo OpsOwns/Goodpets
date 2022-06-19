@@ -1,7 +1,4 @@
-﻿using Goodpets.Application.Abstractions;
-using Goodpets.Application.Abstractions.Email;
-
-namespace Goodpets.Infrastructure.Services;
+﻿namespace Goodpets.Infrastructure.Email;
 
 internal class EmailService : IEmailService
 {

@@ -1,7 +1,4 @@
-﻿using Goodpets.Application.Abstractions;
-using Goodpets.Application.Abstractions.Email;
-
-namespace Goodpets.Infrastructure.Security.Auth;
+﻿namespace Goodpets.Infrastructure.Security.Auth;
 
 internal class IdentityProvider : IIdentityProvider
 {
@@ -11,19 +8,16 @@ internal class IdentityProvider : IIdentityProvider
     private readonly IPasswordManager _passwordManager;
     private readonly IUserRepository _userRepository;
     private readonly ITokenRepository _tokenRepository;
-    private readonly IEmailService _emailService;
     private string Not_Empty(string value) => $"field {value} can't be null or empty";
 
     public IdentityProvider(IIdentity identity, ITokenProvider tokenProvider, IClock clock,
-        IPasswordManager passwordManager, IUserRepository userRepository, IEmailService emailService,
-        ITokenRepository tokenRepository)
+        IPasswordManager passwordManager, IUserRepository userRepository, ITokenRepository tokenRepository)
     {
         _identity = identity ?? throw new ArgumentNullException(nameof(identity));
         _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _passwordManager = passwordManager ?? throw new ArgumentNullException(nameof(passwordManager));
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-        _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         _tokenRepository = tokenRepository ?? throw new ArgumentNullException(nameof(tokenRepository));
     }
 
@@ -128,7 +122,7 @@ internal class IdentityProvider : IIdentityProvider
 
         storedRefreshToken.Used = true;
 
-        await _tokenRepository.UpdateRefreshToken(storedRefreshToken, cancellationToken);
+        await _tokenRepository.UpdateRefreshToken(storedRefreshToken);
 
         var jwtToken = _tokenProvider.GenerateJwtToken(user);
         var refreshTokenNew = _tokenProvider.GenerateRefreshToken();
@@ -146,7 +140,7 @@ internal class IdentityProvider : IIdentityProvider
         if (token is null)
             return;
 
-        await _tokenRepository.RemoveToken(token, cancellationToken);
+        await _tokenRepository.RemoveToken(token);
     }
 
     public async Task<Result> ChangePassword(string newPassword, string oldPassword,

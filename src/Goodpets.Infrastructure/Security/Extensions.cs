@@ -1,7 +1,4 @@
-﻿using Goodpets.Application.Abstractions;
-using Goodpets.Infrastructure.Services;
-
-namespace Goodpets.Infrastructure.Security;
+﻿namespace Goodpets.Infrastructure.Security;
 
 public static class Extensions
 {

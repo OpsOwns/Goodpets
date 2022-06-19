@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Domain.Repositories;
+﻿using Goodpets.Domain.Abstractions;
+
+namespace Goodpets.Domain.Repositories;
 
 public interface IClientRepository : IRepository
 {

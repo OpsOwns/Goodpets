@@ -1,4 +1,4 @@
-﻿namespace Goodpets.API.Configuration.Responses;
+﻿namespace Goodpets.API.Configuration.Mapper;
 
 internal static class ResultMapper
 {

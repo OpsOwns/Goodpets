@@ -1,8 +1,4 @@
-﻿using Goodpets.Application.Abstractions;
-using Goodpets.Application.Abstractions.Email;
-using Goodpets.Infrastructure.Services;
-
-namespace Goodpets.Infrastructure.Email;
+﻿namespace Goodpets.Infrastructure.Email;
 
 public static class Extensions
 {

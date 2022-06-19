@@ -1,6 +1,6 @@
 namespace Goodpets.Infrastructure.Abstractions;
 
-internal interface IUserRepository
+internal interface IUserRepository : IRepository
 {
     Task<User?> GetUserByEmail(string email, CancellationToken cancellationToken);
     Task<User?> GetUser(Guid userId, CancellationToken cancellationToken);

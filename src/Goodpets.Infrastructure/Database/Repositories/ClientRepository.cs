@@ -1,7 +1,4 @@
-﻿using Goodpets.Domain.Entities;
-using Goodpets.Domain.Repositories;
-
-namespace Goodpets.Infrastructure.Database.Repositories;
+﻿namespace Goodpets.Infrastructure.Database.Repositories;
 
 public class ClientRepository : IClientRepository
 {

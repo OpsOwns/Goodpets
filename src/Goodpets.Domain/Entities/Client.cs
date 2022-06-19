@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Domain.Entities;
+﻿using Goodpets.Domain.Exceptions;
+
+namespace Goodpets.Domain.Entities;
 
 public class Client : Entity<ClientId>
 {

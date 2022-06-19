@@ -24,7 +24,7 @@ internal class TokenRepository : ITokenRepository
         await _tokens.AddAsync(token, cancellationToken);
     }
 
-    public Task UpdateRefreshToken(Token token, CancellationToken cancellationToken)
+    public Task UpdateRefreshToken(Token token)
     {
         _tokens.Update(token);
         return Task.CompletedTask;
@@ -41,7 +41,7 @@ internal class TokenRepository : ITokenRepository
         return token ?? null;
     }
 
-    public Task RemoveToken(Token token, CancellationToken cancellationToken)
+    public Task RemoveToken(Token token)
     {
         _tokens.Remove(token);
         return Task.CompletedTask;

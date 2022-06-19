@@ -1,6 +1,4 @@
-﻿using Goodpets.Application.Commands.Auth;
-
-namespace Goodpets.API.Controllers;
+﻿namespace Goodpets.API.Controllers;
 
 [Route($"{BasePath}/[controller]")]
 internal class UserController : BaseController

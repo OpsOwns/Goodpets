@@ -7,6 +7,10 @@ public static class Extensions
         if (services == null)
             throw new ArgumentNullException(nameof(services));
 
+        services.AddDispatchers();
+
+        services.AddCustomLogging();
+
         services.AddEmail();
 
         services.AddSecurity();

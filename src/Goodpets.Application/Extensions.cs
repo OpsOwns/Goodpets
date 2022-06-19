@@ -1,6 +1,4 @@
-﻿using Goodpets.Application.Cqrs;
-
-namespace Goodpets.Application;
+﻿namespace Goodpets.Application;
 
 public static class Extensions
 {
@@ -23,7 +21,6 @@ public static class Extensions
             .AsImplementedInterfaces()
             .WithScopedLifetime());
 
-        services.AddCqrs();
 
         return services;
     }

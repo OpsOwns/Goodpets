@@ -1,6 +1,4 @@
-﻿using Goodpets.Infrastructure.Email.Exceptions;
-
-namespace Goodpets.API.Configuration.Mapper;
+﻿namespace Goodpets.API.Configuration.Mapper;
 
 public class ExceptionResponseMapper : IExceptionResponseMapper
 {

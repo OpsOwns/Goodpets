@@ -1,8 +1,4 @@
-﻿using Goodpets.Application.Abstractions;
-using Goodpets.Application.Abstractions.Email;
-using Goodpets.Application.Commands.Auth;
-
-namespace Goodpets.Application.Commands.Handlers;
+﻿namespace Goodpets.Application.Commands.Handlers;
 
 public class AuthHandler : ICommandHandler<SignUp>, ICommandHandler<SignIn>, ICommandHandler<RefreshToken>,
     ICommandHandler<ChangePassword>, ICommandHandler<ForgotPassword>, ICommandHandler<SignOut>

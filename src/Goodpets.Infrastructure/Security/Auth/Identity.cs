@@ -2,7 +2,7 @@
 
 public class Identity : IIdentity
 {
-    private const string TokenKey = "jwt";
+    private const string TokenKey = "jsonWebTokens";
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public Identity(IHttpContextAccessor httpContextAccessor)
