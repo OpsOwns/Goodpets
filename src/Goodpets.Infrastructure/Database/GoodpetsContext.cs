@@ -10,8 +10,6 @@ internal class GoodpetsContext : DbContext
     }
 
     internal DbSet<User> Users => Set<User>();
-    internal DbSet<Token> Tokens => Set<Token>();
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(_databaseOptions.ConnectionString);

@@ -7,4 +7,5 @@ internal class User
     internal string Username { get; set; } = null!;
     internal string Password { get; set; } = null!;
     internal string Email { get; set; } = null!;
+    public Token? Token { get; set; }
 }

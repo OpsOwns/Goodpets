@@ -18,6 +18,17 @@ internal class UserRepository : IUserRepository
         return Task.CompletedTask;
     }
 
+    public async Task<Token?> GetRefreshToken(string refreshToken, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(refreshToken))
+            throw new UserException(nameof(refreshToken), "refreshToken can not be null or empty");
+
+        var user = await _users.SingleOrDefaultAsync(x => x.Token.RefreshToken == refreshToken,
+            cancellationToken);
+
+        return user?.Token ?? null;
+    }
+
 
     public async Task<User?> GetUserByEmail(string email, CancellationToken cancellationToken)
     {
@@ -60,5 +71,6 @@ internal class UserRepository : IUserRepository
         return await _users.AnyAsync(x => x.Email == email, cancellationToken);
     }
 
-    public async Task CreateUser(User user, CancellationToken cancellationToken) => await _users.AddAsync(user, cancellationToken);
+    public async Task CreateUser(User user, CancellationToken cancellationToken) =>
+        await _users.AddAsync(user, cancellationToken);
 }

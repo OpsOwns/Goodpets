@@ -8,4 +8,5 @@ internal interface IUserRepository : IRepository
     Task<bool> DoesUserEmailExists(string email, CancellationToken cancellationToken);
     Task CreateUser(User user, CancellationToken cancellationToken);
     Task UpdateUser(User user);
+    Task<Token?> GetRefreshToken(string refreshToken, CancellationToken cancellationToken);
 }

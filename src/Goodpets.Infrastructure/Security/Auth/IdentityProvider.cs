@@ -7,18 +7,16 @@ internal class IdentityProvider : IIdentityProvider
     private readonly IClock _clock;
     private readonly IPasswordManager _passwordManager;
     private readonly IUserRepository _userRepository;
-    private readonly ITokenRepository _tokenRepository;
     private string Not_Empty(string value) => $"field {value} can't be null or empty";
 
     public IdentityProvider(IIdentity identity, ITokenProvider tokenProvider, IClock clock,
-        IPasswordManager passwordManager, IUserRepository userRepository, ITokenRepository tokenRepository)
+        IPasswordManager passwordManager, IUserRepository userRepository)
     {
         _identity = identity ?? throw new ArgumentNullException(nameof(identity));
         _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _passwordManager = passwordManager ?? throw new ArgumentNullException(nameof(passwordManager));
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-        _tokenRepository = tokenRepository ?? throw new ArgumentNullException(nameof(tokenRepository));
     }
 
     public async Task<Result> SignIn(string username, string password,
@@ -45,11 +43,15 @@ internal class IdentityProvider : IIdentityProvider
 
         var refreshToken = _tokenProvider.GenerateRefreshToken();
 
-        await _tokenRepository.ReplaceRefreshToken(new Token
+        var token = new Token
         {
-            CreationDate = _clock.Current(), User = user, Used = false, ExpireDate = refreshToken.ExpireTime,
-            JwtId = accessToken.JwtId.Value, RefreshToken = refreshToken.Value, Id = Guid.NewGuid(),
-        }, cancellationToken);
+            CreationDate = _clock.Current(), Used = false, ExpireDate = refreshToken.ExpireTime,
+            JwtId = accessToken.JwtId.Value, RefreshToken = refreshToken.Value,
+        };
+
+        user.Token = token;
+
+        await _userRepository.UpdateUser(user);
 
         _identity.Set(new JsonWebToken(accessToken.Value, refreshToken.Value));
 
@@ -104,8 +106,7 @@ internal class IdentityProvider : IIdentityProvider
         if (user is null)
             return Result.Fail(new Error("This user not exists").WithErrorCode("user"));
 
-        var storedRefreshToken =
-            await _tokenRepository.GetRefreshToken(refreshToken, cancellationToken);
+        var storedRefreshToken = await _userRepository.GetRefreshToken(refreshToken, cancellationToken);
 
         if (storedRefreshToken is null)
             return Result.Fail(new Error("This refresh token not exists").WithErrorCode("refreshToken"));
@@ -122,7 +123,9 @@ internal class IdentityProvider : IIdentityProvider
 
         storedRefreshToken.Used = true;
 
-        await _tokenRepository.UpdateRefreshToken(storedRefreshToken);
+        user.Token = storedRefreshToken;
+
+        await _userRepository.UpdateUser(user);
 
         var jwtToken = _tokenProvider.GenerateJwtToken(user);
         var refreshTokenNew = _tokenProvider.GenerateRefreshToken();
@@ -135,12 +138,14 @@ internal class IdentityProvider : IIdentityProvider
 
     public async Task SignOut(CancellationToken cancellationToken)
     {
-        var token = await _tokenRepository.GetToken(_identity.UserAccountId.Value, cancellationToken);
+        var user = await _userRepository.GetUser(_identity.UserAccountId.Value, cancellationToken);
 
-        if (token is null)
+        if (user is null)
             return;
 
-        await _tokenRepository.RemoveToken(token);
+        user.Token = null;
+
+        await _userRepository.UpdateUser(user);
     }
 
     public async Task<Result> ChangePassword(string newPassword, string oldPassword,
@@ -185,6 +190,6 @@ internal class IdentityProvider : IIdentityProvider
 
         await _userRepository.UpdateUser(user);
 
-        return Result.Ok(user.Password);
+        return Result.Ok(password);
     }
 }
