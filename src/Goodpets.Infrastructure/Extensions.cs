@@ -9,8 +9,6 @@ public static class Extensions
 
         services.AddDispatchers();
 
-        services.AddCustomLogging();
-
         services.AddEmail();
 
         services.AddSecurity();

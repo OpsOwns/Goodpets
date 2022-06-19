@@ -1,6 +1,6 @@
 ﻿namespace Goodpets.Infrastructure.Database.UnitOfWork;
 
-internal class GoodpetsUnitOfWork : IUnitOfWork
+sealed class GoodpetsUnitOfWork : IUnitOfWork
 {
     private readonly GoodpetsContext _dbContext;
 
@@ -9,18 +9,24 @@ internal class GoodpetsUnitOfWork : IUnitOfWork
         _dbContext = dbContext;
     }
 
-    public async Task ExecuteAsync(Func<Task> action)
+    public async Task<Result> ExecuteAsync(Func<Task<Result>> action, CancellationToken cancellationToken)
     {
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await action();
-            await _dbContext.SaveChangesAsync();
-            await transaction.CommitAsync();
+            var result = await action();
+
+            if (result.IsFailed)
+                return result;
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+
+            return Result.Ok();
         }
         catch (Exception)
         {
-            await transaction.RollbackAsync();
+            await transaction.RollbackAsync(cancellationToken);
             throw;
         }
     }
