@@ -2,6 +2,7 @@
 
 public class Identity : IIdentity
 {
+    private const string TokenKey = "jwt";
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public Identity(IHttpContextAccessor httpContextAccessor)
@@ -31,7 +32,24 @@ public class Identity : IIdentity
         }
     }
 
-    public UserAccountId UserAccountId
+    public void Set(JsonWebToken jwt) => _httpContextAccessor.HttpContext?.Items.TryAdd(TokenKey, jwt);
+
+    public JsonWebToken? Get()
+    {
+        if (_httpContextAccessor.HttpContext is null)
+        {
+            return null;
+        }
+
+        if (_httpContextAccessor.HttpContext.Items.TryGetValue(TokenKey, out var jwt))
+        {
+            return jwt as JsonWebToken;
+        }
+
+        return null;
+    }
+
+    public UserId UserAccountId
 
     {
         get

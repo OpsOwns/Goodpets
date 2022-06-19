@@ -1,7 +1,5 @@
 ﻿namespace Goodpets.Infrastructure.Security.Models;
 
-public record JsonWebToken(string AccessToken, string RefreshToken);
-
 internal record AccessToken(string Value, JwtId JwtId);
 
 internal record RefreshToken(string Value, DateTime ExpireTime);

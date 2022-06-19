@@ -1,18 +1,16 @@
-﻿using Goodpets.Domain.Base;
+﻿namespace Goodpets.Domain.Types;
 
-namespace Goodpets.Domain.Types;
-
-public record UserAccountId : EntityId
+public record UserId : EntityId
 {
-    public UserAccountId(Guid value) : base(value)
+    public UserId(Guid value) : base(value)
     {
     }
 
-    public UserAccountId()
+    public UserId()
     {
     }
 
-    public static implicit operator UserAccountId(string userAccountId)
+    public static implicit operator UserId(string userAccountId)
     {
         if (string.IsNullOrEmpty(userAccountId))
             throw new ArgumentNullException(nameof(userAccountId));
@@ -22,6 +20,6 @@ public record UserAccountId : EntityId
             throw new InvalidCastException(nameof(userAccountId));
         }
 
-        return new UserAccountId(userId);
+        return new UserId(userId);
     }
 }

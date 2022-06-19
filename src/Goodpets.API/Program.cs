@@ -10,8 +10,8 @@ builder.Services.AddControllers(x => x.Filters.Add(new FluentValidationAttribute
 builder.Services.AddScoped<ErrorHandlerMiddleware>();
 builder.Services.AddSingleton<IExceptionResponseMapper, ExceptionResponseMapper>();
 
-builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddFluentValidation(FluentValidatorExtensions.AddConfiguration());

@@ -2,13 +2,11 @@
 
 internal class TokenRepository : ITokenRepository
 {
-    private readonly GoodpetsContext _goodpetsContext;
     private readonly DbSet<Token> _tokens;
 
     public TokenRepository(GoodpetsContext goodpetsContext)
     {
-        _goodpetsContext = goodpetsContext;
-        _tokens = _goodpetsContext.Tokens;
+        _tokens = goodpetsContext.Tokens;
     }
 
     public async Task ReplaceRefreshToken(Token token, CancellationToken cancellationToken)
@@ -21,17 +19,15 @@ internal class TokenRepository : ITokenRepository
             _tokens.Remove(storedToken);
         }
 
+        _tokens.Attach(token);
+
         await _tokens.AddAsync(token, cancellationToken);
-
-        _goodpetsContext.Entry(token.User).State = EntityState.Unchanged;
-
-        await _goodpetsContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task UpdateRefreshToken(Token token, CancellationToken cancellationToken)
+    public Task UpdateRefreshToken(Token token, CancellationToken cancellationToken)
     {
         _tokens.Update(token);
-        await _goodpetsContext.SaveChangesAsync(cancellationToken);
+        return Task.CompletedTask;
     }
 
     public async Task<Token?> GetToken(Guid userId, CancellationToken cancellationToken)
@@ -45,10 +41,10 @@ internal class TokenRepository : ITokenRepository
         return token ?? null;
     }
 
-    public async Task RemoveToken(Token token, CancellationToken cancellationToken)
+    public Task RemoveToken(Token token, CancellationToken cancellationToken)
     {
-        _goodpetsContext.Tokens.Remove(token);
-        await _goodpetsContext.SaveChangesAsync(cancellationToken);
+        _tokens.Remove(token);
+        return Task.CompletedTask;
     }
 
     public async Task<Token?> GetRefreshToken(string refreshToken, CancellationToken cancellationToken)

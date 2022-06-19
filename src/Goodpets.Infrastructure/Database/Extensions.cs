@@ -1,4 +1,4 @@
-﻿using Goodpets.Infrastructure.Database.Repositories;
+﻿using Goodpets.Infrastructure.Database.UnitOfWork;
 
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
@@ -12,6 +12,8 @@ public static class Extensions
         services.AddTransient(x => new GoodpetsContext(x.GetRequiredService<DatabaseOptions>()));
 
         services.AddScoped<IUnitOfWork, GoodpetsUnitOfWork>();
+
+        services.TryDecorate(typeof(ICommandHandler<>), typeof(UnitOfWorkDecorator<>));
 
         services.AddTransient<ITokenRepository, TokenRepository>()
             .AddTransient<IUserRepository, UserRepository>();

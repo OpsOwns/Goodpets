@@ -1,4 +1,7 @@
-﻿namespace Goodpets.Infrastructure.Security;
+﻿using Goodpets.Application.Abstractions;
+using Goodpets.Infrastructure.Services;
+
+namespace Goodpets.Infrastructure.Security;
 
 public static class Extensions
 {
@@ -31,7 +34,7 @@ public static class Extensions
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, null!);
 
-        services.TryAddTransient<IIdentityService, IdentityService>();
+        services.TryAddTransient<IIdentityProvider, IdentityProvider>();
 
         services.TryAddSingleton<IIdentity, Identity>();
 

@@ -1,9 +1,11 @@
-﻿namespace Goodpets.Infrastructure.Security;
+﻿using Goodpets.Application.Abstractions;
+using Goodpets.Application.Abstractions.Email;
 
-internal class IdentityService : IIdentityService
+namespace Goodpets.Infrastructure.Security.Auth;
+
+internal class IdentityProvider : IIdentityProvider
 {
     private readonly IIdentity _identity;
-
     private readonly ITokenProvider _tokenProvider;
     private readonly IClock _clock;
     private readonly IPasswordManager _passwordManager;
@@ -12,7 +14,7 @@ internal class IdentityService : IIdentityService
     private readonly IEmailService _emailService;
     private string Not_Empty(string value) => $"field {value} can't be null or empty";
 
-    public IdentityService(IIdentity identity, ITokenProvider tokenProvider, IClock clock,
+    public IdentityProvider(IIdentity identity, ITokenProvider tokenProvider, IClock clock,
         IPasswordManager passwordManager, IUserRepository userRepository, IEmailService emailService,
         ITokenRepository tokenRepository)
     {
@@ -25,7 +27,7 @@ internal class IdentityService : IIdentityService
         _tokenRepository = tokenRepository ?? throw new ArgumentNullException(nameof(tokenRepository));
     }
 
-    public async Task<Result<JsonWebToken>> SignIn(string username, string password,
+    public async Task<Result> SignIn(string username, string password,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(username))
@@ -55,7 +57,9 @@ internal class IdentityService : IIdentityService
             JwtId = accessToken.JwtId.Value, RefreshToken = refreshToken.Value, Id = Guid.NewGuid(),
         }, cancellationToken);
 
-        return Result.Ok(new JsonWebToken(accessToken.Value, refreshToken.Value));
+        _identity.Set(new JsonWebToken(accessToken.Value, refreshToken.Value));
+
+        return Result.Ok();
     }
 
 
@@ -88,7 +92,7 @@ internal class IdentityService : IIdentityService
     }
 
 
-    public async Task<Result<JsonWebToken>> RefreshToken(string accessToken, string refreshToken,
+    public async Task<Result> RefreshToken(string accessToken, string refreshToken,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(accessToken))
@@ -129,7 +133,9 @@ internal class IdentityService : IIdentityService
         var jwtToken = _tokenProvider.GenerateJwtToken(user);
         var refreshTokenNew = _tokenProvider.GenerateRefreshToken();
 
-        return Result.Ok(new JsonWebToken(jwtToken.Value, refreshTokenNew.Value));
+        _identity.Set(new JsonWebToken(jwtToken.Value, refreshTokenNew.Value));
+
+        return Result.Ok();
     }
 
 
@@ -164,12 +170,12 @@ internal class IdentityService : IIdentityService
 
         user.Password = _passwordManager.Encrypt(newPassword);
 
-        await _userRepository.UpdateUser(user, cancellationToken);
+        await _userRepository.UpdateUser(user);
 
         return Result.Ok();
     }
 
-    public async Task<Result> ResetPassword(string email, CancellationToken cancellationToken)
+    public async Task<Result<string>> ResetPassword(string email, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(email))
             return Result.Fail(Not_Empty(nameof(email)));
@@ -183,11 +189,8 @@ internal class IdentityService : IIdentityService
 
         user.Password = _passwordManager.Encrypt(password);
 
-        Task SendEmail() => _emailService.Send(new EmailMessage(password, user.Email, "[GoodPets] New password"),
-            cancellationToken);
+        await _userRepository.UpdateUser(user);
 
-        await _userRepository.UpdateUserTransactional(SendEmail, user, cancellationToken);
-
-        return Result.Ok();
+        return Result.Ok(user.Password);
     }
 }

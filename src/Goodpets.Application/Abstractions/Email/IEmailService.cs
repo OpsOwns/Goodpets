@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Infrastructure.Abstractions;
+﻿namespace Goodpets.Application.Abstractions.Email;
 
 public interface IEmailService
 {

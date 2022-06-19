@@ -1,18 +1,18 @@
-﻿namespace Goodpets.Infrastructure.Abstractions;
+﻿namespace Goodpets.Application.Abstractions.Security;
 
-public interface IIdentityService
+public interface IIdentityProvider
 {
-    Task<Result<JsonWebToken>> SignIn(string username, string password,
+    Task<Result> SignIn(string username, string password,
         CancellationToken cancellationToken);
 
     Task<Result> SignUp(string username, string password, string email, string role,
         CancellationToken cancellationToken);
 
-    Task<Result<JsonWebToken>> RefreshToken(string accessToken, string refreshToken,
+    Task<Result> RefreshToken(string accessToken, string refreshToken,
         CancellationToken cancellationToken);
 
     Task SignOut(CancellationToken cancellationToken);
 
     Task<Result> ChangePassword(string newPassword, string oldPassword, CancellationToken cancellationToken);
-    Task<Result> ResetPassword(string email, CancellationToken cancellationToken);
+    Task<Result<string>> ResetPassword(string email, CancellationToken cancellationToken);
 }

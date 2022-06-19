@@ -1,13 +1,17 @@
-﻿namespace Goodpets.API.Controllers;
+﻿using Goodpets.Application.Commands.Auth;
+
+namespace Goodpets.API.Controllers;
 
 [Route($"{BasePath}/[controller]")]
 internal class UserController : BaseController
 {
-    private readonly IIdentityService _userService;
+    private readonly IDispatcher _dispatcher;
+    private readonly IIdentity _identity;
 
-    public UserController(IIdentityService userService)
+    public UserController(IDispatcher dispatcher, IIdentity identity)
     {
-        _userService = userService;
+        _dispatcher = dispatcher;
+        _identity = identity;
     }
 
     [AllowAnonymous]
@@ -17,10 +21,10 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Register([FromBody] RegisterRequest userRegisterRequest)
+    public async Task<IActionResult> Register([FromBody] SignUpRequest signUpRequest)
     {
-        var result = await _userService.SignUp(userRegisterRequest.UserName, userRegisterRequest.Password,
-            userRegisterRequest.Email, userRegisterRequest.Role, HttpContext.RequestAborted);
+        var result = await _dispatcher.SendAsync(new SignUp(signUpRequest.UserName, signUpRequest.Password,
+            signUpRequest.Email, signUpRequest.Role), HttpContext.RequestAborted);
 
         if (result.IsFailed)
             return BadRequest(result.MapError());
@@ -38,15 +42,15 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(JsonWebToken), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<JsonWebToken>> SignIn([FromBody] LoginRequest userLoginRequest)
+    public async Task<ActionResult<JsonWebToken>> SignIn([FromBody] SignInRequest signInRequest)
     {
-        var jsonWebToken =
-            await _userService.SignIn(userLoginRequest.Login, userLoginRequest.Password, HttpContext.RequestAborted);
+        var result = await _dispatcher.SendAsync(new SignIn(signInRequest.UserName, signInRequest.Password),
+            HttpContext.RequestAborted);
 
-        if (jsonWebToken.IsFailed)
-            return Unauthorized(jsonWebToken.ToResult().MapError());
+        if (result.IsFailed)
+            return Unauthorized(result.MapError());
 
-        return Ok(jsonWebToken.Value);
+        return Ok(_identity.Get());
     }
 
     [AllowAnonymous]
@@ -60,13 +64,14 @@ internal class UserController : BaseController
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<JsonWebToken>> RefreshToken([FromBody] JsonWebTokenRequest jsonWebTokenRequest)
     {
-        var jsonWebToken = await _userService.RefreshToken(jsonWebTokenRequest.AccessToken,
-            jsonWebTokenRequest.RefreshToken, HttpContext.RequestAborted);
+        var result = await _dispatcher.SendAsync(
+            new RefreshToken(jsonWebTokenRequest.AccessToken, jsonWebTokenRequest.RefreshToken),
+            HttpContext.RequestAborted);
 
-        if (jsonWebToken.IsFailed)
-            return BadRequest(jsonWebToken.ToResult().MapError());
+        if (result.IsFailed)
+            return BadRequest(result.MapError());
 
-        return Ok(jsonWebToken.Value);
+        return Ok(_identity.Get());
     }
 
 
@@ -79,8 +84,8 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest changePasswordRequest)
     {
-        var result = await _userService.ChangePassword(changePasswordRequest.NewPassword,
-            changePasswordRequest.OldPassword,
+        var result = await _dispatcher.SendAsync(
+            new ChangePassword(changePasswordRequest.OldPassword, changePasswordRequest.NewPassword),
             HttpContext.RequestAborted);
 
         if (result.IsFailed)
@@ -95,10 +100,10 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> ChangePassword([FromBody] ForgotPasswordRequest forgotPasswordRequest)
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest forgotPasswordRequest)
     {
-        var result = await _userService.ResetPassword(forgotPasswordRequest.Email,
-            HttpContext.RequestAborted);
+        var result =
+            await _dispatcher.SendAsync(new ForgotPassword(forgotPasswordRequest.Email), HttpContext.RequestAborted);
 
         if (result.IsFailed)
             return NotFound(result.MapError());
@@ -113,7 +118,7 @@ internal class UserController : BaseController
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> LogoutUser()
     {
-        await _userService.SignOut(HttpContext.RequestAborted);
+        await _dispatcher.SendAsync(new SignOut(), HttpContext.RequestAborted);
 
         return NoContent();
     }

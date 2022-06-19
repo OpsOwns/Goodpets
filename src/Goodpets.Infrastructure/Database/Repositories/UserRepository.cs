@@ -2,39 +2,22 @@
 
 internal class UserRepository : IUserRepository
 {
-    private readonly GoodpetsContext _goodpetsContext;
     private readonly DbSet<User> _users;
 
     public UserRepository(GoodpetsContext goodpetsContext)
     {
-        _goodpetsContext = goodpetsContext ?? throw new ArgumentNullException(nameof(goodpetsContext));
-        _users = _goodpetsContext.Users;
+        if (goodpetsContext == null)
+            throw new ArgumentNullException(nameof(goodpetsContext));
+
+        _users = goodpetsContext.Users;
     }
 
-    public async Task UpdateUser(User user, CancellationToken cancellationToken)
+    public Task UpdateUser(User user)
     {
         _users.Update(user);
-        await _goodpetsContext.SaveChangesAsync(cancellationToken);
+        return Task.CompletedTask;
     }
 
-    public async Task UpdateUserTransactional(Func<Task> action, User user, CancellationToken cancellationToken)
-    {
-        await using var transaction = await _goodpetsContext.Database.BeginTransactionAsync(cancellationToken);
-        try
-        {
-            _users.Update(user);
-            await _goodpetsContext.SaveChangesAsync(cancellationToken);
-
-            await action();
-
-            await transaction.CommitAsync(cancellationToken);
-        }
-        catch (Exception)
-        {
-            await transaction.RollbackAsync(cancellationToken);
-            throw;
-        }
-    }
 
     public async Task<User?> GetUserByEmail(string email, CancellationToken cancellationToken)
     {
@@ -80,7 +63,5 @@ internal class UserRepository : IUserRepository
     public async Task CreateUser(User user, CancellationToken cancellationToken)
     {
         await _users.AddAsync(user, cancellationToken);
-        await _goodpetsContext.SaveChangesAsync(cancellationToken);
     }
-
 }

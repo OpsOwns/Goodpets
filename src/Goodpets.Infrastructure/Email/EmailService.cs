@@ -1,4 +1,7 @@
-﻿namespace Goodpets.Infrastructure.Email;
+﻿using Goodpets.Application.Abstractions;
+using Goodpets.Application.Abstractions.Email;
+
+namespace Goodpets.Infrastructure.Services;
 
 internal class EmailService : IEmailService
 {
@@ -37,4 +40,5 @@ internal class EmailService : IEmailService
         await client.SendAsync(mimeMessage, cancellationToken);
         await client.DisconnectAsync(true, cancellationToken);
     }
+    
 }

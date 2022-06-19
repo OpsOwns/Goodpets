@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Infrastructure.Database;
+﻿namespace Goodpets.Infrastructure.Database.UnitOfWork;
 
 internal class GoodpetsUnitOfWork : IUnitOfWork
 {
