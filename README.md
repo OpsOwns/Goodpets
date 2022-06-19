@@ -26,7 +26,7 @@ check status of his pet, what pills or other treatment should take.
 * [Xunit](https://github.com/xunit/xunit)
 
 ### Storage
-* MS sql server for now probably migration to azure sql database
+* MS sql server
 
 ### How to start the solution?
 
