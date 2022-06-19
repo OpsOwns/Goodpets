@@ -7,17 +7,17 @@ System should guarantee faster fill all stuff what is needed to register owner w
 check status of his pet, what pills or other treatment should take.
 
 
-## 1. Technology
+### Technology
 
-- .NET 6 ⭐
-- DDD (Domain Driven Design) approach ⭐
-- Clean architecture ⭐
-- CQRS ⭐
+* .NET 6 ⭐
+* DDD (Domain Driven Design) approach ⭐
+* Clean architecture ⭐
+* CQRS ⭐
 
-## 2. Tools
+### Built With
 
-- Entity Framework
-- Humanizer
-- FluentValidation
-- Docker
-- Docker Compose
+* Entity Framework
+* Humanizer
+* FluentValidation
+* Docker
+* Docker Compose
