@@ -13,6 +13,7 @@ check status of his pet, what pills or other treatment should take.
 * DDD (Domain Driven Design) approach ⭐
 * Clean architecture ⭐
 * CQRS ⭐
+* Unit Tests ⭐
 
 ### Built With
 
@@ -21,3 +22,20 @@ check status of his pet, what pills or other treatment should take.
 * [FluentValidation](https://github.com/FluentValidation/FluentValidation)
 * [MailKit](https://github.com/jstedfast/MailKit)
 * [Docker Compose](https://docs.docker.com/compose/)
+* [Azure Key Vault](https://github.com/Azure/AzureKeyVault)
+* [Xunit](https://github.com/xunit/xunit)
+
+### Database
+* MS sql server for now probably migration to azure sql database
+
+### How to start the solution?
+
+Type the following command:
+
+```
+docker-compose up -d
+```
+
+### License
+
+This project is licensed under the [MIT License](LICENSE.md).
