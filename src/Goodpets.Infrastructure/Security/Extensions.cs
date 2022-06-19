@@ -24,13 +24,14 @@ public static class Extensions
             .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>()
             .AddSingleton<IPasswordManager, PasswordManager>()
             .AddSingleton<ITokenProvider, TokenProvider>()
-            .AddSingleton<IIdentityService, IdentityService>()
             .AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, null!);
+
+        services.TryAddTransient<IIdentityService, IdentityService>();
 
         services.TryAddSingleton<IIdentity, Identity>();
 

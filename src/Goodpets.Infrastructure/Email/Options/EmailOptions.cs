@@ -4,7 +4,7 @@ internal sealed class EmailOptions
 {
     private const string SectionName = "EmailBox";
     internal string From { get; init; }
-    internal string SmtpServer { get; init; }
+    internal string Host { get; init; }
     internal string Username { get; init; }
     internal string Password { get; init; }
     internal int Port { get; init; }
@@ -19,7 +19,7 @@ internal sealed class EmailOptions
         if (section is null) throw new InvalidOperationException("Can't find configuration section");
 
         From = section.GetValue<string>(nameof(From));
-        SmtpServer = section.GetValue<string>(nameof(SmtpServer));
+        Host = section.GetValue<string>(nameof(Host));
         Username = section.GetValue<string>(nameof(Username));
         Password = section.GetValue<string>(nameof(Password));
         Port = section.GetValue<int>(nameof(Port));

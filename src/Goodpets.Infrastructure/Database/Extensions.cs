@@ -1,4 +1,4 @@
-﻿using Goodpets.Domain.Base.Abstractions;
+﻿using Goodpets.Infrastructure.Database.Repositories;
 
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
@@ -10,6 +10,11 @@ public static class Extensions
     {
         services.AddSingleton(x => new DatabaseOptions(x.GetRequiredService<IConfiguration>()));
         services.AddTransient(x => new GoodpetsContext(x.GetRequiredService<DatabaseOptions>()));
+
+        services.AddScoped<IUnitOfWork, GoodpetsUnitOfWork>();
+
+        services.AddTransient<ITokenRepository, TokenRepository>()
+            .AddTransient<IUserRepository, UserRepository>();
 
         services.AddHostedService<DbInitializer>();
 
