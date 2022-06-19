@@ -7,7 +7,7 @@ System should guarantee faster fill all stuff what is needed to register owner w
 check status of his pet, what pills or other treatment should take.
 
 
-### Architecture
+### Technologies & Practises
 
 * .NET 6 ⭐
 * DDD (Domain Driven Design) approach ⭐
