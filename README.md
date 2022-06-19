@@ -16,8 +16,8 @@ check status of his pet, what pills or other treatment should take.
 
 ### Built With
 
-* Entity Framework
-* Humanizer
-* FluentValidation
-* Docker
-* Docker Compose
+* [Entity Framework](https://github.com/dotnet/efcore)
+* [Humanizer](https://github.com/Humanizr/Humanizer)
+* [FluentValidation](https://github.com/FluentValidation/FluentValidation)
+* [MailKit](https://github.com/jstedfast/MailKit)
+* [Docker Compose](https://docs.docker.com/compose/)
