@@ -25,7 +25,7 @@ check status of his pet, what pills or other treatment should take.
 * [Azure Key Vault](https://github.com/Azure/AzureKeyVault)
 * [Xunit](https://github.com/xunit/xunit)
 
-### Database
+### Storage
 * MS sql server for now probably migration to azure sql database
 
 ### How to start the solution?
