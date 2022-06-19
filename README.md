@@ -17,7 +17,7 @@ check status of his pet, what pills or other treatment should take.
 
 ### Project structure
 
-* Domain (entities, valueObjects, aggregates, repositories interfaces, exceptions etc.)
+* Domain (entities, value objects, aggregates, repositories interfaces, exceptions etc.)
 * Infrastructure (Database operations, authentication etc.)
 * Application (Domain logic implementation)
 * Api (Presentation layer)
