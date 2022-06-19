@@ -11,10 +11,10 @@ internal class TokenRepository : ITokenRepository
         _tokens = _goodpetsContext.Tokens;
     }
 
-    public async Task ReplaceRefreshToken(Guid userId, Token token, CancellationToken cancellationToken)
+    public async Task ReplaceRefreshToken(Token token, CancellationToken cancellationToken)
     {
         var storedToken = await _tokens
-            .SingleOrDefaultAsync(x => x.UserId == userId, cancellationToken);
+            .SingleOrDefaultAsync(x => x.UserId == token.User.Id, cancellationToken);
 
         if (storedToken is not null)
         {
@@ -23,6 +23,7 @@ internal class TokenRepository : ITokenRepository
 
         await _tokens.AddAsync(token, cancellationToken);
 
+        _goodpetsContext.Entry(token.User).State = EntityState.Unchanged;
 
         await _goodpetsContext.SaveChangesAsync(cancellationToken);
     }

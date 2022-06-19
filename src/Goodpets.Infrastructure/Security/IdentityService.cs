@@ -49,9 +49,9 @@ internal class IdentityService : IIdentityService
 
         var refreshToken = _tokenProvider.GenerateRefreshToken();
 
-        await _tokenRepository.ReplaceRefreshToken(user.Id, new Token
+        await _tokenRepository.ReplaceRefreshToken(new Token
         {
-            CreationDate = _clock.Current(), Used = false, User = user, ExpireDate = refreshToken.ExpireTime,
+            CreationDate = _clock.Current(), User = user, Used = false, ExpireDate = refreshToken.ExpireTime,
             JwtId = accessToken.JwtId.Value, RefreshToken = refreshToken.Value, Id = Guid.NewGuid(),
         }, cancellationToken);
 
