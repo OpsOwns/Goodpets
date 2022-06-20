@@ -138,7 +138,7 @@ internal class IdentityProvider : IIdentityProvider
 
     public async Task SignOut(CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetUser(_identity.UserAccountId.Value, cancellationToken);
+        var user = await _userRepository.GetUser(_identity.UserId.Value, cancellationToken);
 
         if (user is null)
             return;
@@ -157,7 +157,7 @@ internal class IdentityProvider : IIdentityProvider
         if (string.IsNullOrWhiteSpace(oldPassword))
             return Result.Fail(Not_Empty(nameof(oldPassword)));
 
-        var user = await _userRepository.GetUser(_identity.UserAccountId.Value, cancellationToken);
+        var user = await _userRepository.GetUser(_identity.UserId.Value, cancellationToken);
 
         if (user is null)
             throw new UserException("system can't find user in database");
