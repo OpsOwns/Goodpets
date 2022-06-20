@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build ./src -t ${DOCKER_REGISTRY-}goodpets
+      run: docker build ./src/Goodpets.API
