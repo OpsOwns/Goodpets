@@ -1,5 +1,7 @@
 # Sample Backend part of system 'goodpets'
 
+[![Goodpets](https://github.com/OpsOwns/Goodpets/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/OpsOwns/Goodpets/actions/workflows/main.yml)
+
 ## Introducation (purpose of the system)
 
 The purpose of the system is help vet manage his clinic to work more efficiently and take less energy to "fill papers".
