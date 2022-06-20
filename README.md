@@ -1,5 +1,7 @@
 # Sample Backend part of system 'goodpets'
 
+### CI
+
 [![Goodpets](https://github.com/OpsOwns/Goodpets/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/OpsOwns/Goodpets/actions/workflows/main.yml)
 
 ## Introducation (purpose of the system)
