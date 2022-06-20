@@ -19,13 +19,7 @@ public record EntityId
         return Value.ToString();
     }
 
-    public static implicit operator EntityId(Guid identity)
-    {
-        return new(identity);
-    }
+    public static implicit operator EntityId(Guid identity) => new(identity);
 
-    public static implicit operator Guid(EntityId identity)
-    {
-        return identity.Value;
-    }
+    public static implicit operator Guid(EntityId identity) => identity.Value;
 }
