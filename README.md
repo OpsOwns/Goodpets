@@ -34,6 +34,7 @@ check status of his pet, what pills or other treatment should take.
 * [Azure Key Vault](https://github.com/Azure/AzureKeyVault)
 * [Xunit](https://github.com/xunit/xunit)
 * [Moq](https://github.com/moq/moq)
+* [FluentResults](https://github.com/altmann/FluentResults)
 
 ### Storage
 * MS sql server
