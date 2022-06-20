@@ -2,7 +2,7 @@
 
 public interface IIdentity
 {
-    UserId UserAccountId { get; }
+    UserId UserId { get; }
     JwtId JwtId { get; }
     void Set(JsonWebToken jonWebToken);
     JsonWebToken? Get();

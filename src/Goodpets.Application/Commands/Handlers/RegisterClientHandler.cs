@@ -2,33 +2,31 @@
 
 public class RegisterClientHandler : ICommandHandler<RegisterClient>
 {
-    private readonly IClientRepository _clientRepository;
+    private readonly ICustomerRepository _customerRepository;
     private readonly IIdentity _identity;
 
-    public RegisterClientHandler(IClientRepository clientRepository, IIdentity identity)
+    public RegisterClientHandler(IIdentity identity, ICustomerRepository customerRepository)
     {
-        _clientRepository = clientRepository;
         _identity = identity;
+        _customerRepository = customerRepository;
     }
 
     public async Task<Result> HandleAsync(RegisterClient command, CancellationToken cancellationToken = default)
     {
         var email = Email.Create(command.ContactEmail);
-
-        if (email.IsFailed)
-            return email.ToResult();
-
         var address = Address.Create(command.City, command.Street, command.ZipCode);
+        var fullName = FullName.Create(command.Name, command.SureName);
+        var phoneNumber = PhoneNumber.Create(command.PhoneNumber);
 
-        if (address.IsFailed)
-            return address.ToResult();
+        var resultOfCreateValueObjects = Result.Merge(email, address, fullName, phoneNumber);
 
-        var client = new Client();
-
-        client.Register(_identity.UserAccountId, email.Value, address.Value, command.PhoneNumber);
-
-
-        await _clientRepository.RegisterClient(client, cancellationToken);
+        if (resultOfCreateValueObjects.IsFailed)
+            return resultOfCreateValueObjects;
+        
+        var customer = Customer.Register(_identity.UserId, email.Value, address.Value, fullName.Value,
+            phoneNumber.Value);
+        
+        await _customerRepository.Register(customer, cancellationToken);
 
         return Result.Ok();
     }
