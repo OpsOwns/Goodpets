@@ -2,19 +2,8 @@
 
 namespace Goodpets.Domain.Entities;
 
-public abstract class Entity<T> where T : EntityId
+public abstract class Entity
 {
-    protected Entity()
-    {
-    }
-
-    protected Entity(T id)
-    {
-        Id = id ?? throw new ArgumentNullException(nameof(id));
-    }
-
-    public T Id { get; protected set; }
-
     private bool IsTransient()
     {
         return Equals(default);
@@ -22,7 +11,7 @@ public abstract class Entity<T> where T : EntityId
 
     public override bool Equals(object obj)
     {
-        if (obj is not Entity<T> other)
+        if (obj is not Entity other)
             return false;
 
         if (ReferenceEquals(this, other))
@@ -34,7 +23,7 @@ public abstract class Entity<T> where T : EntityId
         return Equals(other);
     }
 
-    public static bool operator ==(Entity<T> a, Entity<T> b)
+    public static bool operator ==(Entity a, Entity b)
     {
         if (a is null && b is null)
             return true;
@@ -45,14 +34,9 @@ public abstract class Entity<T> where T : EntityId
         return a.Equals(b);
     }
 
-    public static bool operator !=(Entity<T> a, Entity<T> b)
+    public static bool operator !=(Entity a, Entity b)
     {
         return !(a == b);
-    }
-
-    public override string ToString()
-    {
-        return Id.Value.ToString();
     }
 
     public override int GetHashCode()

@@ -26,15 +26,15 @@ internal sealed class TokenProvider : ITokenProvider
             SecurityAlgorithms.HmacSha256);
     }
 
-    public AccessToken GenerateJwtToken(User user)
+    public AccessTokenDto GenerateJwtToken(User user)
     {
         var now = _clock.Current();
         var jwtId = new JwtId();
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new(JwtRegisteredClaimNames.UniqueName, user.Username),
-            new(JwtRegisteredClaimNames.Email, user.Email),
+            new(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+            new(JwtRegisteredClaimNames.UniqueName, user.Username.Value),
+            new(JwtRegisteredClaimNames.Email, user.Email.Value),
             new(JwtRegisteredClaimNames.Jti, jwtId.Value.ToString()),
             new(ClaimTypes.Role, user.Role)
         };
@@ -42,7 +42,7 @@ internal sealed class TokenProvider : ITokenProvider
         var jwt = new JwtSecurityToken(_issuer, _audience, claims, now, expires, _signingCredentials);
         var token = _jwtSecurityToken.WriteToken(jwt);
 
-        return new AccessToken(token, jwtId);
+        return new AccessTokenDto(token, jwtId);
     }
 
     public void ValidatePrincipalFromExpiredToken(string token)
@@ -58,22 +58,22 @@ internal sealed class TokenProvider : ITokenProvider
             throw new SecurityTokenException("Invalid token");
     }
 
-    public RefreshToken GenerateRefreshToken()
+    public RefreshTokenDto GenerateRefreshToken()
     {
         var randomNumber = new byte[64];
         using var generator = RandomNumberGenerator.Create();
         generator.GetBytes(randomNumber);
         var token = Convert.ToBase64String(randomNumber);
 
-        return new RefreshToken(token, _clock.Current().Add(_expiryRefreshToken));
+        return new RefreshTokenDto(token, _clock.Current().Add(_expiryRefreshToken));
     }
 
-    public Guid GetUserIdFromJwtToken()
+    public UserId GetUserIdFromJwtToken()
     {
         if (_claimsPrincipal is null)
             throw new InvalidOperationException();
 
-        return Guid.Parse(_claimsPrincipal.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value);
+        return new UserId(Guid.Parse(_claimsPrincipal.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value));
     }
 
     public bool StoredJwtIdSameAsFromPrinciple(Guid storedJwtId)

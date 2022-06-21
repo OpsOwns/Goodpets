@@ -31,8 +31,6 @@ public static class Extensions
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, null!);
 
-        services.TryAddTransient<IIdentityProvider, IdentityProvider>();
-
         services.TryAddSingleton<IIdentity, Identity>();
 
         services.AddAuthorization(authorization =>

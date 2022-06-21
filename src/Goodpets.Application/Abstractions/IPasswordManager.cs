@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Infrastructure.Abstractions;
+﻿namespace Goodpets.Application.Abstractions;
 
 public interface IPasswordManager
 {

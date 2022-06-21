@@ -2,6 +2,6 @@
 
 [Authorize]
 [Route($"{BasePath}/[controller]")]
-internal class ClientController : BaseController
+internal class CustomerController : BaseController
 {
 }
