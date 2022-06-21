@@ -23,7 +23,6 @@ public sealed class Customer : Entity, IAggregateRoot
     }
 
 
-
     public void AssignPet(Pet pet)
     {
         if (_pets.Any(x => x.PetId == pet.PetId))

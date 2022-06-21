@@ -6,5 +6,7 @@ public record PetId : EntityId
     {
     }
 
-    public PetId() { }
+    public PetId()
+    {
+    }
 }

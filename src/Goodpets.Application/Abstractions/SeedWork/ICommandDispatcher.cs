@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Application.Abstractions;
+﻿namespace Goodpets.Application.Abstractions.SeedWork;
 
 public interface ICommandDispatcher
 {
