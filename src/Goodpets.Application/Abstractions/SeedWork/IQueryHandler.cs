@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Application.Abstractions;
+﻿namespace Goodpets.Application.Abstractions.SeedWork;
 
 public interface IQueryHandler<in TQuery, TResult> where TQuery : class, IQuery<TResult>
 {

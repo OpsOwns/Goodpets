@@ -1,4 +1,5 @@
-﻿namespace Goodpets.Tests.Domain;
+﻿
+namespace Goodpets.Tests.Domain;
 
 public class CustomerTests
 {

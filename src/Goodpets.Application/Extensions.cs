@@ -17,7 +17,7 @@ public static class Extensions
             throw new ArgumentNullException(nameof(services));
 
         services.Scan(s => s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
-            .AddClasses(c => c.AssignableTo(typeof(IService)))
+            .AddClasses(c => c.AssignableTo(typeof(IDomainService)))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
 
