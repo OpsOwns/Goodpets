@@ -1,7 +1,8 @@
 ﻿namespace Goodpets.Domain.Entities;
 
-public sealed class Customer : Entity<CustomerId>
+public sealed class Customer : Entity, IAggregateRoot
 {
+    public CustomerId CustomerId { get; private set; }
     public FullName FullName { get; private set; }
     public UserId UserId { get; private set; }
     public Email ContactEmail { get; private set; }
@@ -13,6 +14,7 @@ public sealed class Customer : Entity<CustomerId>
 
     private Customer()
     {
+        CustomerId = null!;
         UserId = null!;
         FullName = null!;
         ContactEmail = null!;
@@ -20,9 +22,11 @@ public sealed class Customer : Entity<CustomerId>
         PhoneNumber = null!;
     }
 
+
+
     public void AssignPet(Pet pet)
     {
-        if (_pets.Any(x => x.Id == pet.Id))
+        if (_pets.Any(x => x.PetId == pet.PetId))
         {
             throw new BusinessException("This pet is already assigment to owner");
         }
@@ -45,27 +49,27 @@ public sealed class Customer : Entity<CustomerId>
         return customer;
     }
 
-    private void ChangeFullName(FullName fullName)
+    public void ChangeFullName(FullName fullName)
     {
         FullName = fullName ?? throw new BusinessException($"{nameof(fullName)} can't be null or empty");
     }
 
-    private void ChangeContactEmail(Email email)
+    public void ChangeContactEmail(Email email)
     {
         ContactEmail = email ?? throw new BusinessException($"{nameof(email)} can't be null or empty");
     }
 
-    private void ChangeAddress(Address address)
+    public void ChangeAddress(Address address)
     {
         Address = address ?? throw new BusinessException($"{nameof(address)} can't be null or empty");
     }
 
-    private void ChangePhoneNumber(PhoneNumber phoneNumber)
+    public void ChangePhoneNumber(PhoneNumber phoneNumber)
     {
         PhoneNumber = phoneNumber ?? throw new BusinessException($"{nameof(phoneNumber)} can't be null or empty");
     }
 
-    private void ChangeUserId(UserId userId)
+    public void ChangeUserId(UserId userId)
     {
         if (userId is null || userId.Value == Guid.Empty)
         {

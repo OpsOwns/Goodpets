@@ -1,7 +1,8 @@
 ﻿namespace Goodpets.Domain.Entities;
 
-public sealed class Pet : Entity<PetId>
+public sealed class Pet : Entity
 {
+    public PetId PetId { get; private set; }
     public string Name { get; private set; }
     public Customer Customer { get; private set; }
     public DateTime DateOfBirth { get; private set; }
@@ -12,6 +13,7 @@ public sealed class Pet : Entity<PetId>
 
     private Pet()
     {
+        PetId = null!;
         Name = null!;
         Customer = null!;
         Weight = 0.0F;
@@ -21,7 +23,7 @@ public sealed class Pet : Entity<PetId>
     }
 
     public static Pet Create(string name, DateTime dateOfBirth, float weight, string gender, string breed, string coat,
-        Customer customer)
+        Customer owner)
     {
         var pet = new Pet();
 
@@ -31,7 +33,7 @@ public sealed class Pet : Entity<PetId>
         pet.ChangeGender(gender);
         pet.ChangeBreed(breed);
         pet.ChangeCoat(coat);
-        pet.ChangeOwner(customer);
+        pet.ChangeOwner(owner);
 
         return pet;
     }
@@ -75,6 +77,11 @@ public sealed class Pet : Entity<PetId>
 
     public void ChangeDateOfBirth(DateTime dateOfBirth)
     {
+        if (DateTime.UtcNow.Year - dateOfBirth.Date.Year > 30)
+        {
+            throw new BusinessException("Invalid date of birth of your pet");
+        }
+
         DateOfBirth = dateOfBirth;
     }
 

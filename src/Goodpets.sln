@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goodpets.Infrastructure", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goodpets.Application", "Goodpets.Application\Goodpets.Application.csproj", "{19CBC215-B1D6-47CF-99D2-41BE75126C31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goodpets.Tests", "Goodpets.Tests\Goodpets.Tests.csproj", "{26B1973A-18CD-48A5-B1CC-B5CAF0102EE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,7 @@ Global
 		{CF21178B-963C-4199-B626-083DD49D8C7F} = {6C9A1894-7154-48C2-B4AD-9DC70C598317}
 		{25E01203-6289-4B0A-8E63-F4F38B342B8E} = {6C9A1894-7154-48C2-B4AD-9DC70C598317}
 		{19CBC215-B1D6-47CF-99D2-41BE75126C31} = {6C9A1894-7154-48C2-B4AD-9DC70C598317}
+		{26B1973A-18CD-48A5-B1CC-B5CAF0102EE0} = {8B9013D1-8020-49E8-82C0-9252B4D0A2E8}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0EF4A382-EB90-4B58-B300-3334AEE5494F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -44,5 +47,9 @@ Global
 		{19CBC215-B1D6-47CF-99D2-41BE75126C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19CBC215-B1D6-47CF-99D2-41BE75126C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19CBC215-B1D6-47CF-99D2-41BE75126C31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26B1973A-18CD-48A5-B1CC-B5CAF0102EE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26B1973A-18CD-48A5-B1CC-B5CAF0102EE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26B1973A-18CD-48A5-B1CC-B5CAF0102EE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26B1973A-18CD-48A5-B1CC-B5CAF0102EE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

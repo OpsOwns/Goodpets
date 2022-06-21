@@ -3,7 +3,7 @@
 public class Email : ValueObject
 {
     public string Value { get; }
-
+    
     private Email(string value)
     {
         Value = value;
@@ -27,6 +27,6 @@ public class Email : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return Value;
     }
 }

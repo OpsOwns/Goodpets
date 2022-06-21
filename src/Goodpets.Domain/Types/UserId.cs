@@ -22,4 +22,6 @@ public record UserId : EntityId
 
         return new UserId(userId);
     }
+
+    public override string ToString() => Value.ToString();
 }

@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Infrastructure.Database.Repositories;
+﻿namespace Goodpets.Infrastructure.Domain.Repositories;
 
 internal class CustomerRepository : ICustomerRepository
 {
