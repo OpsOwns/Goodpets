@@ -26,7 +26,6 @@ public sealed class Pet : Entity
         Customer owner)
     {
         var pet = new Pet();
-
         pet.ChangeName(name);
         pet.ChangeDateOfBirth(dateOfBirth);
         pet.ChangeWeight(weight);
@@ -40,13 +39,13 @@ public sealed class Pet : Entity
 
     public void ChangeOwner(Customer customer)
     {
-        Customer = customer ?? throw new BusinessException("Customer can't be null");
+        Customer = customer ?? throw new ArgumentNullException(nameof(customer));
     }
 
     public void ChangeCoat(string coat)
     {
         if (string.IsNullOrEmpty(coat))
-            throw new BusinessException("Pet coat can't be null or empty");
+            throw new ArgumentNullException(nameof(coat));
 
         Coat = coat;
     }
@@ -54,7 +53,7 @@ public sealed class Pet : Entity
     public void ChangeBreed(string breed)
     {
         if (string.IsNullOrEmpty(breed))
-            throw new BusinessException("Pet breed can't be null or empty");
+            throw new ArgumentNullException(nameof(breed));
 
         Breed = breed;
     }
@@ -62,7 +61,7 @@ public sealed class Pet : Entity
     public void ChangeGender(string gender)
     {
         if (string.IsNullOrEmpty(gender))
-            throw new BusinessException("Pet gender can't be null or empty");
+            throw new ArgumentNullException(nameof(gender));
 
         Gender = gender;
     }
@@ -88,7 +87,7 @@ public sealed class Pet : Entity
     public void ChangeName(string name)
     {
         if (string.IsNullOrEmpty(name))
-            throw new BusinessException("Pet name can't be null or empty");
+            throw new ArgumentNullException(nameof(name));
 
         Name = name;
     }

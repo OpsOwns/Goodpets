@@ -50,22 +50,22 @@ public sealed class Customer : Entity, IAggregateRoot
 
     public void ChangeFullName(FullName fullName)
     {
-        FullName = fullName ?? throw new BusinessException($"{nameof(fullName)} can't be null or empty");
+        FullName = fullName ?? throw new ArgumentNullException(nameof(fullName));
     }
 
     public void ChangeContactEmail(Email email)
     {
-        ContactEmail = email ?? throw new BusinessException($"{nameof(email)} can't be null or empty");
+        ContactEmail = email ?? throw new ArgumentNullException(nameof(email));
     }
 
     public void ChangeAddress(Address address)
     {
-        Address = address ?? throw new BusinessException($"{nameof(address)} can't be null or empty");
+        Address = address ?? throw new ArgumentNullException(nameof(address));
     }
 
     public void ChangePhoneNumber(PhoneNumber phoneNumber)
     {
-        PhoneNumber = phoneNumber ?? throw new BusinessException($"{nameof(phoneNumber)} can't be null or empty");
+        PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
     }
 
     public void ChangeUserId(UserId userId)

@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Infrastructure.Email;
+﻿namespace Goodpets.Infrastructure.Emails;
 
 [Serializable]
 public class EmailException : Exception

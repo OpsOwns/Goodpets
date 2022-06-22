@@ -2,20 +2,20 @@
 
 public record ErrorDetail
 {
-    public string Parameter { get; }
+    public string Code { get; }
     public IEnumerable<string> Messages { get; }
 
-    public ErrorDetail(string parameter, string message)
+    public ErrorDetail(string code, string message)
     {
         if (message == null)
             throw new ArgumentNullException(nameof(message));
-        Parameter = parameter ?? throw new ArgumentNullException(nameof(parameter));
+        Code = code ?? throw new ArgumentNullException(nameof(code));
         Messages ??= new List<string> { message };
     }
 
-    public ErrorDetail(string parameter, IEnumerable<string> messages)
+    public ErrorDetail(string code, IEnumerable<string> messages)
     {
-        Parameter = parameter ?? throw new ArgumentNullException(nameof(parameter));
+        Code = code ?? throw new ArgumentNullException(nameof(code));
         Messages = messages ?? throw new ArgumentNullException(nameof(messages));
     }
 }

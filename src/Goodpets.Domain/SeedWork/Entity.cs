@@ -1,6 +1,6 @@
 ﻿#nullable disable
 
-namespace Goodpets.Domain.Entities;
+namespace Goodpets.Domain.SeedWork;
 
 public abstract class Entity
 {

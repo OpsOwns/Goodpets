@@ -24,7 +24,6 @@ global using Goodpets.Application.Commands.Auth;
 global using Goodpets.Application.Dto;
 global using Goodpets.Domain.SeedWork;
 global using Goodpets.Infrastructure;
-global using Goodpets.Infrastructure.Email;
 global using Goodpets.Infrastructure.Security.Exceptions;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Authorization;
