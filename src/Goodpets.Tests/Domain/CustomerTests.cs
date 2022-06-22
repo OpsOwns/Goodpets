@@ -23,7 +23,7 @@ public class CustomerTests
 
         var customer = CreateCustomer();
 
-        Assert.Throws<BusinessException>(() => customer.ChangeContactEmail(email.ValueOrDefault));
+        Assert.Throws<ArgumentNullException>(() => customer.ChangeContactEmail(email.ValueOrDefault));
         Assert.Throws<InvalidOperationException>(() => customer.ChangeContactEmail(email.Value));
     }
 

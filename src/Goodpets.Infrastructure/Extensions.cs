@@ -9,7 +9,7 @@ public static class Extensions
 
         services.AddDispatchers();
 
-        services.AddEmail();
+        services.AddEmailService();
 
         services.AddSecurity();
         services.AddSingleton<IClock, Clock>();

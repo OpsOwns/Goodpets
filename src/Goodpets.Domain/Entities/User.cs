@@ -19,28 +19,23 @@ public class User : Entity, IAggregateRoot
         Token = null!;
     }
 
-    public User(Role role, Username username, Password password, Email email, Token? token = null)
+    public User(Role role, Username username, Password password, Email email)
     {
         UserId = new UserId();
-        Role = role;
-        Username = username;
-        Password = password;
-        Email = email;
-        Token = token;
+        Role = role ?? throw new ArgumentNullException(nameof(role));
+        Username = username ?? throw new ArgumentNullException(nameof(username));
+        Password = password ?? throw new ArgumentNullException(nameof(password));
+        Email = email ?? throw new ArgumentNullException(nameof(email));
     }
 
     public void ChangePassword(Password password)
     {
-        if (password == null)
-            throw new BusinessException("Password can't be null");
-
-        Password = password;
+        Password = password ?? throw new ArgumentNullException(nameof(password));
     }
 
     public void ChangeToken(Token token)
     {
-        if (token == null) throw new BusinessException("Token can't be null");
-        Token = token;
+        Token = token ?? throw new ArgumentNullException(nameof(token));
     }
 
     public void RemoveToken() => Token = null;

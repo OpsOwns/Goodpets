@@ -22,7 +22,7 @@ global using Goodpets.Infrastructure.Database.Configurations;
 global using Goodpets.Infrastructure.Database.EntityConfigurations;
 global using Goodpets.Infrastructure.Database.UnitOfWork;
 global using Goodpets.Infrastructure.Dispatchers;
-global using Goodpets.Infrastructure.Email;
+global using Goodpets.Infrastructure.Emails;
 global using Goodpets.Infrastructure.Security;
 global using Goodpets.Infrastructure.Security.Auth;
 global using Goodpets.Infrastructure.Security.Exceptions;

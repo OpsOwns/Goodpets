@@ -7,7 +7,7 @@ internal class AccountConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(x => x.UserId);
 
         builder.Property(p => p.Email)
-            .HasConversion(p => p.Value, p => Goodpets.Domain.ValueObjects.Email.Create(p).Value).HasColumnOrder(4)
+            .HasConversion(p => p.Value, p => Email.Create(p).Value).HasColumnOrder(4)
             .IsRequired().HasColumnName("Email");
 
         builder.Property(x => x.Password)
