@@ -2,15 +2,6 @@
 
 public static class Extensions
 {
-    public static Error WithErrorCode(this Error error, string propertyName)
-    {
-        if (propertyName == null)
-            throw new ArgumentNullException(nameof(propertyName));
-
-        error.WithMetadata("ErrorParameter", propertyName);
-        return error;
-    }
-
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         if (services == null)

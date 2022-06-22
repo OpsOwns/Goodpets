@@ -1,4 +1,6 @@
-﻿namespace Goodpets.API.Configuration.Mapper;
+﻿using Result = FluentResults.Result;
+
+namespace Goodpets.API.Configuration.Mapper;
 
 internal static class ResultMapper
 {

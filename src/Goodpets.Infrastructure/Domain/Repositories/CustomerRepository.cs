@@ -2,7 +2,7 @@
 
 internal class CustomerRepository : ICustomerRepository
 {
-    public Task Register(Customer customer, CancellationToken cancellationToken)
+    public Task Register(Owner customer, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

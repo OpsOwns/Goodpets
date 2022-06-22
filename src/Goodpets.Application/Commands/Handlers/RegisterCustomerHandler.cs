@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Application.Commands.Handlers;
+﻿using Result = FluentResults.Result;
+
+namespace Goodpets.Application.Commands.Handlers;
 
 public class RegisterCustomerHandler : ICommandHandler<RegisterCustomer>
 {
@@ -23,10 +25,13 @@ public class RegisterCustomerHandler : ICommandHandler<RegisterCustomer>
         if (resultOfCreateValueObjects.IsFailed)
             return resultOfCreateValueObjects;
 
-        var customer = Customer.Register(_identity.UserId, email.Value, address.Value, fullName.Value,
+        var owner = Owner.Register(_identity.UserId, email.Value, address.Value, fullName.Value,
             phoneNumber.Value);
 
-        await _customerRepository.Register(customer, cancellationToken);
+        if (owner.IsFailed)
+            return owner.ToResult();
+
+        await _customerRepository.Register(owner.Value, cancellationToken);
 
         return Result.Ok();
     }
