@@ -2,5 +2,5 @@
 
 public interface ICustomerRepository : IRepository
 {
-    Task Register(Customer customer, CancellationToken cancellationToken);
+    Task Register(Owner customer, CancellationToken cancellationToken);
 }

@@ -2,9 +2,9 @@
 
 public class Address : ValueObject
 {
-    public string Street { get; private set; }
-    public string City { get; private set; }
-    public string ZipCode { get; private set; }
+    public string Street { get; }
+    public string City { get; }
+    public string ZipCode { get; }
 
     private Address(string city, string street, string zipCode)
     {
@@ -17,13 +17,11 @@ public class Address : ValueObject
     public static Result<Address> Create(string city, string street, string zipCode)
     {
         if (string.IsNullOrEmpty(city))
-            return Result.Fail(new Error("city can't be null or empty").WithMetadata("ErrorParameter", nameof(city)));
+            return Result.Fail(ErrorResultMessages.NotNullOrEmptyError(nameof(city)));
         if (string.IsNullOrEmpty(street))
-            return Result.Fail(
-                new Error("street can't be null or empty").WithMetadata("ErrorParameter", nameof(street)));
+            return Result.Fail(ErrorResultMessages.NotNullOrEmptyError(nameof(street)));
         if (string.IsNullOrEmpty(zipCode))
-            return Result.Fail(
-                new Error("zipCode can't be null or empty").WithMetadata("ErrorParameter", nameof(zipCode)));
+            return Result.Fail(ErrorResultMessages.NotNullOrEmptyError(nameof(zipCode)));
 
         return Result.Ok(new Address(city, street, zipCode));
     }

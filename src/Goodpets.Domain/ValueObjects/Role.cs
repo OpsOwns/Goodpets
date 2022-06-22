@@ -14,14 +14,14 @@ public class Role : ValueObject
     {
         if (string.IsNullOrWhiteSpace(value) || value.Length > 30)
         {
-            return Result.Fail(new Error("role can't be null or empty").WithMetadata("ErrorParameter", nameof(Role)));
+            return Result.Fail(ErrorResultMessages.NotNullOrEmptyError(nameof(Role)));
         }
 
         if (!AvailableRoles.Contains(value))
         {
             return Result.Fail(
                 new Error($"invalid role only available roles are {string.Join(',', AvailableRoles)}").WithMetadata(
-                    "ErrorParameter", nameof(Role)));
+                    "ErrorCode", nameof(Role)));
         }
 
         return Result.Ok(new Role(value));

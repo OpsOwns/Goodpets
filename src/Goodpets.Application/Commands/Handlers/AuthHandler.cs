@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Application.Commands.Handlers;
+﻿using Result = FluentResults.Result;
+
+namespace Goodpets.Application.Commands.Handlers;
 
 public class AuthHandler : ICommandHandler<SignUp>, ICommandHandler<SignIn>, ICommandHandler<RefreshToken>,
     ICommandHandler<ChangePassword>, ICommandHandler<ForgotPassword>, ICommandHandler<SignOut>
@@ -41,9 +43,12 @@ public class AuthHandler : ICommandHandler<SignUp>, ICommandHandler<SignIn>, ICo
 
         var encryptedPassword = Password.Create(_passwordManager.Encrypt(password.Value)).Value;
 
-        var user = new User(role.Value, username.Value, encryptedPassword, email.Value);
+        var user = User.Create(role.Value, username.Value, encryptedPassword, email.Value);
 
-        await _userRepository.CreateUser(user, cancellationToken);
+        if (user.IsFailed)
+            return user.ToResult();
+
+        await _userRepository.CreateUser(user.Value, cancellationToken);
 
         return Result.Ok();
     }

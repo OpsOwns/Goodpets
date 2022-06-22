@@ -1,5 +1,4 @@
-﻿
-namespace Goodpets.Tests.Domain;
+﻿namespace Goodpets.Tests.Domain;
 
 public class CustomerTests
 {
@@ -23,8 +22,7 @@ public class CustomerTests
 
         var customer = CreateCustomer();
 
-        Assert.Throws<ArgumentNullException>(() => customer.ChangeContactEmail(email.ValueOrDefault));
-        Assert.Throws<InvalidOperationException>(() => customer.ChangeContactEmail(email.Value));
+        Assert.True(customer.ChangeContactEmail(email.ValueOrDefault).IsFailed);
     }
 
     [Fact]
@@ -48,16 +46,16 @@ public class CustomerTests
 
         customer.AssignPet(pet);
 
-        Assert.Throws<BusinessException>(() => customer.AssignPet(pet));
+        Assert.True(customer.AssignPet(pet).IsFailed);
     }
 
-    private static Pet CreatePet(Customer customer)
+    private static Pet CreatePet(Owner customer)
     {
-        var pet = Pet.Create("Doris", new DateTime(2016, 3, 12), 5.0F, "Female", "Cat", "Brown", customer);
-        return pet;
+        var pet = Pet.Create("Doris", new LocalDate(2016, 3, 12), 5.0F, "Female", "Cat", "Brown", customer);
+        return pet.Value;
     }
 
-    private static Customer CreateCustomer()
+    private static Owner CreateCustomer()
     {
         var faker = new Faker();
 
@@ -66,8 +64,8 @@ public class CustomerTests
         var fullName = FullName.Create(faker.Name.FirstName(), faker.Name.LastName());
         var phoneNumber = PhoneNumber.Create(faker.Random.Number(100000000, 999999999).ToString());
 
-        var customer = Customer.Register(new UserId(), email.Value, address.Value, fullName.Value, phoneNumber.Value);
+        var customer = Owner.Register(new UserId(), email.Value, address.Value, fullName.Value, phoneNumber.Value);
 
-        return customer;
+        return customer.Value;
     }
 }

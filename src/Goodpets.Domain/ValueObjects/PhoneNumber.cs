@@ -8,18 +8,17 @@ public class PhoneNumber : ValueObject
     {
         Value = value;
     }
-
-
+    
     public static Result<PhoneNumber> Create(string value)
     {
         if (string.IsNullOrEmpty(value))
         {
-            return Result.Fail("Phone number can't be null or empty");
+            return Result.Fail(ErrorResultMessages.NotNullOrEmptyError(nameof(PhoneNumber)));
         }
 
         if (!Regex.IsMatch(value, "^([0-9]{9})$"))
         {
-            return Result.Fail("Invalid phone number format");
+            return Result.Fail(new Error("Invalid phone number format").WithMetadata("ErrorCode", nameof(PhoneNumber)));
         }
 
         return Result.Ok(new PhoneNumber(value));

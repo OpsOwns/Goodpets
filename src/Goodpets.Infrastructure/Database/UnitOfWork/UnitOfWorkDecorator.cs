@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Database.UnitOfWork;
+﻿using Result = FluentResults.Result;
+
+namespace Goodpets.Infrastructure.Database.UnitOfWork;
 
 internal sealed class UnitOfWorkDecorator<TCommand> : ICommandHandler<TCommand> where TCommand : class, ICommand
 {

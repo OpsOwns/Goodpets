@@ -8,7 +8,7 @@ public class Token : ValueObject
     public bool Used { get; }
     public JwtId JwtId { get; }
 
-    protected Token()
+    private Token()
     {
         RefreshToken = null!;
         JwtId = null!;
@@ -28,14 +28,11 @@ public class Token : ValueObject
     {
         if (string.IsNullOrEmpty(refreshToken))
             return Result.Fail(
-                new Error("refreshToken can't be null or empty")
-                    .WithMetadata("ErrorParameter", "RefreshToken"));
+                ErrorResultMessages.NotNullOrEmptyError(nameof(refreshToken)));
 
         if (jwtId.Value == Guid.Empty)
         {
-            return Result.Fail(
-                new Error("jwtId can't be empty")
-                    .WithMetadata("ErrorParameter", "JwtId"));
+            return Result.Fail(ErrorResultMessages.NotNullOrEmptyError(nameof(jwtId)));
         }
 
         return Result.Ok(new Token(refreshToken, expireDate, creationDate, used, jwtId));

@@ -1,4 +1,6 @@
-﻿namespace Goodpets.API.Controllers;
+﻿using Result = FluentResults.Result;
+
+namespace Goodpets.API.Controllers;
 
 [Route($"{BasePath}/[controller]")]
 internal class UserController : BaseController

@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Dispatchers;
+﻿using Result = FluentResults.Result;
+
+namespace Goodpets.Infrastructure.Dispatchers;
 
 internal sealed class Dispatcher : IDispatcher
 {

@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Infrastructure.Database.UnitOfWork;
+﻿using Result = FluentResults.Result;
+
+namespace Goodpets.Infrastructure.Database.UnitOfWork;
 
 sealed class GoodpetsUnitOfWork : IUnitOfWork
 {

@@ -15,7 +15,7 @@ public class Password : ValueObject
         {
             return Result.Fail(
                 new Error("password can't be null or empty and can't have greater than 200 letter and less than 6")
-                    .WithMetadata("ErrorParameter", nameof(Password)));
+                    .WithMetadata("ErrorCode", nameof(Password)));
         }
 
         return Result.Ok(new Password(value));
