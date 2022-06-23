@@ -1,6 +1,4 @@
-﻿using Goodpets.Infrastructure.Emails;
-
-namespace Goodpets.API.Configuration.Mapper;
+﻿namespace Goodpets.API.Configuration.Mapper;
 
 public class ExceptionResponseMapper : IExceptionResponseMapper
 {
@@ -25,7 +23,6 @@ public class ExceptionResponseMapper : IExceptionResponseMapper
             _ => new ExceptionResponse(
                 new ErrorResponse(new ErrorDetail(GetErrorCode(exception), exception.Message)),
                 HttpStatusCode.InternalServerError)
-         
         };
     }
 

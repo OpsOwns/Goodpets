@@ -2,12 +2,12 @@
 
 public sealed class Owner : Entity, IAggregateRoot
 {
-    public CustomerId CustomerId { get; private set; }
-    public FullName FullName { get; private set; }
+    public CustomerId CustomerId { get; private set; } = null!;
+    public FullName FullName { get; private set; } = null!;
     public UserId UserId { get; private set; }
-    public Email ContactEmail { get; private set; }
-    public Address Address { get; private set; }
-    public PhoneNumber PhoneNumber { get; private set; }
+    public Email ContactEmail { get; private set; } = null!;
+    public Address Address { get; private set; } = null!;
+    public PhoneNumber PhoneNumber { get; private set; } = null!;
 
     private readonly List<Pet> _pets = new();
     public IReadOnlyList<Pet> Pets => _pets.ToList();
@@ -22,6 +22,7 @@ public sealed class Owner : Entity, IAggregateRoot
         PhoneNumber = null!;
     }
 
+    private Owner(UserId userId) => UserId = userId ?? throw new ArgumentNullException(nameof(userId));
 
     public Result AssignPet(Pet pet)
     {
@@ -38,15 +39,13 @@ public sealed class Owner : Entity, IAggregateRoot
     public static Result<Owner> Register(UserId userId, Email email, Address address, FullName fullName,
         PhoneNumber phoneNumber)
     {
-        var customer = new Owner();
-
-        var resultUserId = customer.ChangeUserId(userId);
+        var customer = new Owner(userId);
         var resultPhoneNumber = customer.ChangePhoneNumber(phoneNumber);
         var resultAddress = customer.ChangeAddress(address);
         var resultEmail = customer.ChangeContactEmail(email);
         var resultFullName = customer.ChangeFullName(fullName);
 
-        var mergedResult = Result.Merge(resultUserId, resultPhoneNumber, resultAddress, resultEmail, resultFullName);
+        var mergedResult = Result.Merge(resultPhoneNumber, resultAddress, resultEmail, resultFullName);
 
         return mergedResult.IsFailed ? mergedResult : Result.Ok(customer);
     }
@@ -87,16 +86,6 @@ public sealed class Owner : Entity, IAggregateRoot
             return Result.Fail(ErrorResultMessages.NotNullOrEmptyError(nameof(phoneNumber)));
 
         PhoneNumber = phoneNumber;
-
-        return Result.Ok();
-    }
-
-    public Result ChangeUserId(UserId? userId)
-    {
-        if (userId is null)
-            return Result.Fail(ErrorResultMessages.NotNullOrEmptyError(nameof(userId)));
-
-        UserId = userId;
 
         return Result.Ok();
     }

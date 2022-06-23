@@ -2,7 +2,7 @@
 
 public interface ITokenProvider
 {
-    AccessTokenDto GenerateJwtToken(User user);
+    AccessTokenDto GenerateJwtToken(Domain.Entities.User user);
     void ValidatePrincipalFromExpiredToken(string token);
     RefreshTokenDto GenerateRefreshToken();
     UserId GetUserIdFromJwtToken();

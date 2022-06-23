@@ -1,19 +1,17 @@
-﻿using Result = FluentResults.Result;
+﻿namespace Goodpets.Application.Owner.Commands.Handlers;
 
-namespace Goodpets.Application.Commands.Handlers;
-
-public class RegisterCustomerHandler : ICommandHandler<RegisterCustomer>
+internal sealed class RegisterOwnerHandler : ICommandHandler<RegisterOwner>
 {
-    private readonly ICustomerRepository _customerRepository;
+    private readonly IOwnerRepository _customerRepository;
     private readonly IIdentity _identity;
 
-    public RegisterCustomerHandler(IIdentity identity, ICustomerRepository customerRepository)
+    public RegisterOwnerHandler(IIdentity identity, IOwnerRepository customerRepository)
     {
         _identity = identity;
         _customerRepository = customerRepository;
     }
 
-    public async Task<Result> HandleAsync(RegisterCustomer command, CancellationToken cancellationToken = default)
+    public async Task<Result> HandleAsync(RegisterOwner command, CancellationToken cancellationToken = default)
     {
         var email = Email.Create(command.ContactEmail);
         var address = Address.Create(command.City, command.Street, command.ZipCode);
@@ -25,13 +23,13 @@ public class RegisterCustomerHandler : ICommandHandler<RegisterCustomer>
         if (resultOfCreateValueObjects.IsFailed)
             return resultOfCreateValueObjects;
 
-        var owner = Owner.Register(_identity.UserId, email.Value, address.Value, fullName.Value,
+        var owner = Domain.Entities.Owner.Register(_identity.UserId, email.Value, address.Value, fullName.Value,
             phoneNumber.Value);
 
         if (owner.IsFailed)
             return owner.ToResult();
 
-        await _customerRepository.Register(owner.Value, cancellationToken);
+        await _customerRepository.Add(owner.Value, cancellationToken);
 
         return Result.Ok();
     }

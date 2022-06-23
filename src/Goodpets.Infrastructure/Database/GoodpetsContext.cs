@@ -11,7 +11,7 @@ internal class GoodpetsContext : DbContext
 
     internal DbSet<User> Users => Set<User>();
     internal DbSet<Pet> Pets => Set<Pet>();
-    internal DbSet<Owner> Customers => Set<Owner>();
+    internal DbSet<Owner> Owners => Set<Owner>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

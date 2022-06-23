@@ -1,6 +1,4 @@
-﻿using NodaTime;
-
-namespace Goodpets.Infrastructure.Database.EntityConfigurations;
+﻿namespace Goodpets.Infrastructure.Database.EntityConfigurations;
 
 public class PetConfiguration : IEntityTypeConfiguration<Pet>
 {

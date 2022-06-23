@@ -30,7 +30,7 @@ internal class UserRepository : IUserRepository
     }
 
 
-    public async Task<User?> GetUserByEmail(Goodpets.Domain.ValueObjects.Email email,
+    public async Task<User?> GetUserByEmail(Email email,
         CancellationToken cancellationToken)
     {
         if (email is null)
@@ -64,7 +64,7 @@ internal class UserRepository : IUserRepository
         return user ?? null;
     }
 
-    public async Task<bool> DoesUserEmailExists(Goodpets.Domain.ValueObjects.Email email,
+    public async Task<bool> DoesUserEmailExists(Email email,
         CancellationToken cancellationToken)
     {
         if (email is null)

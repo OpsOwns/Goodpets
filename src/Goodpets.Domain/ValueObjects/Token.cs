@@ -3,8 +3,8 @@
 public class Token : ValueObject
 {
     public string RefreshToken { get; }
-    public DateTime ExpireDate { get; }
-    public DateTime CreationDate { get; }
+    public LocalDateTime ExpireDate { get; }
+    public LocalDateTime CreationDate { get; }
     public bool Used { get; }
     public JwtId JwtId { get; }
 
@@ -14,16 +14,18 @@ public class Token : ValueObject
         JwtId = null!;
     }
 
-    private Token(string refreshToken, DateTime expireDate, DateTime creationDate, bool used, JwtId jwtId) : this()
+    private Token(string refreshToken, LocalDateTime expireDate, bool used,
+        JwtId jwtId) : this()
     {
         RefreshToken = refreshToken;
         ExpireDate = expireDate;
-        CreationDate = creationDate;
+        CreationDate = SystemClock.Instance.GetCurrentInstant().InUtc().LocalDateTime;
         Used = used;
         JwtId = jwtId;
     }
 
-    public static Result<Token> Create(string refreshToken, DateTime expireDate, DateTime creationDate, bool used,
+    public static Result<Token> Create(string refreshToken, LocalDateTime expireDate,
+        bool used,
         JwtId jwtId)
     {
         if (string.IsNullOrEmpty(refreshToken))
@@ -35,7 +37,7 @@ public class Token : ValueObject
             return Result.Fail(ErrorResultMessages.NotNullOrEmptyError(nameof(jwtId)));
         }
 
-        return Result.Ok(new Token(refreshToken, expireDate, creationDate, used, jwtId));
+        return Result.Ok(new Token(refreshToken, expireDate, used, jwtId));
     }
 
 

@@ -1,6 +1,4 @@
-﻿using Result = FluentResults.Result;
-
-namespace Goodpets.API.Controllers;
+﻿namespace Goodpets.API.Controllers;
 
 [Route($"{BasePath}/[controller]")]
 internal class UserController : BaseController
@@ -10,8 +8,8 @@ internal class UserController : BaseController
 
     public UserController(IDispatcher dispatcher, IIdentity identity)
     {
-        _dispatcher = dispatcher;
-        _identity = identity;
+        _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
+        _identity = identity ?? throw new ArgumentNullException(nameof(identity));
     }
 
     [AllowAnonymous]
