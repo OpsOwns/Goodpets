@@ -2,6 +2,7 @@
 
 public class SignUpValidator : AbstractValidator<SignUpRequest>
 {
+    
     public SignUpValidator()
     {
         RuleFor(x => x.Email).EmailAddress();

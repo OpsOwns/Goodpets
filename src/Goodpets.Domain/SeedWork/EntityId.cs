@@ -1,4 +1,4 @@
-﻿namespace Goodpets.Domain.Types;
+﻿namespace Goodpets.Domain.SeedWork;
 
 public record EntityId
 {

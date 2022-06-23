@@ -23,8 +23,7 @@ public sealed class Pet : Entity
     }
 
     public static Result<Pet> Create(string name, LocalDate dateOfBirth, float weight, string gender, string breed,
-        string coat,
-        Owner owner)
+        string coat, Owner owner)
     {
         var pet = new Pet();
 

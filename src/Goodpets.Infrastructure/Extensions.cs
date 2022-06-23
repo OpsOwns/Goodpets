@@ -12,7 +12,6 @@ public static class Extensions
         services.AddEmailService();
 
         services.AddSecurity();
-        services.AddSingleton<IClock, Clock>();
 
         services.AddDatabase();
 

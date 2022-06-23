@@ -4,13 +4,13 @@ public static class Extensions
 {
     public static IServiceCollection AddDispatchers(this IServiceCollection services)
     {
-        var applicationAssembly = typeof(ICommandHandler<>).Assembly;
+        var applicationAssembly = AppDomain.CurrentDomain.GetAssemblies();
 
         services.Scan(s => s.FromAssemblies(applicationAssembly)
             .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>)))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
-
+        
         services.Scan(s => s.FromAssemblies(applicationAssembly)
             .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)))
             .AsImplementedInterfaces()

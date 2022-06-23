@@ -1,6 +1,6 @@
-﻿namespace Goodpets.Application.Dto;
+﻿namespace Goodpets.Application.User.DTO;
 
-public record RefreshTokenDto(string Value, DateTime ExpireTime);
+public record RefreshTokenDto(string Value, LocalDateTime ExpireTime);
 
 public record JsonWebToken(string AccessToken, string RefreshToken);
 

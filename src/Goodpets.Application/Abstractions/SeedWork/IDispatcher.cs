@@ -1,6 +1,4 @@
-﻿using Result = FluentResults.Result;
-
-namespace Goodpets.Application.Abstractions.SeedWork;
+﻿namespace Goodpets.Application.Abstractions.SeedWork;
 
 public interface IDispatcher
 {

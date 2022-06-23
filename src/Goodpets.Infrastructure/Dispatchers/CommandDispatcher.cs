@@ -1,6 +1,4 @@
-﻿using Result = FluentResults.Result;
-
-namespace Goodpets.Infrastructure.Dispatchers;
+﻿namespace Goodpets.Infrastructure.Dispatchers;
 
 internal sealed class CommandDispatcher : ICommandDispatcher
 {

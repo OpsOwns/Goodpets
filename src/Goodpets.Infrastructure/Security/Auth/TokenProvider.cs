@@ -3,7 +3,6 @@
 internal sealed class TokenProvider : ITokenProvider
 {
     private readonly string _audience;
-    private readonly IClock _clock;
     private readonly TimeSpan _expiry;
     private readonly TimeSpan _expiryRefreshToken;
     private readonly string _issuer;
@@ -12,10 +11,9 @@ internal sealed class TokenProvider : ITokenProvider
     private readonly TokenValidationParameters _tokenValidationParameters;
     private ClaimsPrincipal? _claimsPrincipal;
 
-    public TokenProvider(AuthenticationOptions options, IClock clock,
+    public TokenProvider(AuthenticationOptions options,
         TokenValidationParameters tokenValidationParameters)
     {
-        _clock = clock;
         _tokenValidationParameters = tokenValidationParameters;
         _issuer = options.Issuer;
         _audience = options.Audience;
@@ -28,7 +26,7 @@ internal sealed class TokenProvider : ITokenProvider
 
     public AccessTokenDto GenerateJwtToken(User user)
     {
-        var now = _clock.Current();
+        var now = SystemClock.Instance.GetCurrentInstant().InUtc().ToDateTimeUtc();
         var jwtId = new JwtId();
         var claims = new List<Claim>
         {
@@ -39,7 +37,8 @@ internal sealed class TokenProvider : ITokenProvider
             new(ClaimTypes.Role, user.Role)
         };
         var expires = now.Add(_expiry);
-        var jwt = new JwtSecurityToken(_issuer, _audience, claims, now, expires, _signingCredentials);
+        var jwt = new JwtSecurityToken(_issuer, _audience, claims, now, expires,
+            _signingCredentials);
         var token = _jwtSecurityToken.WriteToken(jwt);
 
         return new AccessTokenDto(token, jwtId);
@@ -65,7 +64,8 @@ internal sealed class TokenProvider : ITokenProvider
         generator.GetBytes(randomNumber);
         var token = Convert.ToBase64String(randomNumber);
 
-        return new RefreshTokenDto(token, _clock.Current().Add(_expiryRefreshToken));
+        return new RefreshTokenDto(token,
+            SystemClock.Instance.GetCurrentInstant().ToDateTimeUtc().Add(_expiryRefreshToken).ToLocalDateTime());
     }
 
     public UserId GetUserIdFromJwtToken()

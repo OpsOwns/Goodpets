@@ -1,6 +1,4 @@
-﻿using Result = FluentResults.Result;
-
-namespace Goodpets.Infrastructure.Abstractions;
+﻿namespace Goodpets.Infrastructure.Abstractions;
 
 public interface IUnitOfWork
 {

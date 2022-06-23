@@ -37,5 +37,4 @@ internal class EmailService : IEmailService
         await client.SendAsync(mimeMessage, cancellationToken);
         await client.DisconnectAsync(true, cancellationToken);
     }
-    
 }
