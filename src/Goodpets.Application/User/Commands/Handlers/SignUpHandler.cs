@@ -27,7 +27,7 @@ internal sealed class SignUpHandler : ICommandHandler<SignUp>
 
         if (await _userRepository.DoesUserEmailExists(email.Value, cancellationToken))
             return Result.Fail(
-                new Error($"User with email {email} already exists in system").WithErrorCode("email"));
+                new Error($"User with email {email.Value.Value} already exists in system").WithErrorCode("email"));
 
         var encryptedPassword = Password.Create(_passwordManager.Encrypt(password.Value)).Value;
 

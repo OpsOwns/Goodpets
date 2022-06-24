@@ -4,7 +4,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Owner>
 {
     public void Configure(EntityTypeBuilder<Owner> builder)
     {
-        builder.HasKey(x => x.CustomerId);
+        builder.HasKey(x => x.OwnerId);
 
         builder.Property(x => x.ContactEmail).HasConversion(z => z.Value,
             x => Email.Create(x).Value).IsRequired().HasColumnName("ContactEmail");

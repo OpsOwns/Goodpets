@@ -1,5 +1,6 @@
 ﻿// Global using directives
 
+global using System.Runtime.CompilerServices;
 global using FluentResults;
 global using Goodpets.Application.Abstractions;
 global using Goodpets.Application.Abstractions.Security;
