@@ -1,11 +1,11 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(x => x.Filters.Add(new FluentValidationAttribute())).ConfigureApplicationPartManager(
-    manager =>
-        manager.FeatureProviders.Add(new InternalControllerFeatureProvider())).ConfigureApiBehaviorOptions(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
+        manager =>
+            manager.FeatureProviders.Add(new InternalControllerFeatureProvider()))
+    .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; }).AddJsonOptions(
+        options =>
+            options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
 
 builder.Services.AddScoped<ErrorHandlerMiddleware>();
 builder.Services.AddSingleton<IExceptionResponseMapper, ExceptionResponseMapper>();
