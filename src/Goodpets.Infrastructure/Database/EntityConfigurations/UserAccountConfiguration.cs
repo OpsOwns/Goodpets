@@ -27,8 +27,10 @@ internal class AccountConfiguration : IEntityTypeConfiguration<User>
         {
             z.Property(x => x.RefreshToken).HasColumnName("RefreshToken").IsRequired();
             z.Property(x => x.Used).HasColumnName("Used").IsRequired();
-            z.Property(x => x.ExpireDate).HasColumnName("ExpireDate").IsRequired();
-            z.Property(x => x.CreationDate).HasColumnName("CreationDate").IsRequired();
+            z.Property(x => x.ExpireDate).HasConversion(x => x.ToDateTimeUnspecified(), y => y.ToLocalDateTime())
+                .HasColumnName("ExpireDate").IsRequired();
+            z.Property(x => x.CreationDate).HasConversion(x => x.ToDateTimeUnspecified(), y => y.ToLocalDateTime())
+                .HasColumnName("CreationDate").IsRequired();
             z.Property(x => x.JwtId).HasColumnName("JwtId").IsRequired();
         });
 

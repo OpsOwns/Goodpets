@@ -36,4 +36,6 @@ global using Microsoft.AspNetCore.Mvc.Controllers;
 global using Microsoft.AspNetCore.Mvc.Filters;
 global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.OpenApi.Models;
+global using NodaTime;
+global using NodaTime.Serialization.SystemTextJson;
 global using Swashbuckle.AspNetCore.Annotations;
