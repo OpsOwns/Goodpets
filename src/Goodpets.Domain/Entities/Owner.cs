@@ -2,7 +2,7 @@
 
 public sealed class Owner : Entity, IAggregateRoot
 {
-    public CustomerId CustomerId { get; private set; } = null!;
+    public OwnerId OwnerId { get; private set; } = null!;
     public FullName FullName { get; private set; } = null!;
     public UserId UserId { get; private set; }
     public Email ContactEmail { get; private set; } = null!;
@@ -14,7 +14,7 @@ public sealed class Owner : Entity, IAggregateRoot
 
     private Owner()
     {
-        CustomerId = null!;
+        OwnerId = null!;
         UserId = null!;
         FullName = null!;
         ContactEmail = null!;
@@ -22,13 +22,22 @@ public sealed class Owner : Entity, IAggregateRoot
         PhoneNumber = null!;
     }
 
-    private Owner(UserId userId) => UserId = userId ?? throw new ArgumentNullException(nameof(userId));
+    private Owner(UserId userId)
+    {
+        UserId = userId ?? throw new ArgumentNullException(nameof(userId));
+        OwnerId = new OwnerId();
+    }
 
     public Result AssignPet(Pet pet)
     {
         if (_pets.Any(x => x.PetId == pet.PetId))
         {
             return Result.Fail(new Error("This pet is already assigment to owner").WithErrorCode(nameof(Pet)));
+        }
+
+        if (pet.Owner.OwnerId != OwnerId)
+        {
+            return Result.Fail(new Error("This pet has different owner").WithErrorCode(nameof(Pet)));
         }
 
         _pets.Add(pet);
@@ -39,15 +48,15 @@ public sealed class Owner : Entity, IAggregateRoot
     public static Result<Owner> Register(UserId userId, Email email, Address address, FullName fullName,
         PhoneNumber phoneNumber)
     {
-        var customer = new Owner(userId);
-        var resultPhoneNumber = customer.ChangePhoneNumber(phoneNumber);
-        var resultAddress = customer.ChangeAddress(address);
-        var resultEmail = customer.ChangeContactEmail(email);
-        var resultFullName = customer.ChangeFullName(fullName);
+        var owner = new Owner(userId);
+        var resultPhoneNumber = owner.ChangePhoneNumber(phoneNumber);
+        var resultAddress = owner.ChangeAddress(address);
+        var resultEmail = owner.ChangeContactEmail(email);
+        var resultFullName = owner.ChangeFullName(fullName);
 
         var mergedResult = Result.Merge(resultPhoneNumber, resultAddress, resultEmail, resultFullName);
 
-        return mergedResult.IsFailed ? mergedResult : Result.Ok(customer);
+        return mergedResult.IsFailed ? mergedResult : Result.Ok(owner);
     }
 
     public Result ChangeFullName(FullName? fullName)

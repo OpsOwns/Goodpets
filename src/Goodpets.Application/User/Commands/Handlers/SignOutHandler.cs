@@ -16,7 +16,7 @@ internal sealed class SignOutHandler : ICommandHandler<SignOut>
         var user = await _userRepository.GetUser(_identity.UserId, cancellationToken);
 
         if (user?.Token is null)
-            return Result.Ok();
+            throw new BusinessException("System unable to find user");
 
         user.RemoveToken();
 
