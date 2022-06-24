@@ -37,8 +37,8 @@ check status of his pet, what pills or other treatment should take.
 
 ### Infrastructure
 
-* Implementation of repositories body of interfaces from domain.
-* Implementation Query Handlers because there is no reason is store it in application layer, becouse they don't do any buisness logic
+* Implementation repositories body from domain interfaces.
+* Implementation Query Handlers because there is no reason to store it in application layer, becouse they don't do any buisness logic
 * Implementation email service for sending email to owners.
 * Implementation all stuff regarding security generate tokens, auth, etc.
 * Every Command handler is wrapped into Unit Of Work by used decorators.
