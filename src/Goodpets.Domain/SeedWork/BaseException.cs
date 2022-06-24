@@ -3,15 +3,15 @@
 [Serializable]
 public abstract class BaseException : Exception
 {
-    private const string DefaultParameter = "systemError";
-    public string Parameter { get; } = DefaultParameter;
+    private const string DefaultCode = "systemError";
+    public string Code { get; } = DefaultCode;
 
     protected BaseException(string message) : base(message)
     {
     }
 
-    protected BaseException(string parameter, string message) : base(message)
+    protected BaseException(string code, string message) : base(message)
     {
-        Parameter = parameter ?? throw new ArgumentNullException(nameof(parameter));
+        Code = code ?? throw new ArgumentNullException(nameof(code));
     }
 }

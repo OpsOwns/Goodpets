@@ -24,6 +24,7 @@ global using Goodpets.Application.Abstractions.SeedWork;
 global using Goodpets.Application.Owner.Commands;
 global using Goodpets.Application.Owner.DTO;
 global using Goodpets.Application.Owner.Queries;
+global using Goodpets.Application.SeedWork;
 global using Goodpets.Application.User.Commands;
 global using Goodpets.Application.User.DTO;
 global using Goodpets.Domain.SeedWork;
