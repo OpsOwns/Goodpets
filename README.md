@@ -64,7 +64,8 @@ check status of his pet, what pills or other treatment should take.
 * [Docker Compose](https://docs.docker.com/compose/)
 * [Azure Key Vault](https://github.com/Azure/AzureKeyVault)
 * [Xunit](https://github.com/xunit/xunit)
-* [Moq](https://github.com/moq/moq)
+* [Shoudly](https://github.com/shouldly/shouldly)
+* [NSubstitute](https://github.com/nsubstitute/NSubstitute)
 * [FluentResults](https://github.com/altmann/FluentResults)
 * [NodaTime](https://github.com/nodatime/nodatime)
 
