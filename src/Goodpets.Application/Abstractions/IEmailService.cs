@@ -1,6 +1,4 @@
-﻿using Goodpets.Application.SeedWork;
-
-namespace Goodpets.Application.Abstractions;
+﻿namespace Goodpets.Application.Abstractions;
 
 public interface IEmailService
 {

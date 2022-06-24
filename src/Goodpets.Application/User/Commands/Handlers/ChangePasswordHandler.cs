@@ -1,6 +1,4 @@
-﻿using Goodpets.Application.SeedWork;
-
-namespace Goodpets.Application.User.Commands.Handlers;
+﻿namespace Goodpets.Application.User.Commands.Handlers;
 
 internal sealed class ChangePasswordHandler : ICommandHandler<ChangePassword>
 {

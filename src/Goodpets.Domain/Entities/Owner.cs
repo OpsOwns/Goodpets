@@ -1,8 +1,10 @@
-﻿namespace Goodpets.Domain.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Goodpets.Domain.Entities;
 
 public sealed class Owner : Entity, IAggregateRoot
 {
-    public OwnerId OwnerId { get; private set; } = null!;
+    public OwnerId OwnerId { get; private set; }
     public FullName FullName { get; private set; } = null!;
     public UserId UserId { get; private set; }
     public Email ContactEmail { get; private set; } = null!;
@@ -24,7 +26,7 @@ public sealed class Owner : Entity, IAggregateRoot
 
     private Owner(UserId userId)
     {
-        UserId = userId ?? throw new ArgumentNullException(nameof(userId));
+        UserId = userId;
         OwnerId = new OwnerId();
     }
 
