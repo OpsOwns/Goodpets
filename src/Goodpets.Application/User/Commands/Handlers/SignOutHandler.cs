@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Application.User.Commands.Handlers;
+﻿using Goodpets.Application.SeedWork;
+
+namespace Goodpets.Application.User.Commands.Handlers;
 
 internal sealed class SignOutHandler : ICommandHandler<SignOut>
 {
@@ -16,7 +18,7 @@ internal sealed class SignOutHandler : ICommandHandler<SignOut>
         var user = await _userRepository.GetUser(_identity.UserId, cancellationToken);
 
         if (user?.Token is null)
-            throw new BusinessException("System unable to find user");
+            throw new NotFoundException(nameof(user));
 
         user.RemoveToken();
 

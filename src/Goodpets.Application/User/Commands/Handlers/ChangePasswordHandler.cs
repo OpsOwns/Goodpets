@@ -1,4 +1,6 @@
-﻿namespace Goodpets.Application.User.Commands.Handlers;
+﻿using Goodpets.Application.SeedWork;
+
+namespace Goodpets.Application.User.Commands.Handlers;
 
 internal sealed class ChangePasswordHandler : ICommandHandler<ChangePassword>
 {
@@ -28,7 +30,7 @@ internal sealed class ChangePasswordHandler : ICommandHandler<ChangePassword>
         var user = await _userRepository.GetUser(_identity.UserId, cancellationToken);
 
         if (user is null)
-            return Result.Fail(new Error("User not found in the system").WithErrorCode("User"));
+            throw new NotFoundException(nameof(user));
 
 
         if (!_passwordManager.Validate(oldPassword.Value, user.Password.Value))

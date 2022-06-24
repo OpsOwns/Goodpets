@@ -14,12 +14,14 @@ public class ExceptionResponseMapper : IExceptionResponseMapper
             SecurityTokenExpiredException ex => new ExceptionResponse(
                 new ErrorResponse(new ErrorDetail(GetErrorCode(ex), ex.Message)),
                 HttpStatusCode.Unauthorized),
-            UserException ex => new ExceptionResponse(new ErrorResponse(new ErrorDetail(ex.Parameter, ex.Message)),
+            UserException ex => new ExceptionResponse(new ErrorResponse(new ErrorDetail(ex.Code, ex.Message)),
                 HttpStatusCode.Conflict),
             EmailException ex => new ExceptionResponse(new ErrorResponse(new ErrorDetail(GetErrorCode(ex), ex.Message)),
                 HttpStatusCode.Conflict),
             ArgumentNullException ex => new ExceptionResponse(
                 new ErrorResponse(new ErrorDetail("NullCheck", ex.Message)), HttpStatusCode.Conflict),
+            NotFoundException ex => new ExceptionResponse(
+                new ErrorResponse(new ErrorDetail(ex.Code, ex.Message)), HttpStatusCode.NotFound),
             _ => new ExceptionResponse(
                 new ErrorResponse(new ErrorDetail(GetErrorCode(exception), exception.Message)),
                 HttpStatusCode.InternalServerError)

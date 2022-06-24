@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Goodpets.Tests.Application.Commands;
+﻿namespace Goodpets.Tests.Application.Commands;
 
 public class RefreshTokenTests
 {
-    private ICommandHandler<RefreshToken> _commandHandler;
+    private readonly ICommandHandler<RefreshToken> _commandHandler;
     private readonly ITokenProvider _provider;
     private readonly IIdentity _identity;
     private readonly IUserRepository _userRepository;
@@ -144,19 +142,19 @@ public class RefreshTokenTests
         _provider.GetUserIdFromJwtToken().Returns(new UserId());
 
         var fakeUser = FakeUser.CreateFakeUser();
-        
+
         _userRepository.GetUser(Arg.Any<UserId>(), CancellationToken.None)
             .Returns(Task.FromResult<User?>(fakeUser));
 
-        var tokenjwt = Token
+        var tokenJwt = Token
             .Create(faker.Random.Word(),
                 SystemClock.Instance.GetCurrentInstant().InUtc().LocalDateTime.Plus(Period.FromDays(1)), false,
                 new JwtId()).Value;
 
         _userRepository.GetRefreshToken(Arg.Any<string>(), CancellationToken.None)
-            .Returns(Task.FromResult<Token?>(tokenjwt));
+            .Returns(Task.FromResult<Token?>(tokenJwt));
 
-        _provider.StoredJwtIdSameAsFromPrinciple(tokenjwt.JwtId).Returns(true);
+        _provider.StoredJwtIdSameAsFromPrinciple(tokenJwt.JwtId).Returns(true);
 
         _userRepository.UpdateUser(fakeUser).Returns(Task.CompletedTask);
 

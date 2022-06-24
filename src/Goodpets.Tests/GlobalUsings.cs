@@ -1,10 +1,13 @@
 ﻿// Global using directives
 
+global using System;
 global using System.Threading;
 global using System.Threading.Tasks;
 global using Bogus;
+global using Goodpets.Application.Abstractions;
 global using Goodpets.Application.Abstractions.Security;
 global using Goodpets.Application.Abstractions.SeedWork;
+global using Goodpets.Application.SeedWork;
 global using Goodpets.Application.User.Commands;
 global using Goodpets.Application.User.Commands.Handlers;
 global using Goodpets.Application.User.DTO;

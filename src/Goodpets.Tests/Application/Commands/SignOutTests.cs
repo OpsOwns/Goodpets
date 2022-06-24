@@ -26,8 +26,8 @@ public class SignOutTests
 
         var exception = await Record.ExceptionAsync(() => _commandHandler.HandleAsync(signOut, CancellationToken.None));
 
-        exception.ShouldBeOfType<BusinessException>();
-        exception.Message.ShouldBeEquivalentTo("System unable to find user");
+        exception.ShouldBeOfType<NotFoundException>();
+        exception.Message.ShouldBeEquivalentTo("System unable to find value");
     }
 
     [Fact]
